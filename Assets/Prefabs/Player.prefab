@@ -12,12 +12,6 @@ GameObject:
   - component: {fileID: 6896982321390182622}
   - component: {fileID: 6945710973896169371}
   - component: {fileID: 5209180982273092038}
-  - component: {fileID: 193036875018734244}
-  - component: {fileID: 4145020159193950360}
-  - component: {fileID: 9099559585489720659}
-  - component: {fileID: 4454657804293619681}
-  - component: {fileID: 1558889594841445991}
-  - component: {fileID: 7100000000000000101}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -121,119 +115,30 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37ba7ddc807547a38cd484eca3ce9bca, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Player.PlayerController
-  _config: {fileID: 11400000, guid: 1f34ed5da028ced7976a3cdf24707b68, type: 2}
-
---- !u!114 &193036875018734244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 793ae3f11017749019c9837f34fcf6ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Common.Movement.CharacterMovement2D
-  _groundWallDetector:
-    _groundProbe:
-      _origins:
-      - {fileID: 6994347945405572303}
-      - {fileID: 769928323302592445}
-      _distance: 0.2
-    _wallProbe:
-      _origins:
-      - {fileID: 1724772789126508973}
-      - {fileID: 456699895117608732}
-      _distance: 0.5
-    _solidMask:
-      serializedVersion: 2
-      m_Bits: 0
-
---- !u!114 &4145020159193950360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7738c9bed48a45268f528d56fd19a679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Health
-  _max: 100
---- !u!114 &9099559585489720659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba795a0b53074911a60c580c1a7b86a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.CombatSystem
-
---- !u!114 &4454657804293619681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.DamageReceiver
---- !u!114 &1558889594841445991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1adf0d5d081418099873539808e8115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Vfx.DamageFlashVfx
-  _duration: 0.15
-  _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
---- !u!1 &2698962825770619270
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 769928323302592445}
-  m_Layer: 7
-  m_Name: RightGroundCheckPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &769928323302592445
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2698962825770619270}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.23, y: -1.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 9126213500252039777}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.Player
+  _groundCheckPoint: {fileID: 9126213500252039777}
+  _groundCheckDistance: 1.35
+  _wallCheckPoints:
+  - {fileID: 1724772789126508973}
+  - {fileID: 456699895117608732}
+  _wallCheckDistance: 0.45
+  _moveSpeed: 15
+  _dashDuration: 0.2
+  _dashMultiplier: 3
+  _dashCooldown: 2
+  _jumpForce: 14
+  _jumpsCount: 2
+  _wallJumpForce: {x: 6, y: 12}
+  _wallJumpMoveLockDuration: 0.2
+  _inAirMoveMultiplier: 0.5
+  _wallSlideMultiplier: 0.8
+  _attackVelocities:
+  - {x: 3, y: 1.5}
+  - {x: 1, y: 2.5}
+  - {x: 4, y: 5}
+  _attackVelocityDuration: 0.1
+  _attackResetTime: 1
+  _jumpAttackVelocity: {x: 3, y: -5}
 --- !u!1 &3852130694387612074
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1724772789126508973}
   m_Layer: 7
-  m_Name: UpWallCheckPoint
+  m_Name: UpWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306,7 +211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 456699895117608732}
   m_Layer: 7
-  m_Name: DownWallCheckPoint
+  m_Name: DownWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

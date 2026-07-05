@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &394000721608118910
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4973008962671906359}
-  m_Layer: 8
-  m_Name: CombatTargetCheckPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4973008962671906359
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394000721608118910}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.15, y: -0.19, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1613318259418196058}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1707773233236389936
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +126,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9236d4c8699542eeb11e67a8aa86e610, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Common.Animation.AnimatorEventRelay
+  m_EditorClassIdentifier: Assembly-CSharp::Common.Animations.AnimationTriggers
 --- !u!1 &3466222321441341585
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,12 +139,6 @@ GameObject:
   - component: {fileID: 2398960693315817658}
   - component: {fileID: 6385280033924527661}
   - component: {fileID: 4817277150691120106}
-  - component: {fileID: 5630542884956237323}
-  - component: {fileID: 6929327695061375567}
-  - component: {fileID: 7765971437028232559}
-  - component: {fileID: 3589202579622647878}
-  - component: {fileID: 3401725131487728625}
-  - component: {fileID: 7100000000000000201}
   m_Layer: 8
   m_Name: Skeleton
   m_TagString: Untagged
@@ -198,7 +161,6 @@ Transform:
   m_Children:
   - {fileID: 788720872010586179}
   - {fileID: 1189184859021290774}
-  - {fileID: 4973008962671906359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2398960693315817658
@@ -274,89 +236,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3466222321441341585}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75051eae12e4d617887a3bd335ee6b01, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ca4449f4f914ff4ba5b0e06b3016b82, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Enemies.EnemyController
-  _config: {fileID: 11400000, guid: 9b91371a343fc5dfe429459f09563945, type: 2}
-  _sightOrigin: {fileID: 1613318259418196058}
-
---- !u!114 &5630542884956237323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 793ae3f11017749019c9837f34fcf6ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Common.Movement.CharacterMovement2D
-  _groundWallDetector:
-    _groundProbe:
-      _origins:
-      - {fileID: 1189184859021290774}
-      _distance: 0.2
-    _wallProbe:
-      _origins:
-      - {fileID: 1613318259418196058}
-      _distance: 1.3
-    _solidMask:
-      serializedVersion: 2
-      m_Bits: 0
-
---- !u!114 &6929327695061375567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7738c9bed48a45268f528d56fd19a679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Health
-  _max: 100
---- !u!114 &7765971437028232559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba795a0b53074911a60c580c1a7b86a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.CombatSystem
-
---- !u!114 &3589202579622647878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.DamageReceiver
---- !u!114 &3401725131487728625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1adf0d5d081418099873539808e8115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Vfx.DamageFlashVfx
-  _duration: 0.15
-  _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy.Skeleton.EnemySkeletonController
+  _groundCheckPoint: {fileID: 1189184859021290774}
+  _groundCheckDistance: 0.3
+  _wallCheckPoints:
+  - {fileID: 1613318259418196058}
+  _wallCheckDistance: 1.4
+  _idleDuration: 2
+  _moveSpeed: 1.5
+  _moveAnimMultiplier: 1
+  _playerCheckPoint: {fileID: 1613318259418196058}
+  _playerCheckDistance: 13
+  _battleMoveSpeedMultiplier: 2
+  _attackDistance: 2.5
+  _battleMoveAnimMultiplier: 2
+  _inBattleChaseDuration: 5
 --- !u!1 &6358823399330769092
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1189184859021290774}
   m_Layer: 8
-  m_Name: GroundCheckPoint
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,21 +284,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1613318259418196058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-
---- !u!114 &7100000000000000201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
-  _origin: {fileID: 4973008962671906359}
-  _radius: 1
-  _targetMask:
-    serializedVersion: 2
-    m_Bits: 128
