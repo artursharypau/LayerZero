@@ -9,7 +9,7 @@ namespace Enemy.States
         private float _idleTimer;
 
         public EnemyIdleState(StateMachine fsm, EnemyController controller)
-            : base(AnimationIdProvider.Idle, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Idle)
         {
         }
 

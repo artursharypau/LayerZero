@@ -7,15 +7,20 @@ namespace Player.States
     {
         private bool _canControl;
 
-        protected PlayerInAirState(bool canControl, int animEntryId, StateMachine fsm, PlayerController controller)
-            : base(animEntryId, fsm, controller)
+        protected PlayerInAirState(
+            StateMachine fsm,
+            PlayerController controller,
+            bool canControl,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, controller, animParameterHash, animParameterType)
         {
             _canControl = canControl;
         }
 
         public override void Update()
         {
-            Anim.SetFloat(AnimationIdProvider.VelocityY, Controller.RB.linearVelocityY);
+            Anim.SetFloat(AnimationHashProvider.VelocityY, Controller.RB.linearVelocityY);
 
             if (_canControl)
             {

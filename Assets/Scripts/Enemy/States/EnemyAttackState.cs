@@ -6,7 +6,7 @@ namespace Enemy.States
     public class EnemyAttackState : EnemyState
     {
         public EnemyAttackState(StateMachine fsm, EnemyController controller)
-            : base(AnimationIdProvider.Attack, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Attack, AnimatorParameterType.Trigger)
         {
         }
 
