@@ -7,7 +7,7 @@ namespace Player.States
         private bool _isGroundTouched;
 
         public PlayerJumpAttackState(StateMachine fsm, PlayerController controller)
-            : base(PlayerAnimationIdProvider.JumpAttack, fsm, controller)
+            : base(fsm, controller, PlayerAnimationHashProvider.JumpAttack)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Player.States
             {
                 _isGroundTouched = true;
 
-                Anim.SetTrigger(PlayerAnimationIdProvider.JumpAttackTrigger);
+                Anim.SetTrigger(PlayerAnimationHashProvider.JumpAttackTrigger);
                 Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             }
 

@@ -6,7 +6,7 @@ namespace Enemy.States
     public class EnemyMoveState : EnemyGroundedState
     {
         public EnemyMoveState(StateMachine fsm, EnemyController controller)
-            : base(AnimationIdProvider.Move, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Move)
         {
         }
 

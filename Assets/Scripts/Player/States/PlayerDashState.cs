@@ -10,7 +10,7 @@ namespace Player.States
         private float _initialGravityScale;
 
         public PlayerDashState(StateMachine fsm, PlayerController controller)
-            : base(PlayerAnimationIdProvider.Dash, fsm, controller)
+            : base(fsm, controller, PlayerAnimationHashProvider.Dash)
         {
         }
 

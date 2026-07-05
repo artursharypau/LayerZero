@@ -6,7 +6,7 @@ namespace Player.States
     public class PlayerMoveState : PlayerGroundedState
     {
         public PlayerMoveState(StateMachine fsm, PlayerController controller)
-            : base(AnimationIdProvider.Move, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Move)
         {
         }
 

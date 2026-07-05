@@ -1,25 +1,40 @@
+using System;
+using Common.Animations;
 using UnityEngine;
 
 namespace Common
 {
     public abstract class StateBase
     {
-        private readonly int _animEntryId;
+        private readonly int _parameterHash;
+        private readonly AnimatorParameterType _parameterType;
 
         protected StateMachine FSM { get; }
         protected Animator Anim { get; }
 
-        protected StateBase(int animEntryId, StateMachine fsm, Animator anim)
+        protected StateBase(StateMachine fsm, AnimationContext animContext)
         {
-            _animEntryId = animEntryId;
+            _parameterHash = animContext.ParameterHash;
+            _parameterType = animContext.ParameterType;
 
             FSM = fsm;
-            Anim = anim;
+            Anim = animContext.Anim;
         }
 
         public virtual void Enter()
         {
-            Anim.SetBool(_animEntryId, true);
+            switch (_parameterType)
+            {
+                case AnimatorParameterType.Bool:
+                    Anim.SetBool(_parameterHash, true);
+                    break;
+                case AnimatorParameterType.Trigger:
+                    Anim.SetTrigger(_parameterHash);
+                    break;
+                case AnimatorParameterType.None:
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public virtual void Update()
@@ -28,7 +43,10 @@ namespace Common
 
         public virtual void Exit()
         {
-            Anim.SetBool(_animEntryId, false);
+            if (_parameterType == AnimatorParameterType.Bool)
+            {
+                Anim.SetBool(_parameterHash, false);
+            }
         }
     }
 }

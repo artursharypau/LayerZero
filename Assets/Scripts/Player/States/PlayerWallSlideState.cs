@@ -5,7 +5,7 @@ namespace Player.States
     public class PlayerWallSlideState : PlayerInAirState
     {
         public PlayerWallSlideState(StateMachine fsm, PlayerController controller)
-            : base(false, PlayerAnimationIdProvider.WallSlide, fsm, controller)
+            : base(fsm, controller, false, PlayerAnimationHashProvider.WallSlide)
         {
         }
 

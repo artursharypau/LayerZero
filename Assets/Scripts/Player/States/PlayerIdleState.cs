@@ -6,7 +6,7 @@ namespace Player.States
     public class PlayerIdleState : PlayerGroundedState
     {
         public PlayerIdleState(StateMachine fsm, PlayerController controller)
-            : base(AnimationIdProvider.Idle, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Idle)
         {
         }
 

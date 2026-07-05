@@ -7,7 +7,7 @@ namespace Player.States
     public class PlayerAttackState : PlayerState
     {
         private const int StartIndex = 0;
-        private static readonly int EndIndex = PlayerAnimationIdProvider.Attacks.Length - 1;
+        private const int EndIndex = 2;
 
         private int _currIndex;
         private float _finishedTime;
@@ -15,7 +15,7 @@ namespace Player.States
         private bool _nextAttackQueued;
 
         public PlayerAttackState(StateMachine fsm, PlayerController controller)
-            : base(AnimationIdProvider.Attack, fsm, controller)
+            : base(fsm, controller, AnimationHashProvider.Attack, AnimatorParameterType.Trigger)
         {
         }
 
@@ -26,7 +26,6 @@ namespace Player.States
             _nextAttackQueued = false;
 
             SetIndex();
-            PlayAnimationByIndex();
             ApplyVelocity();
 
             base.Enter();
@@ -66,11 +65,8 @@ namespace Player.States
             {
                 _currIndex = _currIndex > EndIndex ? StartIndex : _currIndex;
             }
-        }
 
-        private void PlayAnimationByIndex()
-        {
-            Anim.Play(PlayerAnimationIdProvider.Attacks[_currIndex], 0, 0f);
+            Anim.SetInteger(PlayerAnimationHashProvider.AttackIndex, _currIndex);
         }
 
         private void ApplyVelocity()

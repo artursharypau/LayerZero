@@ -5,7 +5,7 @@ namespace Player.States
     public class PlayerJumpState : PlayerInAirState
     {
         public PlayerJumpState(StateMachine fsm, PlayerController controller)
-            : base(true, PlayerAnimationIdProvider.JumpFall, fsm, controller)
+            : base(fsm, controller, true, PlayerAnimationHashProvider.JumpFall)
         {
         }
 

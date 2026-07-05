@@ -1,4 +1,5 @@
 using Common;
+using Common.Animations;
 using UnityEngine;
 
 namespace Player
@@ -9,16 +10,18 @@ namespace Player
 
         protected PlayerController Controller { get; }
 
-        protected PlayerState(int animEntryId, StateMachine fsm, PlayerController controller)
-            : base(animEntryId, fsm, controller.Anim)
+        protected PlayerState(
+            StateMachine fsm,
+            PlayerController controller,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, new AnimationContext(animParameterHash, animParameterType, controller.Anim))
         {
             Controller = controller;
         }
 
         public override void Update()
         {
-            base.Update();
-
             if (_dashCooldownTimer <= 0f && !Controller.IsWalled && Controller.InputActions.Dash.WasPerformedThisFrame())
             {
                 _dashCooldownTimer = Controller.DashDuration + Controller.DashCooldown;
@@ -28,6 +31,8 @@ namespace Player
             {
                 _dashCooldownTimer -= Time.deltaTime;
             }
+
+            base.Update();
         }
     }
 }

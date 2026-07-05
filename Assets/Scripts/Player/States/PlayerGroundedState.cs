@@ -1,12 +1,17 @@
 using Common;
+using Common.Animations;
 using UnityEngine;
 
 namespace Player.States
 {
     public abstract class PlayerGroundedState : PlayerState
     {
-        protected PlayerGroundedState(int animEntryId, StateMachine fsm, PlayerController controller)
-            : base(animEntryId, fsm, controller)
+        protected PlayerGroundedState(
+            StateMachine fsm,
+            PlayerController controller,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, controller, animParameterHash, animParameterType)
         {
         }
 

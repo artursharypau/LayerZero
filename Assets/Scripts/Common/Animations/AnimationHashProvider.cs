@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Common.Animations
 {
-    public static class AnimationIdProvider
+    public static class AnimationHashProvider
     {
         public static readonly int Idle = Animator.StringToHash("idle");
         public static readonly int Move = Animator.StringToHash("move");

@@ -8,7 +8,7 @@ namespace Player.States
         private float _moveLockTimer;
 
         public PlayerWallJumpState(StateMachine fsm, PlayerController controller)
-            : base(true, PlayerAnimationIdProvider.JumpFall, fsm, controller)
+            : base(fsm, controller, true, PlayerAnimationHashProvider.JumpFall)
         {
         }
 
