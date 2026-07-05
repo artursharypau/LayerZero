@@ -12,35 +12,44 @@ namespace Enemy.States
 
         public override void Enter()
         {
+            base.Enter();
+
             if (!Controller.IsGrounded || Controller.IsWalled)
             {
                 Controller.Flip();
             }
 
             Anim.SetFloat(EnemyAnimationIdProvider.MoveAnimMultiplier, Controller.MoveAnimMultiplier);
+        }
 
-            base.Enter();
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (!Controller.IsGrounded || Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.IdleState);
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
-            if (!Controller.IsGrounded || Controller.IsWalled)
-            {
-                FSM.ChangeState(Controller.IdleState);
-            }
-            else
-            {
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.FacingDirection, Controller.RB.linearVelocityY);
-            }
-
             base.Update();
+
+            Controller.SetVelocity(Controller.MoveSpeed * Controller.FacingDirection, Controller.RB.linearVelocityY);
         }
 
         public override void Exit()
         {
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
-
             base.Exit();
+
+            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
         }
     }
 }

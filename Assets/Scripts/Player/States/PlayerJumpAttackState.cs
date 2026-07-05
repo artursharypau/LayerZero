@@ -13,18 +13,20 @@ namespace Player.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _isGroundTouched = false;
 
             Controller.AnimTriggers.AttackFinished += OnFinished;
             Controller.SetVelocity(
                 Controller.JumpAttackVelocity.x * Controller.FacingDirection,
                 Controller.JumpAttackVelocity.y);
-
-            base.Enter();
         }
 
         public override void Update()
         {
+            base.Update();
+
             if (Controller.IsGrounded && !_isGroundTouched)
             {
                 _isGroundTouched = true;
@@ -32,15 +34,13 @@ namespace Player.States
                 Anim.SetTrigger(PlayerAnimationHashProvider.JumpAttackTrigger);
                 Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             }
-
-            base.Update();
         }
 
         public override void Exit()
         {
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
-
             base.Exit();
+
+            Controller.AnimTriggers.AttackFinished -= OnFinished;
         }
 
         private void OnFinished()

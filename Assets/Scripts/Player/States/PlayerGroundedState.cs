@@ -17,27 +17,37 @@ namespace Player.States
 
         public override void Enter()
         {
-            Controller.ResetJump();
-
             base.Enter();
+
+            Controller.ResetJump();
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (Controller.InputActions.Attack.WasPerformedThisFrame())
             {
                 FSM.ChangeState(Controller.AttackState);
-            }
-            else if (Controller.CanJump())
-            {
-                FSM.ChangeState(Controller.JumpState);
-            }
-            else if (Controller.IsFalling)
-            {
-                FSM.ChangeState(Controller.FallState);
+                return true;
             }
 
-            base.Update();
+            if (Controller.CanJump())
+            {
+                FSM.ChangeState(Controller.JumpState);
+                return true;
+            }
+
+            if (Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            return false;
         }
 
         protected bool IsRunningIntoWall()

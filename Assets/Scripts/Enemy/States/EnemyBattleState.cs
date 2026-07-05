@@ -7,8 +7,8 @@ namespace Enemy.States
     public class EnemyBattleState : EnemyState
     {
         private float _initialMoveAnimMultiplier;
-        private Transform _playerTransform;
         private float _lastPlayerDetectedTime;
+        private Transform _playerTransform;
 
         public EnemyBattleState(StateMachine fsm, EnemyController controller)
             : base(fsm, controller, EnemyAnimationIdProvider.Battle)
@@ -17,7 +17,10 @@ namespace Enemy.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _initialMoveAnimMultiplier = Anim.GetFloat(EnemyAnimationIdProvider.BattleMoveAnimMultiplier);
+            _lastPlayerDetectedTime = Time.time;
 
             if (!_playerTransform)
             {
@@ -25,47 +28,53 @@ namespace Enemy.States
             }
 
             Anim.SetFloat(EnemyAnimationIdProvider.BattleMoveAnimMultiplier, Controller.BattleMoveAnimMultiplier);
+        }
 
-            base.Enter();
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (Time.time >= _lastPlayerDetectedTime + Controller.InBattleChaseDuration)
+            {
+                _playerTransform = null;
+                FSM.ChangeState(Controller.IdleState);
+
+                return true;
+            }
+
+            if (Controller.IsPlayerDetected && Controller.AttackDistance >= GetPlayerAbsDistance())
+            {
+                FSM.ChangeState(Controller.AttackState);
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
+            base.Update();
+
             Anim.SetFloat(AnimationHashProvider.VelocityX, Controller.RB.linearVelocityX);
 
-            bool isPlayerDetected = Controller.IsPlayerDetected;
-            float currentTime = Time.time;
-
-            if (isPlayerDetected)
+            if (Controller.IsPlayerDetected)
             {
-                _lastPlayerDetectedTime = currentTime;
+                _lastPlayerDetectedTime = Time.time;
             }
 
-            if (currentTime >= _lastPlayerDetectedTime + Controller.InBattleChaseDuration)
-            {
-                _playerTransform = null;
-                FSM.ChangeState(Controller.IdleState);
-            }
-            else if (isPlayerDetected && Controller.AttackDistance >= GetPlayerAbsDistance())
-            {
-                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
-                FSM.ChangeState(Controller.AttackState);
-            }
-            else
-            {
-                Controller.SetVelocity(
-                    Controller.MoveSpeed * Controller.BattleMoveSpeedMultiplier * GetPlayerDirection(),
-                    Controller.RB.linearVelocityY);
-            }
-
-            base.Update();
+            Controller.SetVelocity(
+                Controller.MoveSpeed * Controller.BattleMoveSpeedMultiplier * GetPlayerDirection(),
+                Controller.RB.linearVelocityY);
         }
 
         public override void Exit()
         {
-            Anim.SetFloat(EnemyAnimationIdProvider.BattleMoveAnimMultiplier, _initialMoveAnimMultiplier);
-
             base.Exit();
+
+            Anim.SetFloat(EnemyAnimationIdProvider.BattleMoveAnimMultiplier, _initialMoveAnimMultiplier);
         }
 
         private float GetPlayerAbsDistance()

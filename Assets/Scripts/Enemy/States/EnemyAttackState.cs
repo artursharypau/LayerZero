@@ -12,16 +12,16 @@ namespace Enemy.States
 
         public override void Enter()
         {
-            Controller.AnimTriggers.AttackFinished += OnFinished;
-
             base.Enter();
+
+            Controller.AnimTriggers.AttackFinished += OnFinished;
         }
 
         public override void Exit()
         {
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
-
             base.Exit();
+
+            Controller.AnimTriggers.AttackFinished -= OnFinished;
         }
 
         private void OnFinished()

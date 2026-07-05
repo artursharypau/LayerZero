@@ -8,42 +8,57 @@ namespace Player.States
         private float _moveLockTimer;
 
         public PlayerWallJumpState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, true, PlayerAnimationHashProvider.JumpFall)
+            : base(fsm, controller, PlayerAnimationHashProvider.JumpFall)
         {
         }
 
         public override void Enter()
         {
+            base.Enter();
+
             _moveLockTimer = Controller.WallJumpMoveLockDuration;
 
-            SetCanControl(false);
+            EnableInput(false);
             Controller.SetVelocity(Controller.WallJumpForce.x * -Controller.FacingDirection, Controller.WallJumpForce.y);
-
-            base.Enter();
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
-            _moveLockTimer -= Time.deltaTime;
+            if (base.TryTransition())
+            {
+                return true;
+            }
 
             if (Controller.CanJump())
             {
                 FSM.ChangeState(Controller.JumpState);
-            }
-            else if (Controller.IsFalling)
-            {
-                FSM.ChangeState(Controller.FallState);
-            }
-            else if (Controller.IsWalled)
-            {
-                FSM.ChangeState(Controller.WallSlideState);
-            }
-            else if (_moveLockTimer <= 0f)
-            {
-                SetCanControl(true);
+                return true;
             }
 
+            if (Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            if (Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.WallSlideState);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
             base.Update();
+
+            _moveLockTimer -= Time.deltaTime;
+            if (_moveLockTimer <= 0f)
+            {
+                EnableInput(true);
+            }
         }
     }
 }

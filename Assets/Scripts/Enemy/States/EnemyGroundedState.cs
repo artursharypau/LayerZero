@@ -14,14 +14,20 @@ namespace Enemy.States
         {
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (Controller.IsPlayerDetected)
             {
                 FSM.ChangeState(Controller.BattleState);
+                return true;
             }
 
-            base.Update();
+            return false;
         }
     }
 }

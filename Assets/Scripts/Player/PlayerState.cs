@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public abstract class PlayerState : StateBase
+    public abstract class PlayerState : State
     {
         private static float _dashCooldownTimer;
 
@@ -20,19 +20,28 @@ namespace Player
             Controller = controller;
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (_dashCooldownTimer <= 0f && !Controller.IsWalled && Controller.InputActions.Dash.WasPerformedThisFrame())
             {
                 _dashCooldownTimer = Controller.DashDuration + Controller.DashCooldown;
                 FSM.ChangeState(Controller.DashState);
-            }
-            else
-            {
-                _dashCooldownTimer -= Time.deltaTime;
+                return true;
             }
 
+            return false;
+        }
+
+        public override void Update()
+        {
             base.Update();
+
+            _dashCooldownTimer -= Time.deltaTime;
         }
     }
 }

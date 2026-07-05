@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Common
 {
-    public abstract class ControllerBase : MonoBehaviour
+    public abstract class Controller : MonoBehaviour
     {
         [Header("Collision detection")]
         [SerializeField] private Transform _groundCheckPoint;

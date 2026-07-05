@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public abstract class EnemyController : ControllerBase
+    public abstract class EnemyController : Controller
     {
         [Header("Movement details")]
         [SerializeField] private float _idleDuration = 2f;
@@ -32,10 +32,10 @@ namespace Enemy
 
         public bool IsPlayerDetected => CheckForPlayer();
 
-        public StateBase IdleState { get; private set; }
-        public StateBase MoveState { get; private set; }
-        public StateBase AttackState { get; private set; }
-        public StateBase BattleState { get; private set; }
+        public State IdleState { get; private set; }
+        public State MoveState { get; private set; }
+        public State AttackState { get; private set; }
+        public State BattleState { get; private set; }
 
         protected override void OnAwake()
         {
@@ -53,7 +53,9 @@ namespace Enemy
         protected override void OnDrawAdditionalGizmos()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(_playerCheckPoint.position, _playerCheckPoint.position + new Vector3(_playerCheckDistance * FacingDirection, 0f));
+            Gizmos.DrawLine(
+                _playerCheckPoint.position,
+                _playerCheckPoint.position + new Vector3(_playerCheckDistance * FacingDirection, 0f));
 
             Gizmos.color = Color.red;
             Gizmos.DrawLine(_playerCheckPoint.position, _playerCheckPoint.position + new Vector3(_attackDistance * FacingDirection, 0f));

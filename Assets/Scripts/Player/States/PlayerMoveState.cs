@@ -10,25 +10,34 @@ namespace Player.States
         {
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (Controller.MoveInput.x == 0f || IsRunningIntoWall())
             {
                 FSM.ChangeState(Controller.IdleState);
-            }
-            else
-            {
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.MoveInput.x, Controller.RB.linearVelocityY);
+                return true;
             }
 
+            return false;
+        }
+
+        public override void Update()
+        {
             base.Update();
+
+            Controller.SetVelocity(Controller.MoveSpeed * Controller.MoveInput.x, Controller.RB.linearVelocityY);
         }
 
         public override void Exit()
         {
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
-
             base.Exit();
+
+            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
         }
     }
 }

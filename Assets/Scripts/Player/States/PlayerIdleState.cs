@@ -12,19 +12,25 @@ namespace Player.States
 
         public override void Enter()
         {
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
-
             base.Enter();
+
+            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (Controller.MoveInput.x != 0f && !IsRunningIntoWall())
             {
                 FSM.ChangeState(Controller.MoveState);
+                return true;
             }
 
-            base.Update();
+            return false;
         }
     }
 }

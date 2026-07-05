@@ -5,20 +5,26 @@ namespace Player.States
     public class PlayerWallSlideState : PlayerInAirState
     {
         public PlayerWallSlideState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, false, PlayerAnimationHashProvider.WallSlide)
+            : base(fsm, controller, PlayerAnimationHashProvider.WallSlide)
         {
+            EnableInput(false);
         }
 
         public override void Enter()
         {
+            base.Enter();
+
             Controller.ResetJump();
             Controller.ConsumeJump();
-
-            base.Enter();
         }
 
-        public override void Update()
+        public override bool TryTransition()
         {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
             if (Controller.IsGrounded)
             {
                 if (Controller.FacingDirection != Controller.MoveInput.x)
@@ -27,21 +33,29 @@ namespace Player.States
                 }
 
                 FSM.ChangeState(Controller.IdleState);
-            }
-            else if (!Controller.IsWalled && Controller.IsFalling)
-            {
-                FSM.ChangeState(Controller.FallState);
-            }
-            else if (Controller.InputActions.Jump.WasPerformedThisFrame())
-            {
-                FSM.ChangeState(Controller.WallJumpState);
-            }
-            else
-            {
-                HandleSliding();
+                return true;
             }
 
+            if (!Controller.IsWalled && Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            if (Controller.InputActions.Jump.WasPerformedThisFrame())
+            {
+                FSM.ChangeState(Controller.WallJumpState);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
             base.Update();
+
+            HandleSliding();
         }
 
         private void HandleSliding()

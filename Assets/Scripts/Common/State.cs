@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Common
 {
-    public abstract class StateBase
+    public abstract class State
     {
         private readonly int _parameterHash;
         private readonly AnimatorParameterType _parameterType;
@@ -12,7 +12,7 @@ namespace Common
         protected StateMachine FSM { get; }
         protected Animator Anim { get; }
 
-        protected StateBase(StateMachine fsm, AnimationContext animContext)
+        protected State(StateMachine fsm, AnimationContext animContext)
         {
             _parameterHash = animContext.ParameterHash;
             _parameterType = animContext.ParameterType;
@@ -25,16 +25,22 @@ namespace Common
         {
             switch (_parameterType)
             {
+                case AnimatorParameterType.None:
+                    break;
                 case AnimatorParameterType.Bool:
                     Anim.SetBool(_parameterHash, true);
                     break;
                 case AnimatorParameterType.Trigger:
                     Anim.SetTrigger(_parameterHash);
                     break;
-                case AnimatorParameterType.None:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public virtual bool TryTransition()
+        {
+            return false;
         }
 
         public virtual void Update()

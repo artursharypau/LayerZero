@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public sealed class PlayerController : ControllerBase
+    public sealed class PlayerController : Controller
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
@@ -45,15 +45,15 @@ namespace Player
 
         public PlayerInputSet.PlayerActions InputActions { get; private set; }
 
-        public StateBase IdleState { get; private set; }
-        public StateBase MoveState { get; private set; }
-        public StateBase DashState { get; private set; }
-        public StateBase JumpState { get; private set; }
-        public StateBase FallState { get; private set; }
-        public StateBase WallSlideState { get; private set; }
-        public StateBase WallJumpState { get; private set; }
-        public StateBase AttackState { get; private set; }
-        public StateBase JumpAttackState { get; private set; }
+        public State IdleState { get; private set; }
+        public State MoveState { get; private set; }
+        public State DashState { get; private set; }
+        public State JumpState { get; private set; }
+        public State FallState { get; private set; }
+        public State WallSlideState { get; private set; }
+        public State WallJumpState { get; private set; }
+        public State AttackState { get; private set; }
+        public State JumpAttackState { get; private set; }
 
         public Vector2 MoveInput { get; private set; }
 
