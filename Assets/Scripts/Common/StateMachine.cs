@@ -2,24 +2,32 @@ namespace Common
 {
     public class StateMachine
     {
-        public StateBase Current { get; private set; }
+        public State Current { get; private set; }
 
-        public void Initialize(StateBase initialStateBase)
+        public void Initialize(State initialState)
         {
-            Current = initialStateBase;
+            Current = initialState;
             Current.Enter();
         }
 
-        public void ChangeState(StateBase newStateBase)
+        public void ChangeState(State newState)
         {
             Current.Exit();
-            Current = newStateBase;
+            Current = newState;
             Current.Enter();
         }
 
         public void Update()
         {
-            Current.Update();
+            if (Current == null)
+            {
+                return;
+            }
+
+            if (!Current.TryTransition())
+            {
+                Current.Update();
+            }
         }
     }
 }

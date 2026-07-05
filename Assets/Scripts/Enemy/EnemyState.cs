@@ -1,10 +1,9 @@
 using Common;
 using Common.Animations;
-using UnityEngine;
 
 namespace Enemy
 {
-    public abstract class EnemyState : StateBase
+    public abstract class EnemyState : State
     {
         private static int _counter;
 
@@ -18,20 +17,6 @@ namespace Enemy
             : base(fsm, new AnimationContext(animParameterHash, animParameterType, controller.Anim))
         {
             Controller = controller;
-        }
-
-        public override void Enter()
-        {
-            Debug.unityLogger.Log($"Entering in {_counter++}: {GetType().Name}");
-
-            base.Enter();
-        }
-
-        public override void Exit()
-        {
-            Debug.unityLogger.Log($"Exiting in {_counter++}: {GetType().Name}");
-
-            base.Exit();
         }
     }
 }

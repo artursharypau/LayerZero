@@ -5,29 +5,38 @@ namespace Player.States
     public class PlayerJumpState : PlayerInAirState
     {
         public PlayerJumpState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, true, PlayerAnimationHashProvider.JumpFall)
+            : base(fsm, controller, PlayerAnimationHashProvider.JumpFall)
         {
         }
 
         public override void Enter()
         {
-            Jump();
-
             base.Enter();
+
+            Jump();
+        }
+
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (Controller.RB.linearVelocityY <= 0f)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
-            if (Controller.RB.linearVelocityY <= 0f)
-            {
-                FSM.ChangeState(Controller.FallState);
-            }
-            else
-            {
-                Jump();
-            }
-
             base.Update();
+
+            Jump();
         }
 
         private void Jump()

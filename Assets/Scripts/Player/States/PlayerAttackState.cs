@@ -21,18 +21,20 @@ namespace Player.States
 
         public override void Enter()
         {
+            base.Enter();
+
             Controller.AnimTriggers.AttackFinished += OnFinished;
 
             _nextAttackQueued = false;
 
             SetIndex();
             ApplyVelocity();
-
-            base.Enter();
         }
 
         public override void Update()
         {
+            base.Update();
+
             if (_velocityTimer <= 0f)
             {
                 Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
@@ -44,15 +46,13 @@ namespace Player.States
             }
 
             _velocityTimer -= Time.deltaTime;
-
-            base.Update();
         }
 
         public override void Exit()
         {
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
-
             base.Exit();
+
+            Controller.AnimTriggers.AttackFinished -= OnFinished;
         }
 
         private void SetIndex()

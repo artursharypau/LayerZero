@@ -15,21 +15,33 @@ namespace Enemy.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _idleTimer = Controller.IdleDuration;
             Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+        }
 
-            base.Enter();
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (_idleTimer <= 0f)
+            {
+                FSM.ChangeState(Controller.MoveState);
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
-            _idleTimer -= Time.deltaTime;
-            if (_idleTimer <= 0f)
-            {
-                FSM.ChangeState(Controller.MoveState);
-            }
-
             base.Update();
+
+            _idleTimer -= Time.deltaTime;
         }
     }
 }

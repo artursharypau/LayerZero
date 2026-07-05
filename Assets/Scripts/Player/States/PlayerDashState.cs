@@ -16,53 +16,57 @@ namespace Player.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _timer = Controller.DashDuration;
             _velocityX = Controller.MoveSpeed * Controller.DashMultiplier;
             _initialGravityScale = Controller.RB.gravityScale;
 
             Controller.RB.gravityScale = 0f;
+        }
 
-            base.Enter();
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (_timer <= 0f)
+            {
+                if (Controller.IsWalled)
+                {
+                    FSM.ChangeState(Controller.WallSlideState);
+                }
+                else if (Controller.IsFalling)
+                {
+                    FSM.ChangeState(Controller.FallState);
+                }
+                else
+                {
+                    FSM.ChangeState(Controller.IdleState);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
-            _timer -= Time.deltaTime;
-
-            if (_timer <= 0f)
-            {
-                SwitchState();
-            }
-            else
-            {
-                HandleDash();
-            }
-
             base.Update();
+
+            _timer -= Time.deltaTime;
+            HandleDash();
         }
 
         public override void Exit()
         {
+            base.Exit();
+
             Controller.SetVelocity(0f, 0f);
             Controller.RB.gravityScale = _initialGravityScale;
-
-            base.Exit();
-        }
-
-        private void SwitchState()
-        {
-            if (Controller.IsWalled)
-            {
-                FSM.ChangeState(Controller.WallSlideState);
-            }
-            else if (Controller.IsFalling)
-            {
-                FSM.ChangeState(Controller.FallState);
-            }
-            else
-            {
-                FSM.ChangeState(Controller.IdleState);
-            }
         }
 
         private void HandleDash()
