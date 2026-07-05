@@ -1,11 +1,12 @@
 using Common;
+using Common.Animations;
 
 namespace Player.States
 {
     public class PlayerMoveState : PlayerGroundedState
     {
         public PlayerMoveState(StateMachine fsm, PlayerController controller)
-            : base(PlayerAnimationIdProvider.Move, fsm, controller)
+            : base(AnimationIdProvider.Move, fsm, controller)
         {
         }
 

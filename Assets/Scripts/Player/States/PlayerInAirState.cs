@@ -1,12 +1,10 @@
 using Common;
-using UnityEngine;
+using Common.Animations;
 
 namespace Player.States
 {
     public abstract class PlayerInAirState : PlayerState
     {
-        private static readonly int VelocityY = Animator.StringToHash("velocityY");
-
         private bool _canControl;
 
         protected PlayerInAirState(bool canControl, int animEntryId, StateMachine fsm, PlayerController controller)
@@ -17,7 +15,7 @@ namespace Player.States
 
         public override void Update()
         {
-            Anim.SetFloat(VelocityY, Controller.RB.linearVelocityY);
+            Anim.SetFloat(AnimationIdProvider.VelocityY, Controller.RB.linearVelocityY);
 
             if (_canControl)
             {
@@ -34,7 +32,7 @@ namespace Player.States
 
         private void HandleControl()
         {
-            if (Controller.InputActions.BasicAttack.WasPerformedThisFrame())
+            if (Controller.InputActions.Attack.WasPerformedThisFrame())
             {
                 FSM.ChangeState(Controller.JumpAttackState);
             }

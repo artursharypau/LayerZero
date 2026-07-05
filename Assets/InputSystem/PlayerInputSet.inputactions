@@ -34,7 +34,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "BasicAttack",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "c92059b8-6fd8-4262-ae8c-a8730cfade50",
                     "expectedControlType": "",
@@ -183,7 +183,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
-                    "action": "BasicAttack",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

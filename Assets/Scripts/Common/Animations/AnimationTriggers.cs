@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace Player
+namespace Common.Animations
 {
-    public class PlayerAnimationTriggers : MonoBehaviour
+    public class AnimationTriggers : MonoBehaviour
     {
         public event Action AttackFinished = delegate { };
 

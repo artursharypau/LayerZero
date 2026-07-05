@@ -1,20 +1,21 @@
 using Common;
+using Common.Animations;
 using UnityEngine;
 
 namespace Player.States
 {
-    public class PlayerBasicAttackState : PlayerState
+    public class PlayerAttackState : PlayerState
     {
         private const int StartIndex = 0;
-        private static readonly int EndIndex = PlayerAnimationIdProvider.BasicAttacks.Length - 1;
+        private static readonly int EndIndex = PlayerAnimationIdProvider.Attacks.Length - 1;
 
         private int _currIndex;
         private float _finishedTime;
         private float _velocityTimer;
         private bool _nextAttackQueued;
 
-        public PlayerBasicAttackState(StateMachine fsm, PlayerController controller)
-            : base(PlayerAnimationIdProvider.BasicAttack, fsm, controller)
+        public PlayerAttackState(StateMachine fsm, PlayerController controller)
+            : base(AnimationIdProvider.Attack, fsm, controller)
         {
         }
 
@@ -38,7 +39,7 @@ namespace Player.States
                 Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             }
 
-            if (Controller.InputActions.BasicAttack.WasPerformedThisFrame())
+            if (Controller.InputActions.Attack.WasPerformedThisFrame())
             {
                 _nextAttackQueued = true;
             }
@@ -69,14 +70,14 @@ namespace Player.States
 
         private void PlayAnimationByIndex()
         {
-            Anim.Play(PlayerAnimationIdProvider.BasicAttacks[_currIndex], 0, 0f);
+            Anim.Play(PlayerAnimationIdProvider.Attacks[_currIndex], 0, 0f);
         }
 
         private void ApplyVelocity()
         {
             _velocityTimer = Controller.AttackVelocityDuration;
 
-            Vector2 velocity = Controller.AttackVelocity[_currIndex];
+            Vector2 velocity = Controller.AttackVelocities[_currIndex];
             float velocityX = Controller.MoveInput.x != 0f
                 ? Controller.MoveInput.x * velocity.x
                 : velocity.x * Controller.FacingDirection;
@@ -97,7 +98,7 @@ namespace Player.States
             }
             else
             {
-                FSM.ChangeState(Controller.BasicAttackState);
+                FSM.ChangeState(Controller.AttackState);
             }
         }
     }

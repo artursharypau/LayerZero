@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6896982321390182622}
   - component: {fileID: 6945710973896169371}
   - component: {fileID: 5209180982273092038}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,6 +113,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ba7ddc807547a38cd484eca3ce9bca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.Player
+  _groundCheckPoint: {fileID: 9126213500252039777}
+  _groundCheckDistance: 1.35
+  _wallCheckPoints:
+  - {fileID: 1724772789126508973}
+  - {fileID: 456699895117608732}
+  _wallCheckDistance: 0.45
   _moveSpeed: 15
   _dashDuration: 0.2
   _dashMultiplier: 3
@@ -123,11 +129,7 @@ MonoBehaviour:
   _wallJumpMoveLockDuration: 0.2
   _inAirMoveMultiplier: 0.5
   _wallSlideMultiplier: 0.8
-  _groundCheckDistance: 1.35
-  _wallCheckDistance: 0.45
-  _upWallCheckTransform: {fileID: 1724772789126508973}
-  _downWallCheckTransform: {fileID: 456699895117608732}
-  _attackVelocity:
+  _attackVelocities:
   - {x: 3, y: 1.5}
   - {x: 1, y: 2.5}
   - {x: 4, y: 5}
@@ -143,7 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1724772789126508973}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UpWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +176,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 456699895117608732}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DownWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +210,7 @@ GameObject:
   - component: {fileID: 2901280222887039337}
   - component: {fileID: 3179852667148875104}
   - component: {fileID: 8765777604338609285}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}

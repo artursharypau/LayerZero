@@ -1,3 +1,4 @@
+using Common.Animations;
 using UnityEngine;
 
 namespace Common
@@ -5,10 +6,10 @@ namespace Common
     public abstract class ControllerBase : MonoBehaviour
     {
         [Header("Collision detection")]
+        [SerializeField] private Transform _groundCheckPoint;
         [SerializeField] private float _groundCheckDistance = 1.35f;
+        [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;
-        [SerializeField] private Transform _upWallCheckTransform;
-        [SerializeField] private Transform _downWallCheckTransform;
 
         public bool IsGrounded { get; private set; } = true;
         public bool IsFalling => RB.linearVelocityY < 0f && !IsGrounded;
@@ -18,12 +19,14 @@ namespace Common
 
         public Rigidbody2D RB { get; private set; }
         public Animator Anim { get; private set; }
+        public AnimationTriggers AnimTriggers { get; private set; }
         public StateMachine FSM { get; private set; }
 
         private void Awake()
         {
             RB = GetComponent<Rigidbody2D>();
             Anim = GetComponentInChildren<Animator>();
+            AnimTriggers = GetComponentInChildren<AnimationTriggers>();
 
             FSM = new StateMachine();
 
@@ -43,9 +46,32 @@ namespace Common
             OnUpdate();
         }
 
-        protected abstract void OnAwake();
-        protected abstract void OnStart();
-        protected abstract void OnUpdate();
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(_groundCheckPoint.position, _groundCheckPoint.position + new Vector3(0f, -_groundCheckDistance));
+            foreach (Transform wallCheckPoint in _wallCheckPoints)
+            {
+                Gizmos.DrawLine(wallCheckPoint.position, wallCheckPoint.position + new Vector3(_wallCheckDistance * FacingDirection, 0f));
+            }
+
+            OnDrawAdditionalGizmos();
+        }
+
+        protected virtual void OnAwake()
+        {
+        }
+
+        protected virtual void OnStart()
+        {
+        }
+
+        protected virtual void OnUpdate()
+        {
+        }
+
+        protected virtual void OnDrawAdditionalGizmos()
+        {
+        }
 
         public void SetVelocity(float x, float y)
         {
@@ -65,19 +91,18 @@ namespace Common
 
         private void HandleCollisionDetection()
         {
+            IsGrounded = Physics2D.Raycast(_groundCheckPoint.position, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground);
+            IsWalled = true;
+
             Vector2 direction = IsFacingRight ? Vector2.right : Vector2.left;
-
-            IsGrounded = Physics2D.Raycast(transform.position, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground);
-            IsWalled = Physics2D.Raycast(_upWallCheckTransform.position, direction, _wallCheckDistance, LayerMaskProvider.Ground)
-                       && Physics2D.Raycast(_downWallCheckTransform.position, direction, _wallCheckDistance, LayerMaskProvider.Ground);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawLine(transform.position, transform.position + new Vector3(0f, -_groundCheckDistance));
-            Gizmos.DrawLine(_upWallCheckTransform.position, _upWallCheckTransform.position + new Vector3(_wallCheckDistance * FacingDirection, 0f));
-            Gizmos.DrawLine(
-                _downWallCheckTransform.position, _downWallCheckTransform.position + new Vector3(_wallCheckDistance * FacingDirection, 0f));
+            foreach (Transform wallCheckPoint in _wallCheckPoints)
+            {
+                if (!Physics2D.Raycast(wallCheckPoint.position, direction, _wallCheckDistance, LayerMaskProvider.Ground))
+                {
+                    IsWalled = false;
+                    break;
+                }
+            }
         }
     }
 }

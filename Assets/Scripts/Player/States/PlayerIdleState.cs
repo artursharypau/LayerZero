@@ -1,11 +1,12 @@
 using Common;
+using Common.Animations;
 
 namespace Player.States
 {
     public class PlayerIdleState : PlayerGroundedState
     {
         public PlayerIdleState(StateMachine fsm, PlayerController controller)
-            : base(PlayerAnimationIdProvider.Idle, fsm, controller)
+            : base(AnimationIdProvider.Idle, fsm, controller)
         {
         }
 

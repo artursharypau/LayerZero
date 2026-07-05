@@ -21,7 +21,7 @@ namespace Player
         [SerializeField] [Range(0, 1)] private float _wallSlideMultiplier = 0.8f;
 
         [Header("Attack details")]
-        [SerializeField] private Vector2[] _attackVelocity = { new(3f, 1.5f), new(1f, 2.5f), new(4f, 5f) };
+        [SerializeField] private Vector2[] _attackVelocities = { new(3f, 1.5f), new(1f, 2.5f), new(4f, 5f) };
         [SerializeField] private float _attackVelocityDuration = 0.1f;
         [SerializeField] private float _attackResetTime = 1f;
         [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
@@ -38,12 +38,11 @@ namespace Player
         public float InAirMoveMultiplier => _inAirMoveMultiplier;
         public float WallSlideMultiplier => _wallSlideMultiplier;
 
-        public Vector2[] AttackVelocity => _attackVelocity;
+        public Vector2[] AttackVelocities => _attackVelocities;
         public float AttackVelocityDuration => _attackVelocityDuration;
         public float AttackResetTime => _attackResetTime;
         public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
 
-        public PlayerAnimationTriggers AnimTriggers { get; private set; }
         public PlayerInputSet.PlayerActions InputActions { get; private set; }
 
         public StateBase IdleState { get; private set; }
@@ -53,14 +52,13 @@ namespace Player
         public StateBase FallState { get; private set; }
         public StateBase WallSlideState { get; private set; }
         public StateBase WallJumpState { get; private set; }
-        public StateBase BasicAttackState { get; private set; }
+        public StateBase AttackState { get; private set; }
         public StateBase JumpAttackState { get; private set; }
 
         public Vector2 MoveInput { get; private set; }
 
         protected override void OnAwake()
         {
-            AnimTriggers = GetComponentInChildren<PlayerAnimationTriggers>();
             InputActions = new PlayerInputSet().Player;
 
             IdleState = new PlayerIdleState(FSM, this);
@@ -70,7 +68,7 @@ namespace Player
             FallState = new PlayerFallState(FSM, this);
             WallSlideState = new PlayerWallSlideState(FSM, this);
             WallJumpState = new PlayerWallJumpState(FSM, this);
-            BasicAttackState = new PlayerBasicAttackState(FSM, this);
+            AttackState = new PlayerAttackState(FSM, this);
             JumpAttackState = new PlayerJumpAttackState(FSM, this);
         }
 

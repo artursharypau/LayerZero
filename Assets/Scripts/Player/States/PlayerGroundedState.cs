@@ -19,9 +19,9 @@ namespace Player.States
 
         public override void Update()
         {
-            if (Controller.InputActions.BasicAttack.WasPerformedThisFrame())
+            if (Controller.InputActions.Attack.WasPerformedThisFrame())
             {
-                FSM.ChangeState(Controller.BasicAttackState);
+                FSM.ChangeState(Controller.AttackState);
             }
             else if (Controller.CanJump())
             {
