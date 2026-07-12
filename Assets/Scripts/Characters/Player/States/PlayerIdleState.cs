@@ -1,0 +1,36 @@
+using Core.Animation;
+using Core.StateMachine;
+
+namespace Characters.Player.States
+{
+    public class PlayerIdleState : PlayerGroundedState
+    {
+        public PlayerIdleState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, AnimatorHashProvider.Idle)
+        {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+        }
+
+        public override bool TryTransition()
+        {
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (Controller.MoveInput.x != 0f && !IsRunningIntoWall())
+            {
+                FSM.ChangeState(Controller.MoveState);
+                return true;
+            }
+
+            return false;
+        }
+    }
+}

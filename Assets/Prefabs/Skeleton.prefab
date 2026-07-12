@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &394000721608118910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4973008962671906359}
+  m_Layer: 8
+  m_Name: CombatTargetCheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4973008962671906359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394000721608118910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.15, y: -0.19, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1613318259418196058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1707773233236389936
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,6 +170,7 @@ GameObject:
   - component: {fileID: 2398960693315817658}
   - component: {fileID: 6385280033924527661}
   - component: {fileID: 4817277150691120106}
+  - component: {fileID: 7765971437028232559}
   m_Layer: 8
   m_Name: Skeleton
   m_TagString: Untagged
@@ -161,6 +193,7 @@ Transform:
   m_Children:
   - {fileID: 788720872010586179}
   - {fileID: 1189184859021290774}
+  - {fileID: 4973008962671906359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2398960693315817658
@@ -253,6 +286,23 @@ MonoBehaviour:
   _attackDistance: 2.5
   _battleMoveAnimMultiplier: 2
   _inBattleChaseDuration: 5
+--- !u!114 &7765971437028232559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466222321441341585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba795a0b53074911a60c580c1a7b86a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Common.CombatSystem
+  _targetCheckPoint: {fileID: 4973008962671906359}
+  _targetCheckRadius: 1
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &6358823399330769092
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +313,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1189184859021290774}
   m_Layer: 8
-  m_Name: GroundCheck
+  m_Name: GroundCheckPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
