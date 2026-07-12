@@ -1,41 +1,59 @@
-using LayerZero.Characters.Common.Animation;
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Input;
+using Core.Animation;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
     public abstract class PlayerInAirState : PlayerState
     {
-        protected PlayerInAirState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        private bool _inputEnabled;
+
+        protected PlayerInAirState(
+            StateMachine fsm,
+            PlayerController controller,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, controller, animParameterHash, animParameterType)
         {
-            On(() => IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.JumpAttack);
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
+            _inputEnabled = true;
         }
 
-        protected bool IsMovementEnabled { get; set; } = true;
-
-        public override void Enter()
+        public override bool TryTransition()
         {
-            base.Enter();
+            if (base.TryTransition())
+            {
+                return true;
+            }
 
-            IsMovementEnabled = true;
+            if (_inputEnabled && Controller.InputActions.Attack.WasPerformedThisFrame())
+            {
+                FSM.ChangeState(Controller.JumpAttackState);
+                return true;
+            }
+
+            return false;
         }
 
         public override void Update()
         {
             base.Update();
 
-            Animator.SetFloat(CommonAnimatorParameters.VelocityY, Movement.VelocityY);
+            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.RB.linearVelocityY);
+
+            HandleMove();
         }
 
-        public override void FixedUpdate()
+        protected void EnableInput(bool enable)
         {
-            base.FixedUpdate();
+            _inputEnabled = enable;
+        }
 
-            if (IsMovementEnabled && Input.Move.x != 0f)
+        private void HandleMove()
+        {
+            if (_inputEnabled && Controller.MoveInput.x != 0f)
             {
-                Movement.SetVelocityX(Config.Movement.MoveSpeed * Config.Movement.InAirMoveMultiplier * Input.Move.x, true);
+                Controller.SetVelocity(
+                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.MoveInput.x,
+                    Controller.RB.linearVelocityY);
             }
         }
     }

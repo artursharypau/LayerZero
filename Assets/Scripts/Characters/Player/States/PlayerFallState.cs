@@ -1,36 +1,40 @@
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerFallState : PlayerInAirState
+    public class PlayerFallState : PlayerInAirState
     {
-        private float _defaultGravityScale;
-
-        public PlayerFallState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+        public PlayerFallState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
         {
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
-
-            OnFixed(() => Movement.IsGrounded, PlayerStateId.Idle);
-            OnFixed(() => Movement.IsWalled, PlayerStateId.WallSlide);
         }
 
-        public override int Id => PlayerStateId.Fall;
-
-        public override void Enter()
+        public override bool TryTransition()
         {
-            base.Enter();
+            if (base.TryTransition())
+            {
+                return true;
+            }
 
-            _defaultGravityScale = Movement.GravityScale;
-            Movement.SetGravityScale(_defaultGravityScale * Config.Jump.FallGravityMultiplier);
-        }
+            if (Controller.CanJump())
+            {
+                FSM.ChangeState(Controller.JumpState);
+                return true;
+            }
 
-        public override void Exit()
-        {
-            base.Exit();
+            if (Controller.IsGrounded)
+            {
+                FSM.ChangeState(Controller.IdleState);
+                return true;
+            }
 
-            Movement.SetGravityScale(_defaultGravityScale);
+            if (Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.WallSlideState);
+                return true;
+            }
+
+            return false;
         }
     }
 }

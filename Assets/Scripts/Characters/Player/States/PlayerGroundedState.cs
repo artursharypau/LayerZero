@@ -1,32 +1,59 @@
-using LayerZero.Characters.Common.Animation;
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Input;
+using Core.Animation;
+using Core.StateMachine;
 using UnityEngine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
     public abstract class PlayerGroundedState : PlayerState
     {
-        protected PlayerGroundedState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        protected PlayerGroundedState(
+            StateMachine fsm,
+            PlayerController controller,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, controller, animParameterHash, animParameterType)
         {
-            On(() => Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.Attack);
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
-
-            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            Owner.Abilities.Refill(PlayerAbilityId.Jump);
+            Controller.ResetJump();
         }
 
-        protected bool IsPushingIntoWall()
+        public override bool TryTransition()
         {
-            return Movement.IsWalled && Mathf.Approximately(Input.Move.x, Movement.FacingDirection);
+            if (base.TryTransition())
+            {
+                return true;
+            }
+
+            if (Controller.InputActions.Attack.WasPerformedThisFrame())
+            {
+                FSM.ChangeState(Controller.AttackState);
+                return true;
+            }
+
+            if (Controller.CanJump())
+            {
+                FSM.ChangeState(Controller.JumpState);
+                return true;
+            }
+
+            if (Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool IsRunningIntoWall()
+        {
+            return Controller.IsWalled
+                   && Mathf.Approximately(Controller.MoveInput.x, Controller.FacingDirection);
         }
     }
 }

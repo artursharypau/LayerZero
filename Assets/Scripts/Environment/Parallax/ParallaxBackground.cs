@@ -1,17 +1,19 @@
 using UnityEngine;
 
-namespace LayerZero.Environment.Parallax
+namespace Environment.Parallax
 {
-    public sealed class ParallaxBackground : MonoBehaviour
+    public class ParallaxBackground : MonoBehaviour
     {
         [SerializeField] private ParallaxLayer[] _layers;
 
         private Camera _camera;
-        private float _previousCameraX;
+        private float _previousCameraPositionX;
+        private float _cameraHalfWidth;
 
         private void Awake()
         {
             _camera = Camera.main;
+            _cameraHalfWidth = _camera!.orthographicSize * _camera.aspect;
 
             foreach (ParallaxLayer layer in _layers)
             {
@@ -21,31 +23,22 @@ namespace LayerZero.Environment.Parallax
 
         private void Start()
         {
-            if (_camera)
-            {
-                _previousCameraX = _camera.transform.position.x;
-            }
+            _previousCameraPositionX = _camera.transform.position.x;
         }
 
         private void LateUpdate()
         {
-            if (!_camera)
-            {
-                return;
-            }
+            float currentCameraPositionX = _camera.transform.position.x;
+            float distance = currentCameraPositionX - _previousCameraPositionX;
+            _previousCameraPositionX = currentCameraPositionX;
 
-            float cameraX = _camera.transform.position.x;
-            float distance = cameraX - _previousCameraX;
-            _previousCameraX = cameraX;
-
-            float halfWidth = _camera.orthographicSize * _camera.aspect;
-            float leftEdge = cameraX - halfWidth;
-            float rightEdge = cameraX + halfWidth;
+            float cameraLeftEdge = currentCameraPositionX - _cameraHalfWidth;
+            float cameraRightEdge = currentCameraPositionX + _cameraHalfWidth;
 
             foreach (ParallaxLayer layer in _layers)
             {
                 layer.Move(distance);
-                layer.Recycle(distance, leftEdge, rightEdge);
+                layer.LoopBackground(distance, cameraLeftEdge, cameraRightEdge);
             }
         }
     }

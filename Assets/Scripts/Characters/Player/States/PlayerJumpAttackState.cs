@@ -1,63 +1,52 @@
-using LayerZero.Characters.Common.States;
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
-using LayerZero.Combat.Attacks;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerJumpAttackState : PlayerState
+    public class PlayerJumpAttackState : PlayerState
     {
-        private readonly AttackBehaviour _attack;
+        private bool _isGroundTouched;
 
-        private bool _hasLanded;
-
-        public PlayerJumpAttackState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpAttack)
+        public PlayerJumpAttackState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.JumpAttack)
         {
-            _attack = new AttackBehaviour(owner, ResolveAttack);
-
-            On(() => _attack.IsFinished, ResolveLocomotionState);
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
         }
-
-        public override int Id => PlayerStateId.JumpAttack;
 
         public override void Enter()
         {
             base.Enter();
 
-            _hasLanded = false;
+            _isGroundTouched = false;
 
-            Movement.SetVelocity(Config.JumpAttack.Velocity.x * Movement.FacingDirection, Config.JumpAttack.Velocity.y);
-
-            _attack.Begin();
+            Controller.AnimTriggers.AttackFinished += OnFinished;
+            Controller.SetVelocity(
+                Controller.JumpAttackVelocity.x * Controller.FacingDirection,
+                Controller.JumpAttackVelocity.y);
         }
 
-        public override void FixedUpdate()
+        public override void Update()
         {
-            base.FixedUpdate();
+            base.Update();
 
-            if (_hasLanded || !Movement.IsGrounded)
+            if (Controller.IsGrounded && !_isGroundTouched)
             {
-                return;
+                _isGroundTouched = true;
+
+                Anim.SetTrigger(PlayerAnimatorHashProvider.JumpAttackTrigger);
+                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             }
-
-            _hasLanded = true;
-
-            Animator.Trigger(PlayerAnimatorParameters.JumpAttackTrigger);
-            Movement.SetVelocityX(0f);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            _attack.End();
+            Controller.AnimTriggers.AttackFinished -= OnFinished;
         }
 
-        private AttackDefinition ResolveAttack()
+        private void OnFinished()
         {
-            return Config.JumpAttack.Attack;
+            Controller.AnimTriggers.AttackFinished -= OnFinished;
+            FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
         }
     }
 }

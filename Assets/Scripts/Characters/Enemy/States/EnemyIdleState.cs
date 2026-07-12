@@ -1,11 +1,14 @@
 using Core.Animation;
 using Core.StateMachine;
+using UnityEngine;
 
-namespace Characters.Player.States
+namespace Characters.Enemy.States
 {
-    public class PlayerIdleState : PlayerGroundedState
+    public class EnemyIdleState : EnemyGroundedState
     {
-        public PlayerIdleState(StateMachine fsm, PlayerController controller)
+        private float _idleTimer;
+
+        public EnemyIdleState(StateMachine fsm, EnemyController controller)
             : base(fsm, controller, AnimatorHashProvider.Idle)
         {
         }
@@ -14,6 +17,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
+            _idleTimer = Controller.IdleDuration;
             Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
         }
 
@@ -24,13 +28,20 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.MoveInput.x != 0f && !IsRunningIntoWall())
+            if (_idleTimer <= 0f)
             {
                 FSM.ChangeState(Controller.MoveState);
                 return true;
             }
 
             return false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            _idleTimer -= Time.deltaTime;
         }
     }
 }

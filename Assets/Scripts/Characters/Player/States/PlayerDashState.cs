@@ -1,64 +1,84 @@
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
-using LayerZero.Combat.Damage.Resistance;
-using LayerZero.Core.Timing;
+using Core.StateMachine;
+using UnityEngine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerDashState : PlayerState
+    public class PlayerDashState : PlayerState
     {
-        private Countdown _timer;
-        private ResistanceHandle _resistance = ResistanceHandle.None;
-        private float _speed;
-        private float _defaultGravityScale;
-        private bool _isDashing;
+        private float _timer;
+        private float _velocityX;
+        private float _initialGravityScale;
 
-        public PlayerDashState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.Dash)
+        public PlayerDashState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.Dash)
         {
-            OnFixed(() => !_isDashing, ResolveLocomotionState);
-            OnFixed(() => _timer.IsExpired, ResolveLocomotionState);
-            OnFixed(() => Movement.IsWalled, PlayerStateId.Idle);
         }
-
-        public override int Id => PlayerStateId.Dash;
 
         public override void Enter()
         {
             base.Enter();
 
-            _defaultGravityScale = Movement.GravityScale;
-            _isDashing = Owner.Abilities.TryUse(PlayerAbilityId.Dash);
+            _timer = Controller.DashDuration;
+            _velocityX = Controller.MoveSpeed * Controller.DashMultiplier;
+            _initialGravityScale = Controller.RB.gravityScale;
 
-            if (!_isDashing)
-            {
-                return;
-            }
-
-            _timer.Start(Config.Dash.Duration);
-            _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
-
-            _resistance = Owner.DamageResistances.Apply(DamageResistance.Default.WithInvulnerability());
-
-            Movement.SetGravityScale(0f);
+            Controller.RB.gravityScale = 0f;
         }
 
-        public override void FixedUpdate()
+        public override bool TryTransition()
         {
-            base.FixedUpdate();
+            if (base.TryTransition())
+            {
+                return true;
+            }
 
-            Movement.SetVelocity(_speed * Movement.FacingDirection, 0f);
+            if (_timer <= 0f)
+            {
+                if (Controller.IsWalled)
+                {
+                    FSM.ChangeState(Controller.WallSlideState);
+                }
+                else if (Controller.IsFalling)
+                {
+                    FSM.ChangeState(Controller.FallState);
+                }
+                else
+                {
+                    FSM.ChangeState(Controller.IdleState);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            _timer -= Time.deltaTime;
+            HandleDash();
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Movement.SetGravityScale(_defaultGravityScale);
-            Movement.SetVelocityX(0f);
+            Controller.SetVelocity(0f, 0f);
+            Controller.RB.gravityScale = _initialGravityScale;
+        }
 
-            Owner.DamageResistances.Remove(_resistance);
-            _resistance = ResistanceHandle.None;
+        private void HandleDash()
+        {
+            if (Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.IsGrounded ? Controller.IdleState : Controller.WallSlideState);
+            }
+            else
+            {
+                Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
+            }
         }
     }
 }

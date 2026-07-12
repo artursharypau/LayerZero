@@ -1,13 +1,25 @@
 using Core.Animation;
 using Core.StateMachine;
 
-namespace Characters.Player.States
+namespace Characters.Enemy.States
 {
-    public class PlayerMoveState : PlayerGroundedState
+    public class EnemyMoveState : EnemyGroundedState
     {
-        public PlayerMoveState(StateMachine fsm, PlayerController controller)
+        public EnemyMoveState(StateMachine fsm, EnemyController controller)
             : base(fsm, controller, AnimatorHashProvider.Move)
         {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            if (!Controller.IsGrounded || Controller.IsWalled)
+            {
+                Controller.Flip();
+            }
+
+            Anim.SetFloat(EnemyAnimatorHashProvider.MoveAnimMultiplier, Controller.MoveAnimMultiplier);
         }
 
         public override bool TryTransition()
@@ -17,7 +29,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.MoveInput.x == 0f || IsRunningIntoWall())
+            if (!Controller.IsGrounded || Controller.IsWalled)
             {
                 FSM.ChangeState(Controller.IdleState);
                 return true;
@@ -30,9 +42,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Controller.SetVelocity(
-                Controller.MoveSpeed * Controller.MoveInput.x,
-                Controller.RB.linearVelocityY);
+            Controller.SetVelocity(Controller.MoveSpeed * Controller.FacingDirection, Controller.RB.linearVelocityY);
         }
 
         public override void Exit()

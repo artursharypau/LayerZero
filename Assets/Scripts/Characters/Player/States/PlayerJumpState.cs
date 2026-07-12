@@ -1,37 +1,52 @@
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerJumpState : PlayerInAirState
+    public class PlayerJumpState : PlayerInAirState
     {
-        public PlayerJumpState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+        public PlayerJumpState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
         {
-            OnFixed(() => Movement.VelocityY <= 0f, PlayerStateId.Fall);
         }
-
-        public override int Id => PlayerStateId.Jump;
 
         public override void Enter()
         {
             base.Enter();
 
-            TryJump();
+            Jump();
         }
 
-        public override void FixedUpdate()
+        public override bool TryTransition()
         {
-            base.FixedUpdate();
-
-            TryJump();
-        }
-
-        private void TryJump()
-        {
-            if (Owner.Abilities.TryUse(PlayerAbilityId.Jump))
+            if (base.TryTransition())
             {
-                Movement.SetVelocity(Movement.VelocityX, Config.Jump.Force);
+                return true;
+            }
+
+            if (Controller.RB.linearVelocityY <= 0f)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            Jump();
+        }
+
+        private void Jump()
+        {
+            if (Controller.CanJump())
+            {
+                Controller.SetVelocity(
+                    Controller.MoveSpeed * Controller.MoveInput.x,
+                    Controller.JumpForce);
+                Controller.ConsumeJump();
             }
         }
     }

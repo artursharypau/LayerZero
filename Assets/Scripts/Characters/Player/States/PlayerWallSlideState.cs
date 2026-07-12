@@ -1,46 +1,70 @@
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
-using LayerZero.Characters.Player.Input;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerWallSlideState : PlayerInAirState
+    public class PlayerWallSlideState : PlayerInAirState
     {
-        public PlayerWallSlideState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.WallSlide)
+        public PlayerWallSlideState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.WallSlide)
         {
-            On(() => Input.WasPerformed(PlayerInputAction.Jump), PlayerStateId.WallJump);
-
-            OnFixed(() => Movement.IsGrounded, TransitToIdle);
-            OnFixed(() => !Movement.IsWalled && Movement.IsFalling, PlayerStateId.Fall);
+            EnableInput(false);
         }
-
-        public override int Id => PlayerStateId.WallSlide;
 
         public override void Enter()
         {
             base.Enter();
 
-            IsMovementEnabled = false;
-
-            Owner.Abilities.RefillTo(PlayerAbilityId.Jump, 1);
+            Controller.ResetJump();
+            Controller.ConsumeJump();
         }
 
-        public override void FixedUpdate()
+        public override bool TryTransition()
         {
-            base.FixedUpdate();
+            if (base.TryTransition())
+            {
+                return true;
+            }
 
-            float velocityY = Input.Move.y < 0f
-                ? Movement.VelocityY
-                : Movement.VelocityY * Config.Movement.WallSlideMultiplier;
+            if (Controller.IsGrounded)
+            {
+                if (Controller.FacingDirection != Controller.MoveInput.x)
+                {
+                    Controller.Flip();
+                }
 
-            Movement.SetVelocity(0f, velocityY);
+                FSM.ChangeState(Controller.IdleState);
+                return true;
+            }
+
+            if (!Controller.IsWalled && Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            if (Controller.InputActions.Jump.WasPerformedThisFrame())
+            {
+                FSM.ChangeState(Controller.WallJumpState);
+                return true;
+            }
+
+            return false;
         }
 
-        private int TransitToIdle()
+        public override void Update()
         {
-            Movement.FaceTowards(Input.Move.x);
-            return PlayerStateId.Idle;
+            base.Update();
+
+            HandleSliding();
+        }
+
+        private void HandleSliding()
+        {
+            float velocityY = Controller.MoveInput.y < 0f
+                ? Controller.RB.linearVelocityY
+                : Controller.RB.linearVelocityY * Controller.WallSlideMultiplier;
+
+            Controller.SetVelocity(Controller.MoveInput.x, velocityY);
         }
     }
 }

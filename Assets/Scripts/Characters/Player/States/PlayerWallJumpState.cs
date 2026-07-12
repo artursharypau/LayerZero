@@ -1,43 +1,65 @@
-using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
-using LayerZero.Core.Timing;
+using Core.StateMachine;
 using UnityEngine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public sealed class PlayerWallJumpState : PlayerInAirState
+    public class PlayerWallJumpState : PlayerInAirState
     {
-        private Countdown _moveLock;
+        private float _moveLockTimer;
 
-        public PlayerWallJumpState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+        public PlayerWallJumpState(StateMachine fsm, PlayerController controller)
+            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
         {
-            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
-
-            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
-            OnFixed(() => Movement.IsWalled, PlayerStateId.WallSlide);
         }
-
-        public override int Id => PlayerStateId.WallJump;
 
         public override void Enter()
         {
             base.Enter();
 
-            _moveLock.Start(Config.Jump.WallJumpMoveLockDuration);
-            IsMovementEnabled = false;
+            _moveLockTimer = Controller.WallJumpMoveLockDuration;
 
-            Vector2 force = Config.Jump.WallJumpForce;
-            Movement.SetVelocity(force.x * -Movement.FacingDirection, force.y, true);
+            EnableInput(false);
+            Controller.SetVelocity(
+                Controller.WallJumpForce.x * -Controller.FacingDirection,
+                Controller.WallJumpForce.y);
         }
 
-        public override void FixedUpdate()
+        public override bool TryTransition()
         {
-            base.FixedUpdate();
-
-            if (!IsMovementEnabled && _moveLock.IsExpired)
+            if (base.TryTransition())
             {
-                IsMovementEnabled = true;
+                return true;
+            }
+
+            if (Controller.CanJump())
+            {
+                FSM.ChangeState(Controller.JumpState);
+                return true;
+            }
+
+            if (Controller.IsFalling)
+            {
+                FSM.ChangeState(Controller.FallState);
+                return true;
+            }
+
+            if (Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.WallSlideState);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            _moveLockTimer -= Time.deltaTime;
+            if (_moveLockTimer <= 0f)
+            {
+                EnableInput(true);
             }
         }
     }

@@ -1,28 +1,47 @@
-using LayerZero.Characters.Common.Animation;
-using LayerZero.Characters.Common.States;
-using LayerZero.Characters.Player.Config;
-using LayerZero.Characters.Player.Input;
+using Core.Animation;
+using Core.StateMachine;
+using UnityEngine;
 
-namespace LayerZero.Characters.Player.States
+namespace Characters.Player.States
 {
-    public abstract class PlayerState : CharacterState<PlayerController>
+    public abstract class PlayerState : State
     {
-        protected PlayerState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        private static float _dashCooldownTimer;
+
+        protected PlayerController Controller { get; }
+
+        protected PlayerState(
+            StateMachine fsm,
+            PlayerController controller,
+            int animParameterHash,
+            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
+            : base(fsm, new AnimatorContext(animParameterHash, animParameterType, controller.Anim))
         {
+            Controller = controller;
         }
 
-        protected IPlayerInput Input => Owner.Input;
-        protected PlayerConfig Config => Owner.Config;
-
-        protected int ResolveLocomotionState()
+        public override bool TryTransition()
         {
-            if (Movement.IsFalling)
+            if (base.TryTransition())
             {
-                return PlayerStateId.Fall;
+                return true;
             }
 
-            return Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle;
+            if (_dashCooldownTimer <= 0f && !Controller.IsWalled && Controller.InputActions.Dash.WasPerformedThisFrame())
+            {
+                _dashCooldownTimer = Controller.DashDuration + Controller.DashCooldown;
+                FSM.ChangeState(Controller.DashState);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            _dashCooldownTimer -= Time.deltaTime;
         }
     }
 }
