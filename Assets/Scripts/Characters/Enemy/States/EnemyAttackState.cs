@@ -28,7 +28,7 @@ namespace Characters.Enemy.States
         {
             Controller.AnimTriggers.AttackFinished -= OnFinished;
 
-            FSM.ChangeState(Controller.BattleState);
+            FSM.ChangeState(Controller.ChaseState);
         }
     }
 }

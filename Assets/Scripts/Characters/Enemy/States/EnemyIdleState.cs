@@ -30,7 +30,7 @@ namespace Characters.Enemy.States
 
             if (_idleTimer <= 0f)
             {
-                FSM.ChangeState(Controller.MoveState);
+                FSM.ChangeState(Controller.PatrolState);
                 return true;
             }
 

@@ -1,6 +1,7 @@
 using Core.Animation;
 using Core.StateMachine;
 using Core.Utils;
+using Systems.Combat;
 using UnityEngine;
 
 namespace Characters
@@ -22,6 +23,7 @@ namespace Characters
         public Rigidbody2D RB { get; private set; }
         public Animator Anim { get; private set; }
         public AnimatorTriggers AnimTriggers { get; private set; }
+        public Health Health { get; private set; }
         public StateMachine FSM { get; private set; }
 
         private void Awake()
@@ -29,10 +31,16 @@ namespace Characters
             RB = GetComponent<Rigidbody2D>();
             Anim = GetComponentInChildren<Animator>();
             AnimTriggers = GetComponentInChildren<AnimatorTriggers>();
+            Health = GetComponent<Health>();
 
             FSM = new StateMachine();
 
             OnAwake();
+        }
+
+        private void OnEnable()
+        {
+            OnEnabled();
         }
 
         private void Start()
@@ -43,9 +51,14 @@ namespace Characters
         private void Update()
         {
             HandleCollisionDetection();
-            FSM.Update();
-
             OnUpdate();
+
+            FSM.Update();
+        }
+
+        private void OnDisable()
+        {
+            OnDisabled();
         }
 
         private void OnDrawGizmos()
@@ -63,11 +76,19 @@ namespace Characters
         {
         }
 
+        protected virtual void OnEnabled()
+        {
+        }
+
         protected virtual void OnStart()
         {
         }
 
         protected virtual void OnUpdate()
+        {
+        }
+
+        protected virtual void OnDisabled()
         {
         }
 

@@ -1,12 +1,11 @@
-using Core.Animation;
 using Core.StateMachine;
 
 namespace Characters.Enemy.States
 {
-    public class EnemyMoveState : EnemyGroundedState
+    public class EnemyPatrolState : EnemyGroundedState
     {
-        public EnemyMoveState(StateMachine fsm, EnemyController controller)
-            : base(fsm, controller, AnimatorHashProvider.Move)
+        public EnemyPatrolState(StateMachine fsm, EnemyController controller)
+            : base(fsm, controller, EnemyAnimatorHashProvider.Patrol)
         {
         }
 
