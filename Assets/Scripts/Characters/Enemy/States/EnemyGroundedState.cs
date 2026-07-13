@@ -21,9 +21,9 @@ namespace Characters.Enemy.States
                 return true;
             }
 
-            if (Controller.IsPlayerDetected)
+            if (Controller.Target.HasCurrent)
             {
-                FSM.ChangeState(Controller.BattleState);
+                FSM.ChangeState(Controller.ChaseState);
                 return true;
             }
 

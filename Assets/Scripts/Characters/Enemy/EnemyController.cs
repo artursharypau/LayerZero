@@ -1,6 +1,6 @@
 using Characters.Enemy.States;
 using Core.StateMachine;
-using Core.Utils;
+using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Enemy
@@ -12,38 +12,43 @@ namespace Characters.Enemy
         [SerializeField] private float _moveSpeed = 1.5f;
         [SerializeField] [Range(0, 5)] private float _moveAnimMultiplier = 1f;
 
-        [Header("Player detection")]
-        [SerializeField] private Transform _playerCheckPoint;
-        [SerializeField] private float _playerCheckDistance = 13f;
+        [Header("Chase details")]
+        [SerializeField] [Range(0, 5)] private float _chaseMoveSpeedMultiplier = 2f;
+        [SerializeField] [Range(0, 5)] private float _chaseMoveAnimMultiplier = 2f;
 
-        [Header("Battle details")]
-        [SerializeField] [Range(0, 5)] private float _battleMoveSpeedMultiplier = 2f;
-        [SerializeField] private float _attackDistance = 2.5f;
-        [SerializeField] [Range(0, 5)] private float _battleMoveAnimMultiplier = 2f;
-        [SerializeField] private float _inBattleChaseDuration = 5f;
+        private CombatSystem _combatSystem;
 
         public float IdleDuration => _idleDuration;
         public float MoveSpeed => _moveSpeed;
         public float MoveAnimMultiplier => _moveAnimMultiplier;
 
-        public float BattleMoveSpeedMultiplier => _battleMoveSpeedMultiplier;
-        public float AttackDistance => _attackDistance;
-        public float BattleMoveAnimMultiplier => _battleMoveAnimMultiplier;
-        public float InBattleChaseDuration => _inBattleChaseDuration;
+        public float ChaseMoveSpeedMultiplier => _chaseMoveSpeedMultiplier;
+        public float ChaseMoveAnimMultiplier => _chaseMoveAnimMultiplier;
 
-        public bool IsPlayerDetected => CheckForPlayer();
+        public EnemyTarget Target { get; private set; }
 
         public State IdleState { get; private set; }
-        public State MoveState { get; private set; }
+        public State PatrolState { get; private set; }
         public State AttackState { get; private set; }
-        public State BattleState { get; private set; }
+        public State ChaseState { get; private set; }
 
         protected override void OnAwake()
         {
+            _combatSystem = GetComponent<CombatSystem>();
+
+            Target = GetComponent<EnemyTarget>();
+
             IdleState = new EnemyIdleState(FSM, this);
-            MoveState = new EnemyMoveState(FSM, this);
+            PatrolState = new EnemyPatrolState(FSM, this);
             AttackState = new EnemyAttackState(FSM, this);
-            BattleState = new EnemyBattleState(FSM, this);
+            ChaseState = new EnemyChaseState(FSM, this);
+        }
+
+        protected override void OnEnabled()
+        {
+            base.OnEnabled();
+
+            Health.Damaged += OnDamaged;
         }
 
         protected override void OnStart()
@@ -51,28 +56,26 @@ namespace Characters.Enemy
             FSM.Initialize(IdleState);
         }
 
-        protected override void OnDrawAdditionalGizmos()
+        protected override void OnUpdate()
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(
-                _playerCheckPoint.position,
-                _playerCheckPoint.position + new Vector3(_playerCheckDistance * FacingDirection, 0f));
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(_playerCheckPoint.position, _playerCheckPoint.position + new Vector3(_attackDistance * FacingDirection, 0f));
+            Target.Tick(FacingDirection);
         }
 
-        public RaycastHit2D CheckForPlayer()
+        protected override void OnDisabled()
         {
-            RaycastHit2D raycast = Physics2D.Raycast(
-                _playerCheckPoint.position,
-                Vector2.right * FacingDirection,
-                _playerCheckDistance,
-                LayerMaskProvider.Player | LayerMaskProvider.Ground);
+            base.OnDisabled();
 
-            return raycast.collider && LayerMaskProvider.Contains(raycast.collider.gameObject.layer, LayerMaskProvider.Player)
-                ? raycast
-                : default;
+            Health.Damaged -= OnDamaged;
+        }
+
+        public bool ShouldAttack()
+        {
+            return _combatSystem.HasTargets();
+        }
+
+        private void OnDamaged(DamageInfo damageInfo)
+        {
+            Target.DamageAlert(damageInfo);
         }
     }
 }

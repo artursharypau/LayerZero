@@ -4,8 +4,9 @@ namespace Characters.Enemy
 {
     public static class EnemyAnimatorHashProvider
     {
+        public static readonly int Patrol = Animator.StringToHash("patrol");
         public static readonly int MoveAnimMultiplier = Animator.StringToHash("moveAnimMultiplier");
-        public static readonly int Battle = Animator.StringToHash("battle");
-        public static readonly int BattleMoveAnimMultiplier = Animator.StringToHash("battleMoveAnimMultiplier");
+        public static readonly int Chase = Animator.StringToHash("chase");
+        public static readonly int ChaseMoveAnimMultiplier = Animator.StringToHash("chaseMoveAnimMultiplier");
     }
 }

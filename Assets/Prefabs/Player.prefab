@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6896982321390182622}
   - component: {fileID: 6945710973896169371}
   - component: {fileID: 5209180982273092038}
+  - component: {fileID: 4145020159193950360}
   - component: {fileID: 9099559585489720659}
   m_Layer: 7
   m_Name: Player
@@ -138,6 +139,19 @@ MonoBehaviour:
   _attackVelocityDuration: 0.1
   _attackResetTime: 1
   _jumpAttackVelocity: {x: 3, y: -5}
+--- !u!114 &4145020159193950360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514101050448271214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7738c9bed48a45268f528d56fd19a679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Systems.Combat.Health
+  _max: 100
 --- !u!114 &9099559585489720659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +169,8 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  _damageAmount: 10
+  _damageSource: 1
 --- !u!1 &3852130694387612074
 GameObject:
   m_ObjectHideFlags: 0
