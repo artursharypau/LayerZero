@@ -60,9 +60,9 @@ namespace Systems.Combat
 
             foreach (Collider2D target in targets)
             {
-                if (target.TryGetComponent(out Health targetHealth))
+                if (target.TryGetComponent(out IDamageable damageable))
                 {
-                    targetHealth.TakeDamage(new DamageInfo(_damageAmount, _damageSource, transform));
+                    damageable.TakeDamage(new DamageInfo(_damageAmount, _damageSource, transform));
                 }
             }
         }

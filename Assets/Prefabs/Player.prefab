@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5209180982273092038}
   - component: {fileID: 4145020159193950360}
   - component: {fileID: 9099559585489720659}
+  - component: {fileID: 1558889594841445991}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -173,6 +174,20 @@ MonoBehaviour:
     m_Bits: 256
   _damageAmount: 10
   _damageSource: 1
+--- !u!114 &1558889594841445991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514101050448271214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1adf0d5d081418099873539808e8115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Vfx.DamageVfx
+  _duration: 0.15
+  _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
 --- !u!1 &3852130694387612074
 GameObject:
   m_ObjectHideFlags: 0
