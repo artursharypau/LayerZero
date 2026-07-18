@@ -1,23 +1,25 @@
 using Core.Animation;
 using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Enemy.States
 {
     public class EnemyIdleState : EnemyGroundedState
     {
-        private float _idleTimer;
+        private readonly CountdownTimer _timer;
 
         public EnemyIdleState(StateMachine fsm, EnemyController controller)
             : base(fsm, controller, AnimatorHashProvider.Idle)
         {
+            _timer = new CountdownTimer();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _idleTimer = Controller.IdleDuration;
+            _timer.Start(Controller.IdleDuration);
             Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
         }
 
@@ -28,7 +30,7 @@ namespace Characters.Enemy.States
                 return true;
             }
 
-            if (_idleTimer <= 0f)
+            if (!_timer.IsRunning)
             {
                 FSM.ChangeState(Controller.PatrolState);
                 return true;
@@ -41,7 +43,7 @@ namespace Characters.Enemy.States
         {
             base.Update();
 
-            _idleTimer -= Time.deltaTime;
+            _timer.Tick(Time.deltaTime);
         }
     }
 }

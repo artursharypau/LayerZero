@@ -1,22 +1,24 @@
 using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
 {
     public class PlayerWallJumpState : PlayerInAirState
     {
-        private float _moveLockTimer;
+        private readonly CountdownTimer _moveLockTimer;
 
         public PlayerWallJumpState(StateMachine fsm, PlayerController controller)
             : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
         {
+            _moveLockTimer = new CountdownTimer();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _moveLockTimer = Controller.WallJumpMoveLockDuration;
+            _moveLockTimer.Start(Controller.WallJumpMoveLockDuration);
 
             EnableInput(false);
             Controller.SetVelocity(
@@ -56,8 +58,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            _moveLockTimer -= Time.deltaTime;
-            if (_moveLockTimer <= 0f)
+            if (_moveLockTimer.Tick(Time.deltaTime))
             {
                 EnableInput(true);
             }
