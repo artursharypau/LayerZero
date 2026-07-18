@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 6929327695061375567}
   - component: {fileID: 3175512165780746393}
   - component: {fileID: 7765971437028232559}
+  - component: {fileID: 3401725131487728625}
   m_Layer: 8
   m_Name: Skeleton
   m_TagString: Untagged
@@ -309,7 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba5c962bd3949a38c4faee6cfeac089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Characters.Enemy.EnemyTargetDetector
-  _alertDuration: 2
+  _alertDuration: 5
   _checkPoint: {fileID: 1613318259418196058}
   _checkDistance: 13
 --- !u!114 &7765971437028232559
@@ -331,6 +332,20 @@ MonoBehaviour:
     m_Bits: 128
   _damageAmount: 10
   _damageSource: 2
+--- !u!114 &3401725131487728625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466222321441341585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1adf0d5d081418099873539808e8115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Vfx.DamageVfx
+  _duration: 0.15
+  _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
 --- !u!1 &6358823399330769092
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,51 @@
+using Core.Utils;
+using Systems.Combat;
+using UnityEngine;
+
+namespace Core.Vfx
+{
+    public class DamageVfx : MonoBehaviour
+    {
+        [SerializeField] private float _duration = 0.15f;
+        [SerializeField] private Material _material;
+
+        private SpriteRenderer _sr;
+        private IDamageable _damageable;
+        private CountdownTimer _timer;
+        private Material _initialMaterial;
+
+        private void Awake()
+        {
+            _sr = GetComponentInChildren<SpriteRenderer>();
+            _damageable = GetComponent<IDamageable>();
+
+            _timer = new CountdownTimer();
+        }
+
+        private void OnEnable()
+        {
+            _damageable.Damaged += OnDamaged;
+        }
+
+        private void OnDisable()
+        {
+            _damageable.Damaged -= OnDamaged;
+        }
+
+        private void Update()
+        {
+            if (_timer.Tick(Time.deltaTime))
+            {
+                _sr.material = _initialMaterial;
+            }
+        }
+
+        private void OnDamaged(DamageInfo obj)
+        {
+            _initialMaterial = _sr.material;
+            _sr.material = _material;
+
+            _timer.Start(_duration);
+        }
+    }
+}

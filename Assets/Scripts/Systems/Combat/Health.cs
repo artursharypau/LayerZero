@@ -3,22 +3,23 @@ using UnityEngine;
 
 namespace Systems.Combat
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour, IDamageable
     {
         [SerializeField] private int _max;
 
-        private int _current;
-
         public event Action<DamageInfo> Damaged;
+
+        public float CurrentHealth { get; private set; }
+        public float MaxHealth => _max;
 
         private void Awake()
         {
-            _current = _max;
+            CurrentHealth = _max;
         }
 
         public void TakeDamage(DamageInfo damageInfo)
         {
-            _current -= damageInfo.Amount;
+            CurrentHealth -= damageInfo.Amount;
 
             Damaged?.Invoke(damageInfo);
         }
