@@ -13,12 +13,13 @@ namespace Characters.Enemy
         [SerializeField] private float _checkDistance = 13f;
 
         private float _facingDirection;
-        private float _detectedLastTime;
         private Transform _behindAttackerTransform;
+        private CountdownTimer _timer;
 
         public bool HasCurrent => Current != null;
         public Transform Current { get; private set; }
         public bool IsBehind => HasCurrent && !Mathf.Approximately(Direction, _facingDirection);
+
         public float Direction
         {
             get
@@ -32,6 +33,11 @@ namespace Characters.Enemy
             }
         }
 
+        private void Awake()
+        {
+            _timer = new CountdownTimer();
+        }
+
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.yellow;
@@ -43,6 +49,7 @@ namespace Characters.Enemy
         public void Tick(float facingDirection)
         {
             _facingDirection = facingDirection;
+            _timer.Tick(Time.deltaTime);
 
             UpdateCurrent();
         }
@@ -72,11 +79,11 @@ namespace Characters.Enemy
 
             if (current)
             {
-                _detectedLastTime = Time.time;
                 Current = current;
+                _timer.Start(_alertDuration);
             }
 
-            if (_detectedLastTime + _alertDuration < Time.time)
+            if (!_timer.IsRunning)
             {
                 Current = null;
             }

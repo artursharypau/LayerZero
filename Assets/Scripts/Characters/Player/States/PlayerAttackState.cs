@@ -1,5 +1,6 @@
 using Core.Animation;
 using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -9,14 +10,16 @@ namespace Characters.Player.States
         private const int StartIndex = 0;
         private const int EndIndex = 2;
 
+        private readonly CountdownTimer _velocityTimer;
+
         private int _currIndex;
         private float _finishedTime;
-        private float _velocityTimer;
         private bool _nextAttackQueued;
 
         public PlayerAttackState(StateMachine fsm, PlayerController controller)
             : base(fsm, controller, AnimatorHashProvider.Attack, AnimatorParameterType.Trigger)
         {
+            _velocityTimer = new CountdownTimer();
         }
 
         public override void Enter()
@@ -35,7 +38,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            if (_velocityTimer <= 0f)
+            if (_velocityTimer.Tick(Time.deltaTime))
             {
                 Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             }
@@ -44,8 +47,6 @@ namespace Characters.Player.States
             {
                 _nextAttackQueued = true;
             }
-
-            _velocityTimer -= Time.deltaTime;
         }
 
         public override void Exit()
@@ -71,7 +72,7 @@ namespace Characters.Player.States
 
         private void ApplyVelocity()
         {
-            _velocityTimer = Controller.AttackVelocityDuration;
+            _velocityTimer.Start(Controller.AttackVelocityDuration);
 
             Vector2 velocity = Controller.AttackVelocities[_currIndex];
             float velocityX = Controller.MoveInput.x != 0f

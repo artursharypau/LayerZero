@@ -68,8 +68,6 @@ namespace Characters
             {
                 Gizmos.DrawLine(wallCheckPoint.position, wallCheckPoint.position + new Vector3(_wallCheckDistance * FacingDirection, 0f));
             }
-
-            OnDrawAdditionalGizmos();
         }
 
         protected virtual void OnAwake()
@@ -89,10 +87,6 @@ namespace Characters
         }
 
         protected virtual void OnDisabled()
-        {
-        }
-
-        protected virtual void OnDrawAdditionalGizmos()
         {
         }
 

@@ -19,7 +19,6 @@ namespace Core.Utils
             }
 
             _time -= deltaTime;
-
             return _time <= 0;
         }
     }

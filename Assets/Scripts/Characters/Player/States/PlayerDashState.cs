@@ -1,24 +1,27 @@
 using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
 {
     public class PlayerDashState : PlayerState
     {
-        private float _timer;
+        private readonly CountdownTimer _timer;
+
         private float _velocityX;
         private float _initialGravityScale;
 
         public PlayerDashState(StateMachine fsm, PlayerController controller)
             : base(fsm, controller, PlayerAnimatorHashProvider.Dash)
         {
+            _timer = new CountdownTimer();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _timer = Controller.DashDuration;
+            _timer.Start(Controller.DashDuration);
             _velocityX = Controller.MoveSpeed * Controller.DashMultiplier;
             _initialGravityScale = Controller.RB.gravityScale;
 
@@ -32,7 +35,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_timer <= 0f)
+            if (!_timer.IsRunning)
             {
                 if (Controller.IsWalled)
                 {
@@ -57,7 +60,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            _timer -= Time.deltaTime;
+            _timer.Tick(Time.deltaTime);
             HandleDash();
         }
 
