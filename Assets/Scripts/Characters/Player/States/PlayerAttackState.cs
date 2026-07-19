@@ -37,7 +37,8 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            if (_velocityTimer.Tick(Time.deltaTime))
+            _velocityTimer.Tick(Time.deltaTime);
+            if (_velocityTimer.IsExpired)
             {
                 Controller.SetHorizontalVelocity(0f);
             }

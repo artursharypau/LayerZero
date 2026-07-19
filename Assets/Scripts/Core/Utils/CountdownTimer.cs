@@ -1,25 +1,24 @@
+using Core.Tick;
+
 namespace Core.Utils
 {
-    public class CountdownTimer
+    public class CountdownTimer : ITickable
     {
         private float _time;
 
-        public bool IsRunning => _time > 0f;
+        public bool IsExpired => _time <= 0f;
 
         public void Start(float duration)
         {
             _time = duration;
         }
 
-        public bool Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
-            if (!IsRunning)
+            if (!IsExpired)
             {
-                return false;
+                _time -= deltaTime;
             }
-
-            _time -= deltaTime;
-            return _time <= 0;
         }
     }
 }

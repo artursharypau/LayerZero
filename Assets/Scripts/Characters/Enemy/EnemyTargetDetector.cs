@@ -1,12 +1,14 @@
 using System;
 using Characters.Common;
+using Core.Tick;
 using Core.Utils;
 using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Enemy
 {
-    public class EnemyTargetDetector : MonoBehaviour
+    [Serializable]
+    public class EnemyTargetDetector : ITickable
     {
         [SerializeField] private float _alertDuration = 5f;
         [SerializeField] private float _checkCooldown = 0.5f;
@@ -15,15 +17,25 @@ namespace Characters.Enemy
         [SerializeField] private Transform _checkPoint;
         [SerializeField] private float _checkDistance = 13f;
 
-        private IMovable _controller;
+        private IMovable _owner;
         private CountdownTimer _alertTimer;
         private CountdownTimer _checkTimer;
+
+        public void Initialize(IMovable owner)
+        {
+            _owner = owner;
+
+            _alertTimer = new CountdownTimer();
+            _checkTimer = new CountdownTimer();
+
+            _checkTimer.Start(_checkCooldown);
+        }
 
         public event Action TargetFound;
         public event Action TargetLost;
 
         public Transform Current { get; private set; }
-        public bool IsBehind => Current && !Mathf.Approximately(Direction, _controller.FacingDirection);
+        public bool IsBehind => Current && !Mathf.Approximately(Direction, _owner.FacingDirection);
 
         public float Direction
         {
@@ -34,53 +46,36 @@ namespace Characters.Enemy
                     return 0f;
                 }
 
-                return Current.position.x > transform.position.x ? 1 : -1;
+                return Current.position.x > _owner.RB.position.x ? 1 : -1;
             }
         }
 
-        private void Awake()
-        {
-            _controller = GetComponent<IMovable>();
-            _alertTimer = new CountdownTimer();
-            _checkTimer = new CountdownTimer();
-        }
-
-        private void Start()
-        {
-            _checkTimer.Start(_checkCooldown);
-        }
-
-        private void Update()
+        public void Tick(float deltaTime)
         {
             _alertTimer.Tick(Time.deltaTime);
+            _checkTimer.Tick(Time.deltaTime);
 
-            if (_checkTimer.Tick(Time.deltaTime))
+            if (_checkTimer.IsExpired)
             {
                 UpdateCurrent();
                 _checkTimer.Start(_checkCooldown);
             }
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(
-                _checkPoint.position,
-                _checkPoint.position + new Vector3(_checkDistance * _controller.FacingDirection, 0f));
-        }
-
         public void DamageAlert(DamageInfo damageInfo)
         {
             if (damageInfo.Source == DamageSource.Player)
             {
-                if (!Current)
-                {
-                    TargetFound?.Invoke();
-                }
-
-                Current = damageInfo.AttackerTransform;
-                _alertTimer.Start(_alertDuration);
+                SetTarget(damageInfo.AttackerTransform);
             }
+        }
+
+        public void DrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(
+                _checkPoint.position,
+                _checkPoint.position + new Vector3(_checkDistance * _owner.FacingDirection, 0f));
         }
 
         private void UpdateCurrent()
@@ -95,16 +90,10 @@ namespace Characters.Enemy
 
             if (current)
             {
-                if (!Current)
-                {
-                    TargetFound?.Invoke();
-                }
-
-                Current = current;
-                _alertTimer.Start(_alertDuration);
+                SetTarget(current);
             }
 
-            if (!_alertTimer.IsRunning)
+            if (_alertTimer.IsExpired)
             {
                 if (Current)
                 {
@@ -115,11 +104,22 @@ namespace Characters.Enemy
             }
         }
 
+        private void SetTarget(Transform target)
+        {
+            if (!Current)
+            {
+                TargetFound?.Invoke();
+            }
+
+            Current = target;
+            _alertTimer.Start(_alertDuration);
+        }
+
         private RaycastHit2D CheckForTargetInFront()
         {
             RaycastHit2D raycast = Physics2D.Raycast(
                 _checkPoint.position,
-                Vector2.right * _controller.FacingDirection,
+                Vector2.right * _owner.FacingDirection,
                 _checkDistance,
                 LayerMaskProvider.Player | LayerMaskProvider.Ground);
 

@@ -36,7 +36,8 @@ namespace Core.Vfx
 
         private void Update()
         {
-            if (_timer.Tick(Time.deltaTime))
+            _timer.Tick(Time.deltaTime);
+            if (_timer.IsExpired)
             {
                 _sr.material = _initialMaterial;
             }

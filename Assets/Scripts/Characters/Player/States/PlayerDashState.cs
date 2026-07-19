@@ -41,7 +41,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (!_timer.IsRunning)
+            if (_timer.IsExpired)
             {
                 if (Controller.IsWalled)
                 {

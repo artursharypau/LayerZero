@@ -117,12 +117,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ba7ddc807547a38cd484eca3ce9bca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.Player
-  _groundCheckPoint: {fileID: 9126213500252039777}
-  _groundCheckDistance: 1.35
-  _wallCheckPoints:
-  - {fileID: 1724772789126508973}
-  - {fileID: 456699895117608732}
-  _wallCheckDistance: 0.45
+  _groundWallDetector:
+    _groundCheckPoint: {fileID: 9126213500252039777}
+    _groundCheckDistance: 1.35
+    _wallCheckPoints:
+    - {fileID: 1724772789126508973}
+    - {fileID: 456699895117608732}
+    _wallCheckDistance: 0.5
   _moveSpeed: 15
   _dashDuration: 0.2
   _dashMultiplier: 3
