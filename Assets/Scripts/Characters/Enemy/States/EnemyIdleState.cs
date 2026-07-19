@@ -30,7 +30,7 @@ namespace Characters.Enemy.States
                 return true;
             }
 
-            if (!_timer.IsRunning)
+            if (_timer.IsExpired)
             {
                 FSM.ChangeState(Controller.PatrolState);
                 return true;

@@ -27,7 +27,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (!_dashTimer.IsRunning && !Controller.IsWalled && Controller.InputActions.Dash.WasPerformedThisFrame())
+            if (_dashTimer.IsExpired && !Controller.IsWalled && Controller.InputActions.Dash.WasPerformedThisFrame())
             {
                 FSM.ChangeState(Controller.DashState);
                 _dashTimer.Start(Controller.DashDuration + Controller.DashCooldown);

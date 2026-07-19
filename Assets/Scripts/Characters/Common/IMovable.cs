@@ -5,8 +5,8 @@ namespace Characters.Common
     public interface IMovable
     {
         bool IsGrounded { get; }
-        bool IsFalling { get; }
         bool IsWalled { get; }
+        bool IsFalling { get; }
         bool IsFacingRight { get; }
         float FacingDirection { get; }
         Rigidbody2D RB { get; }

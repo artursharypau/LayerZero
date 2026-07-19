@@ -17,6 +17,8 @@ namespace Characters.Enemy
         [SerializeField] [Range(0, 5)] private float _chaseMoveSpeedMultiplier = 2f;
         [SerializeField] [Range(0, 5)] private float _chaseMoveAnimMultiplier = 2f;
 
+        [SerializeField] private EnemyTargetDetector _targetDetector;
+
         private CombatSystem _combatSystem;
 
         public float IdleDuration => _idleDuration;
@@ -26,7 +28,7 @@ namespace Characters.Enemy
         public float ChaseMoveSpeedMultiplier => _chaseMoveSpeedMultiplier;
         public float ChaseMoveAnimMultiplier => _chaseMoveAnimMultiplier;
 
-        public EnemyTargetDetector TargetDetector { get; private set; }
+        public EnemyTargetDetector TargetDetector => _targetDetector;
 
         public State IdleState { get; private set; }
         public State PatrolState { get; private set; }
@@ -37,12 +39,12 @@ namespace Characters.Enemy
         {
             _combatSystem = GetComponent<CombatSystem>();
 
-            TargetDetector = GetComponent<EnemyTargetDetector>();
-
             IdleState = new EnemyIdleState(FSM, this);
             PatrolState = new EnemyPatrolState(FSM, this);
             AttackState = new EnemyAttackState(FSM, this);
             ChaseState = new EnemyChaseState(FSM, this);
+
+            _targetDetector.Initialize(this);
         }
 
         protected override void OnEnabled()
@@ -57,11 +59,21 @@ namespace Characters.Enemy
             FSM.Initialize(IdleState);
         }
 
+        protected override void OnUpdated()
+        {
+            _targetDetector.Tick(Time.deltaTime);
+        }
+
         protected override void OnDisabled()
         {
             base.OnDisabled();
 
             Health.Damaged -= OnDamaged;
+        }
+
+        protected override void OnDrownGizmos()
+        {
+            _targetDetector.DrawGizmos();
         }
 
         public bool ShouldAttack()

@@ -28,7 +28,7 @@ namespace Characters.Player
         [SerializeField] private float _attackResetTime = 1f;
         [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
 
-        private bool _isJumping;
+        private bool _jumpRequested;
         private ushort _availableJumps;
         private readonly float _jumpBufferingDuration = 0.2f;
         private CountdownTimer _jumpBufferingTimer;
@@ -98,9 +98,10 @@ namespace Characters.Player
 
         protected override void OnUpdated()
         {
-            if (_jumpBufferingTimer.Tick(Time.deltaTime))
+            _jumpBufferingTimer.Tick(Time.deltaTime);
+            if (_jumpBufferingTimer.IsExpired)
             {
-                _isJumping = false;
+                _jumpRequested = false;
             }
         }
 
@@ -119,12 +120,12 @@ namespace Characters.Player
 
         public bool CanJump()
         {
-            return _isJumping && _availableJumps > 0;
+            return _jumpRequested && _availableJumps > 0;
         }
 
         public void ConsumeJump()
         {
-            _isJumping = false;
+            _jumpRequested = false;
 
             if (_availableJumps > 0)
             {
@@ -149,7 +150,7 @@ namespace Characters.Player
 
         private void OnJumpPerformed(InputAction.CallbackContext obj)
         {
-            _isJumping = true;
+            _jumpRequested = true;
             _jumpBufferingTimer.Start(_jumpBufferingDuration);
         }
     }

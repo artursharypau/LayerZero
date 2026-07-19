@@ -56,7 +56,8 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            if (_moveLockTimer.Tick(Time.deltaTime))
+            _moveLockTimer.Tick(Time.deltaTime);
+            if (_moveLockTimer.IsExpired)
             {
                 EnableInput(true);
             }
