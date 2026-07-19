@@ -1,3 +1,4 @@
+using Characters.Common;
 using Core.Animation;
 using Core.StateMachine;
 using Core.Utils;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace Characters.Player.States
 {
-    public class PlayerAttackState : PlayerState
+    public class PlayerAttackState : AttackState<PlayerController>
     {
         private const int StartIndex = 0;
         private const int EndIndex = 2;
@@ -17,7 +18,7 @@ namespace Characters.Player.States
         private bool _nextAttackQueued;
 
         public PlayerAttackState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, AnimatorHashProvider.Attack, AnimatorParameterType.Trigger)
+            : base(fsm, controller, AnimatorHashProvider.Attack)
         {
             _velocityTimer = new CountdownTimer();
         }
@@ -25,8 +26,6 @@ namespace Characters.Player.States
         public override void Enter()
         {
             base.Enter();
-
-            Controller.AnimTriggers.AttackFinished += OnFinished;
 
             _nextAttackQueued = false;
 
@@ -40,7 +39,7 @@ namespace Characters.Player.States
 
             if (_velocityTimer.Tick(Time.deltaTime))
             {
-                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+                Controller.SetHorizontalVelocity(0f);
             }
 
             if (Controller.InputActions.Attack.WasPerformedThisFrame())
@@ -49,11 +48,21 @@ namespace Characters.Player.States
             }
         }
 
-        public override void Exit()
+        protected override void OnAttackFinished()
         {
-            base.Exit();
+            Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
 
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
+            ++_currIndex;
+            _finishedTime = Time.time;
+
+            if (!_nextAttackQueued || _currIndex > EndIndex)
+            {
+                FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
+            }
+            else
+            {
+                FSM.ChangeState(Controller.AttackState);
+            }
         }
 
         private void SetIndex()
@@ -80,23 +89,6 @@ namespace Characters.Player.States
                 : velocity.x * Controller.FacingDirection;
 
             Controller.SetVelocity(velocityX, velocity.y);
-        }
-
-        private void OnFinished()
-        {
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
-
-            ++_currIndex;
-            _finishedTime = Time.time;
-
-            if (!_nextAttackQueued || _currIndex > EndIndex)
-            {
-                FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
-            }
-            else
-            {
-                FSM.ChangeState(Controller.AttackState);
-            }
         }
     }
 }

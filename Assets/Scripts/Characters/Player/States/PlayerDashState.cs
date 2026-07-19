@@ -35,6 +35,12 @@ namespace Characters.Player.States
                 return true;
             }
 
+            if (Controller.IsWalled)
+            {
+                FSM.ChangeState(Controller.IsGrounded ? Controller.IdleState : Controller.WallSlideState);
+                return true;
+            }
+
             if (!_timer.IsRunning)
             {
                 if (Controller.IsWalled)
@@ -61,7 +67,7 @@ namespace Characters.Player.States
             base.Update();
 
             _timer.Tick(Time.deltaTime);
-            HandleDash();
+            Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
         }
 
         public override void Exit()
@@ -70,18 +76,6 @@ namespace Characters.Player.States
 
             Controller.SetVelocity(0f, 0f);
             Controller.RB.gravityScale = _initialGravityScale;
-        }
-
-        private void HandleDash()
-        {
-            if (Controller.IsWalled)
-            {
-                FSM.ChangeState(Controller.IsGrounded ? Controller.IdleState : Controller.WallSlideState);
-            }
-            else
-            {
-                Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
-            }
         }
     }
 }

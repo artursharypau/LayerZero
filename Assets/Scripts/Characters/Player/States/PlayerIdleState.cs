@@ -14,7 +14,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+            Controller.SetHorizontalVelocity(0f);
         }
 
         public override bool TryTransition()

@@ -4,9 +4,9 @@ using Core.Utils;
 using Systems.Combat;
 using UnityEngine;
 
-namespace Characters
+namespace Characters.Common
 {
-    public abstract class CharacterController : MonoBehaviour
+    public abstract class CharacterController : MonoBehaviour, IMovable
     {
         [Header("Collision detection")]
         [SerializeField] private Transform _groundCheckPoint;
@@ -35,7 +35,7 @@ namespace Characters
 
             FSM = new StateMachine();
 
-            OnAwake();
+            OnAwakened();
         }
 
         private void OnEnable()
@@ -45,13 +45,13 @@ namespace Characters
 
         private void Start()
         {
-            OnStart();
+            OnStarted();
         }
 
         private void Update()
         {
             HandleCollisionDetection();
-            OnUpdate();
+            OnUpdated();
 
             FSM.Update();
         }
@@ -59,6 +59,11 @@ namespace Characters
         private void OnDisable()
         {
             OnDisabled();
+        }
+
+        private void OnDestroy()
+        {
+            OnDestroyed();
         }
 
         private void OnDrawGizmos()
@@ -70,7 +75,7 @@ namespace Characters
             }
         }
 
-        protected virtual void OnAwake()
+        protected virtual void OnAwakened()
         {
         }
 
@@ -78,15 +83,19 @@ namespace Characters
         {
         }
 
-        protected virtual void OnStart()
+        protected virtual void OnStarted()
         {
         }
 
-        protected virtual void OnUpdate()
+        protected virtual void OnUpdated()
         {
         }
 
         protected virtual void OnDisabled()
+        {
+        }
+
+        protected virtual void OnDestroyed()
         {
         }
 
@@ -100,10 +109,17 @@ namespace Characters
             }
         }
 
+        public void SetHorizontalVelocity(float x)
+        {
+            SetVelocity(x, RB.linearVelocityY);
+        }
+
         public void Flip()
         {
             transform.Rotate(0f, 180f, 0f);
             IsFacingRight = !IsFacingRight;
+
+            HandleCollisionDetection();
         }
 
         private void HandleCollisionDetection()

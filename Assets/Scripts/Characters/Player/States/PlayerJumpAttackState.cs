@@ -1,13 +1,15 @@
+using Characters.Common;
+using Core.Animation;
 using Core.StateMachine;
 
 namespace Characters.Player.States
 {
-    public class PlayerJumpAttackState : PlayerState
+    public class PlayerJumpAttackState : AttackState<PlayerController>
     {
         private bool _isGroundTouched;
 
         public PlayerJumpAttackState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.JumpAttack)
+            : base(fsm, controller, PlayerAnimatorHashProvider.JumpAttack, AnimatorParameterType.Bool)
         {
         }
 
@@ -17,7 +19,6 @@ namespace Characters.Player.States
 
             _isGroundTouched = false;
 
-            Controller.AnimTriggers.AttackFinished += OnFinished;
             Controller.SetVelocity(
                 Controller.JumpAttackVelocity.x * Controller.FacingDirection,
                 Controller.JumpAttackVelocity.y);
@@ -32,20 +33,13 @@ namespace Characters.Player.States
                 _isGroundTouched = true;
 
                 Anim.SetTrigger(PlayerAnimatorHashProvider.JumpAttackTrigger);
-                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+                Controller.SetHorizontalVelocity(0f);
             }
         }
 
-        public override void Exit()
+        protected override void OnAttackFinished()
         {
-            base.Exit();
-
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
-        }
-
-        private void OnFinished()
-        {
-            Controller.AnimTriggers.AttackFinished -= OnFinished;
+            Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
             FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
         }
     }
