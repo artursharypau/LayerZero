@@ -20,6 +20,8 @@ namespace Core.Vfx
             _damageable = GetComponent<IDamageable>();
 
             _timer = new CountdownTimer();
+
+            _initialMaterial = _sr.material;
         }
 
         private void OnEnable()
@@ -42,7 +44,6 @@ namespace Core.Vfx
 
         private void OnDamaged(DamageInfo obj)
         {
-            _initialMaterial = _sr.material;
             _sr.material = _material;
 
             _timer.Start(_duration);

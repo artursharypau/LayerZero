@@ -11653,6 +11653,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3175512165780746393, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
+      propertyPath: _checkCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3466222321441341585, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
       propertyPath: m_Name
       value: Skeleton

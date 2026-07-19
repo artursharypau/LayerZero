@@ -51,9 +51,7 @@ namespace Characters.Player.States
         {
             if (_inputEnabled && Controller.MoveInput.x != 0f)
             {
-                Controller.SetVelocity(
-                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.MoveInput.x,
-                    Controller.RB.linearVelocityY);
+                Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.MoveInput.x);
             }
         }
     }

@@ -21,9 +21,7 @@ namespace Characters.Player.States
             _moveLockTimer.Start(Controller.WallJumpMoveLockDuration);
 
             EnableInput(false);
-            Controller.SetVelocity(
-                Controller.WallJumpForce.x * -Controller.FacingDirection,
-                Controller.WallJumpForce.y);
+            Controller.SetVelocity(Controller.WallJumpForce.x * -Controller.FacingDirection, Controller.WallJumpForce.y);
         }
 
         public override bool TryTransition()

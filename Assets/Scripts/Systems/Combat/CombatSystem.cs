@@ -25,7 +25,7 @@ namespace Systems.Combat
             _animTriggers = GetComponentInChildren<AnimatorTriggers>();
 
             _filter = new ContactFilter2D();
-            _targetsBuffer = new List<Collider2D>();
+            _targetsBuffer = new List<Collider2D>(3);
 
             _filter.SetLayerMask(_targetLayerMask);
         }
@@ -47,32 +47,26 @@ namespace Systems.Combat
 
         public bool HasTargets()
         {
-            return GetTargets().Count > 0;
+            return UpdateTargets() > 0;
         }
 
         private void OnAttackHit()
         {
-            List<Collider2D> targets = GetTargets();
-            if (targets == null || targets.Count == 0)
-            {
-                return;
-            }
+            int count = UpdateTargets();
 
-            foreach (Collider2D target in targets)
+            for (int i = 0; i < count; i++)
             {
-                if (target.TryGetComponent(out IDamageable damageable))
+                if (_targetsBuffer[i].TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(new DamageInfo(_damageAmount, _damageSource, transform));
                 }
             }
         }
 
-        private List<Collider2D> GetTargets()
+        private int UpdateTargets()
         {
             _targetsBuffer.Clear();
-            Physics2D.OverlapCircle(_targetCheckPoint.position, _targetCheckRadius, _filter, _targetsBuffer);
-
-            return _targetsBuffer;
+            return Physics2D.OverlapCircle(_targetCheckPoint.position, _targetCheckRadius, _filter, _targetsBuffer);
         }
     }
 }

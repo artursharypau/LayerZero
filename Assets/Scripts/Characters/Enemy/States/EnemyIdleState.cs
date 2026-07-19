@@ -20,7 +20,7 @@ namespace Characters.Enemy.States
             base.Enter();
 
             _timer.Start(Controller.IdleDuration);
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+            Controller.SetHorizontalVelocity(0f);
         }
 
         public override bool TryTransition()

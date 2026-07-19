@@ -43,9 +43,7 @@ namespace Characters.Player.States
         {
             if (Controller.CanJump())
             {
-                Controller.SetVelocity(
-                    Controller.MoveSpeed * Controller.MoveInput.x,
-                    Controller.JumpForce);
+                Controller.SetVelocity(Controller.MoveSpeed * Controller.MoveInput.x, Controller.JumpForce);
                 Controller.ConsumeJump();
             }
         }

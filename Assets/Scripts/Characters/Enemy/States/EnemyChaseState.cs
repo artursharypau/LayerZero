@@ -17,7 +17,7 @@ namespace Characters.Enemy.States
             base.Enter();
 
             _initialMoveAnimMultiplier = Anim.GetFloat(EnemyAnimatorHashProvider.ChaseMoveAnimMultiplier);
-
+            Controller.TargetDetector.TargetLost += OnTargetLost;
             Anim.SetFloat(EnemyAnimatorHashProvider.ChaseMoveAnimMultiplier, Controller.ChaseMoveAnimMultiplier);
         }
 
@@ -25,12 +25,6 @@ namespace Characters.Enemy.States
         {
             if (base.TryTransition())
             {
-                return true;
-            }
-
-            if (!Controller.Target.HasCurrent)
-            {
-                FSM.ChangeState(Controller.IdleState);
                 return true;
             }
 
@@ -49,16 +43,15 @@ namespace Characters.Enemy.States
 
             Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.RB.linearVelocityX);
 
-            if (Controller.Target.IsBehind)
+            if (Controller.TargetDetector.IsBehind)
             {
                 Controller.Flip();
             }
 
             if (Controller.IsGrounded && !Controller.IsWalled)
             {
-                Controller.SetVelocity(
-                    Controller.MoveSpeed * Controller.ChaseMoveSpeedMultiplier * Controller.Target.Direction,
-                    Controller.RB.linearVelocityY);
+                Controller.SetHorizontalVelocity(
+                    Controller.MoveSpeed * Controller.ChaseMoveSpeedMultiplier * Controller.TargetDetector.Direction);
             }
         }
 
@@ -66,7 +59,14 @@ namespace Characters.Enemy.States
         {
             base.Exit();
 
+            Controller.TargetDetector.TargetLost -= OnTargetLost;
             Anim.SetFloat(EnemyAnimatorHashProvider.ChaseMoveAnimMultiplier, _initialMoveAnimMultiplier);
+        }
+
+        private void OnTargetLost()
+        {
+            Controller.TargetDetector.TargetLost -= OnTargetLost;
+            FSM.ChangeState(Controller.IdleState);
         }
     }
 }

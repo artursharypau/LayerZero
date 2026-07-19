@@ -8,9 +8,11 @@ namespace Systems.Combat
         [SerializeField] private int _max;
 
         public event Action<DamageInfo> Damaged;
+        public event Action Died;
 
         public float CurrentHealth { get; private set; }
         public float MaxHealth => _max;
+        public bool IsDead => CurrentHealth <= 0f;
 
         private void Awake()
         {
@@ -19,9 +21,18 @@ namespace Systems.Combat
 
         public void TakeDamage(DamageInfo damageInfo)
         {
-            CurrentHealth -= damageInfo.Amount;
+            if (IsDead)
+            {
+                return;
+            }
 
+            CurrentHealth = Mathf.Max(0f, CurrentHealth - damageInfo.Amount);
             Damaged?.Invoke(damageInfo);
+
+            if (IsDead)
+            {
+                Died?.Invoke();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Core.StateMachine;
+using UnityEngine;
 
 namespace Characters.Player.States
 {
@@ -27,7 +28,7 @@ namespace Characters.Player.States
 
             if (Controller.IsGrounded)
             {
-                if (Controller.FacingDirection != Controller.MoveInput.x)
+                if (!Mathf.Approximately(Controller.FacingDirection, Controller.MoveInput.x))
                 {
                     Controller.Flip();
                 }

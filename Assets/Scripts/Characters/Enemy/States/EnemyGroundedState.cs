@@ -14,20 +14,24 @@ namespace Characters.Enemy.States
         {
         }
 
-        public override bool TryTransition()
+        public override void Enter()
         {
-            if (base.TryTransition())
-            {
-                return true;
-            }
+            base.Enter();
 
-            if (Controller.Target.HasCurrent)
-            {
-                FSM.ChangeState(Controller.ChaseState);
-                return true;
-            }
+            Controller.TargetDetector.TargetFound += OnTargetFound;
+        }
 
-            return false;
+        public override void Exit()
+        {
+            base.Exit();
+
+            Controller.TargetDetector.TargetFound -= OnTargetFound;
+        }
+
+        private void OnTargetFound()
+        {
+            Controller.TargetDetector.TargetFound -= OnTargetFound;
+            FSM.ChangeState(Controller.ChaseState);
         }
     }
 }

@@ -30,16 +30,14 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Controller.SetVelocity(
-                Controller.MoveSpeed * Controller.MoveInput.x,
-                Controller.RB.linearVelocityY);
+            Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.MoveInput.x);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+            Controller.SetHorizontalVelocity(0f);
         }
     }
 }

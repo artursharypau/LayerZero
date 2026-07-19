@@ -2,6 +2,7 @@ using Characters.Enemy.States;
 using Core.StateMachine;
 using Systems.Combat;
 using UnityEngine;
+using CharacterController = Characters.Common.CharacterController;
 
 namespace Characters.Enemy
 {
@@ -25,18 +26,18 @@ namespace Characters.Enemy
         public float ChaseMoveSpeedMultiplier => _chaseMoveSpeedMultiplier;
         public float ChaseMoveAnimMultiplier => _chaseMoveAnimMultiplier;
 
-        public EnemyTarget Target { get; private set; }
+        public EnemyTargetDetector TargetDetector { get; private set; }
 
         public State IdleState { get; private set; }
         public State PatrolState { get; private set; }
         public State AttackState { get; private set; }
         public State ChaseState { get; private set; }
 
-        protected override void OnAwake()
+        protected override void OnAwakened()
         {
             _combatSystem = GetComponent<CombatSystem>();
 
-            Target = GetComponent<EnemyTarget>();
+            TargetDetector = GetComponent<EnemyTargetDetector>();
 
             IdleState = new EnemyIdleState(FSM, this);
             PatrolState = new EnemyPatrolState(FSM, this);
@@ -51,14 +52,9 @@ namespace Characters.Enemy
             Health.Damaged += OnDamaged;
         }
 
-        protected override void OnStart()
+        protected override void OnStarted()
         {
             FSM.Initialize(IdleState);
-        }
-
-        protected override void OnUpdate()
-        {
-            Target.Tick(FacingDirection);
         }
 
         protected override void OnDisabled()
@@ -75,7 +71,7 @@ namespace Characters.Enemy
 
         private void OnDamaged(DamageInfo damageInfo)
         {
-            Target.DamageAlert(damageInfo);
+            TargetDetector.DamageAlert(damageInfo);
         }
     }
 }

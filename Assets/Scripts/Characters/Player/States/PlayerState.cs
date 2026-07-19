@@ -1,3 +1,4 @@
+using Characters.Common;
 using Core.Animation;
 using Core.StateMachine;
 using Core.Utils;
@@ -5,21 +6,17 @@ using UnityEngine;
 
 namespace Characters.Player.States
 {
-    public abstract class PlayerState : State
+    public abstract class PlayerState : CharacterState<PlayerController>
     {
         private readonly CountdownTimer _dashTimer;
-
-        protected PlayerController Controller { get; }
 
         protected PlayerState(
             StateMachine fsm,
             PlayerController controller,
-            int animParameterHash,
-            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(fsm, new AnimatorContext(animParameterHash, animParameterType, controller.Anim))
+            int hash,
+            AnimatorParameterType type = AnimatorParameterType.Bool)
+            : base(fsm, controller, hash, type)
         {
-            Controller = controller;
-
             _dashTimer = new CountdownTimer();
         }
 

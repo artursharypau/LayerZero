@@ -1,8 +1,10 @@
 using Characters.Player.States;
 using Core.StateMachine;
+using Core.Utils;
 using InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CharacterController = Characters.Common.CharacterController;
 
 namespace Characters.Player
 {
@@ -26,7 +28,10 @@ namespace Characters.Player
         [SerializeField] private float _attackResetTime = 1f;
         [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
 
+        private bool _isJumping;
         private ushort _availableJumps;
+        private readonly float _jumpBufferingDuration = 0.2f;
+        private CountdownTimer _jumpBufferingTimer;
 
         public float MoveSpeed => _moveSpeed;
         public float DashDuration => _dashDuration;
@@ -43,6 +48,7 @@ namespace Characters.Player
         public float AttackResetTime => _attackResetTime;
         public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
 
+        public PlayerInputSet InputSet { get; private set; }
         public PlayerInputSet.PlayerActions InputActions { get; private set; }
 
         public State IdleState { get; private set; }
@@ -57,9 +63,12 @@ namespace Characters.Player
 
         public Vector2 MoveInput { get; private set; }
 
-        protected override void OnAwake()
+        protected override void OnAwakened()
         {
-            InputActions = new PlayerInputSet().Player;
+            _jumpBufferingTimer = new CountdownTimer();
+
+            InputSet = new PlayerInputSet();
+            InputActions = InputSet.Player;
 
             IdleState = new PlayerIdleState(FSM, this);
             MoveState = new PlayerMoveState(FSM, this);
@@ -72,38 +81,51 @@ namespace Characters.Player
             JumpAttackState = new PlayerJumpAttackState(FSM, this);
         }
 
-        protected override void OnStart()
+        protected override void OnEnabled()
+        {
+            InputActions.Enable();
+            InputActions.Movement.performed += OnMovementPerformed;
+            InputActions.Movement.canceled += OnMovementCanceled;
+            InputActions.Jump.performed += OnJumpPerformed;
+        }
+
+        protected override void OnStarted()
         {
             _availableJumps = _jumpsCount;
 
             FSM.Initialize(IdleState);
         }
 
-        protected override void OnUpdate()
+        protected override void OnUpdated()
         {
+            if (_jumpBufferingTimer.Tick(Time.deltaTime))
+            {
+                _isJumping = false;
+            }
         }
 
-        private void OnEnable()
-        {
-            InputActions.Enable();
-            InputActions.Movement.performed += OnMovementPerformed;
-            InputActions.Movement.canceled += OnMovementCanceled;
-        }
-
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             InputActions.Disable();
             InputActions.Movement.performed -= OnMovementPerformed;
             InputActions.Movement.canceled -= OnMovementCanceled;
+            InputActions.Jump.performed -= OnJumpPerformed;
+        }
+
+        protected override void OnDestroyed()
+        {
+            InputSet.Dispose();
         }
 
         public bool CanJump()
         {
-            return _availableJumps > 0 && InputActions.Jump.WasPerformedThisFrame();
+            return _isJumping && _availableJumps > 0;
         }
 
         public void ConsumeJump()
         {
+            _isJumping = false;
+
             if (_availableJumps > 0)
             {
                 --_availableJumps;
@@ -123,6 +145,12 @@ namespace Characters.Player
         private void OnMovementCanceled(InputAction.CallbackContext context)
         {
             MoveInput = Vector2.zero;
+        }
+
+        private void OnJumpPerformed(InputAction.CallbackContext obj)
+        {
+            _isJumping = true;
+            _jumpBufferingTimer.Start(_jumpBufferingDuration);
         }
     }
 }
