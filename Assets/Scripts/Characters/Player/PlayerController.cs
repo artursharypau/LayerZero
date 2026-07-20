@@ -1,9 +1,6 @@
 using Characters.Player.States;
 using Core.StateMachine;
-using Core.Utils;
-using InputSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using CharacterController = Characters.Common.CharacterController;
 
 namespace Characters.Player
@@ -28,10 +25,9 @@ namespace Characters.Player
         [SerializeField] private float _attackResetTime = 1f;
         [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
 
-        private bool _jumpRequested;
+        [SerializeField] private PlayerInputHandler _inputHandler;
+
         private ushort _availableJumps;
-        private readonly float _jumpBufferingDuration = 0.2f;
-        private CountdownTimer _jumpBufferingTimer;
 
         public float MoveSpeed => _moveSpeed;
         public float DashDuration => _dashDuration;
@@ -48,8 +44,7 @@ namespace Characters.Player
         public float AttackResetTime => _attackResetTime;
         public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
 
-        public PlayerInputSet InputSet { get; private set; }
-        public PlayerInputSet.PlayerActions InputActions { get; private set; }
+        public PlayerInputHandler InputHandler => _inputHandler;
 
         public State IdleState { get; private set; }
         public State MoveState { get; private set; }
@@ -61,15 +56,8 @@ namespace Characters.Player
         public State AttackState { get; private set; }
         public State JumpAttackState { get; private set; }
 
-        public Vector2 MoveInput { get; private set; }
-
         protected override void OnAwakened()
         {
-            _jumpBufferingTimer = new CountdownTimer();
-
-            InputSet = new PlayerInputSet();
-            InputActions = InputSet.Player;
-
             IdleState = new PlayerIdleState(FSM, this);
             MoveState = new PlayerMoveState(FSM, this);
             DashState = new PlayerDashState(FSM, this);
@@ -79,14 +67,13 @@ namespace Characters.Player
             WallJumpState = new PlayerWallJumpState(FSM, this);
             AttackState = new PlayerAttackState(FSM, this);
             JumpAttackState = new PlayerJumpAttackState(FSM, this);
+
+            _inputHandler.Initialize();
         }
 
         protected override void OnEnabled()
         {
-            InputActions.Enable();
-            InputActions.Movement.performed += OnMovementPerformed;
-            InputActions.Movement.canceled += OnMovementCanceled;
-            InputActions.Jump.performed += OnJumpPerformed;
+            _inputHandler.Enable();
         }
 
         protected override void OnStarted()
@@ -98,34 +85,27 @@ namespace Characters.Player
 
         protected override void OnUpdated()
         {
-            _jumpBufferingTimer.Tick(Time.deltaTime);
-            if (_jumpBufferingTimer.IsExpired)
-            {
-                _jumpRequested = false;
-            }
+            _inputHandler.Tick(Time.deltaTime);
         }
 
         protected override void OnDisabled()
         {
-            InputActions.Disable();
-            InputActions.Movement.performed -= OnMovementPerformed;
-            InputActions.Movement.canceled -= OnMovementCanceled;
-            InputActions.Jump.performed -= OnJumpPerformed;
+            _inputHandler.Disable();
         }
 
         protected override void OnDestroyed()
         {
-            InputSet.Dispose();
+            _inputHandler.Dispose();
         }
 
         public bool CanJump()
         {
-            return _jumpRequested && _availableJumps > 0;
+            return _inputHandler.WasJumpPerformed() && _availableJumps > 0;
         }
 
         public void ConsumeJump()
         {
-            _jumpRequested = false;
+            _inputHandler.ConsumeJump();
 
             if (_availableJumps > 0)
             {
@@ -136,22 +116,6 @@ namespace Characters.Player
         public void ResetJump()
         {
             _availableJumps = _jumpsCount;
-        }
-
-        private void OnMovementPerformed(InputAction.CallbackContext context)
-        {
-            MoveInput = context.ReadValue<Vector2>();
-        }
-
-        private void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            MoveInput = Vector2.zero;
-        }
-
-        private void OnJumpPerformed(InputAction.CallbackContext obj)
-        {
-            _jumpRequested = true;
-            _jumpBufferingTimer.Start(_jumpBufferingDuration);
         }
     }
 }

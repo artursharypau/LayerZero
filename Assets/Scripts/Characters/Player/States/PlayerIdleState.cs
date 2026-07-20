@@ -24,7 +24,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.MoveInput.x != 0f && !IsRunningIntoWall())
+            if (Controller.InputHandler.Move.x != 0f && !IsRunningIntoWall())
             {
                 FSM.ChangeState(Controller.MoveState);
                 return true;

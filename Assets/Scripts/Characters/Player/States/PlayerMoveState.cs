@@ -17,7 +17,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.MoveInput.x == 0f || IsRunningIntoWall())
+            if (Controller.InputHandler.Move.x == 0f || IsRunningIntoWall())
             {
                 FSM.ChangeState(Controller.IdleState);
                 return true;
@@ -30,7 +30,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.MoveInput.x);
+            Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x);
         }
 
         public override void Exit()

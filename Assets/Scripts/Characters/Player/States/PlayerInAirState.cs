@@ -24,7 +24,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_inputEnabled && Controller.InputActions.Attack.WasPerformedThisFrame())
+            if (_inputEnabled && Controller.InputHandler.WasAttackPerformed())
             {
                 FSM.ChangeState(Controller.JumpAttackState);
                 return true;
@@ -49,9 +49,9 @@ namespace Characters.Player.States
 
         private void HandleMove()
         {
-            if (_inputEnabled && Controller.MoveInput.x != 0f)
+            if (_inputEnabled && Controller.InputHandler.Move.x != 0f)
             {
-                Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.MoveInput.x);
+                Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.InputHandler.Move.x);
             }
         }
     }

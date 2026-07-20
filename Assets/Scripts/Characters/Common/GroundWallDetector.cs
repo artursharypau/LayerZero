@@ -8,7 +8,7 @@ namespace Characters.Common
     [Serializable]
     public class GroundWallDetector : ITickable
     {
-        [SerializeField] private Transform _groundCheckPoint;
+        [SerializeField] private Transform[] _groundCheckPoints;
         [SerializeField] private float _groundCheckDistance = 1.35f;
         [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;
@@ -27,14 +27,23 @@ namespace Characters.Common
         {
             Vector2 direction = Mathf.Approximately(_owner.FacingDirection, 1f) ? Vector2.right : Vector2.left;
 
-            IsGrounded = Physics2D.Raycast(_groundCheckPoint.position, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground);
-            IsWalled = false;
+            IsGrounded = true;
+            IsWalled = true;
+
+            foreach (Transform point in _groundCheckPoints)
+            {
+                if (!Physics2D.Raycast(point.position, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground))
+                {
+                    IsGrounded = false;
+                    break;
+                }
+            }
 
             foreach (Transform point in _wallCheckPoints)
             {
-                if (Physics2D.Raycast(point.position, direction, _wallCheckDistance, LayerMaskProvider.Ground))
+                if (!Physics2D.Raycast(point.position, direction, _wallCheckDistance, LayerMaskProvider.Ground))
                 {
-                    IsWalled = true;
+                    IsWalled = false;
                     break;
                 }
             }
@@ -42,12 +51,21 @@ namespace Characters.Common
 
         public void DrawGizmos()
         {
-            Gizmos.DrawLine(_groundCheckPoint.position, _groundCheckPoint.position + new Vector3(0f, -_groundCheckDistance));
-            foreach (Transform wallCheckPoint in _wallCheckPoints)
+            if (_owner == null)
             {
-                Gizmos.DrawLine(
-                    wallCheckPoint.position,
-                    wallCheckPoint.position + new Vector3(_wallCheckDistance * _owner.FacingDirection, 0f));
+                return;
+            }
+
+            Gizmos.color = Color.yellow;
+
+            foreach (Transform point in _groundCheckPoints)
+            {
+                Gizmos.DrawLine(point.position, point.position + new Vector3(0f, -_groundCheckDistance));
+            }
+
+            foreach (Transform point in _wallCheckPoints)
+            {
+                Gizmos.DrawLine(point.position, point.position + new Vector3(_wallCheckDistance * _owner.FacingDirection, 0f));
             }
         }
     }

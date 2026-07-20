@@ -273,13 +273,14 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca4449f4f914ff4ba5b0e06b3016b82, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy.Skeleton.EnemySkeletonController
+  m_EditorClassIdentifier: Assembly-CSharp::Characters.Enemy.Skeleton.SkeletonController
   _groundWallDetector:
-    _groundCheckPoint: {fileID: 1189184859021290774}
+    _groundCheckPoints:
+    - {fileID: 1189184859021290774}
     _groundCheckDistance: 1.35
     _wallCheckPoints:
     - {fileID: 1613318259418196058}
-    _wallCheckDistance: 0.5
+    _wallCheckDistance: 1.35
   _idleDuration: 2
   _moveSpeed: 1.5
   _moveAnimMultiplier: 1

@@ -1,53 +1,90 @@
 using System;
+using Core.Tick;
+using Core.Utils;
 using InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Characters.Player
 {
-    public class PlayerInputHandler : IDisposable
+    [Serializable]
+    public class PlayerInputHandler : ITickable, IDisposable
     {
-        private readonly PlayerInputSet _inputSet;
+        [SerializeField] private float _jumpBufferDuration = 0.2f;
 
+        private PlayerInputSet _inputSet;
         private PlayerInputSet.PlayerActions _inputActions;
+        private BufferedButton _jumpButton;
 
-        public Vector2 MoveInput { get; private set; }
-        public bool JumpRequested { get; private set; }
+        public Vector2 Move { get; private set; }
 
-        public PlayerInputHandler()
+        public void Initialize()
         {
             _inputSet = new PlayerInputSet();
             _inputActions = _inputSet.Player;
+            _jumpButton = new BufferedButton(_jumpBufferDuration);
+        }
 
-            _inputActions.Enable();
+        public void Tick(float deltaTime)
+        {
+            _jumpButton.Tick(deltaTime);
+        }
+
+        public void Enable()
+        {
+            _inputSet.Enable();
             _inputActions.Movement.performed += OnMovementPerformed;
             _inputActions.Movement.canceled += OnMovementCanceled;
             _inputActions.Jump.performed += OnJumpPerformed;
         }
 
-        public void Dispose()
+        public void Disable()
         {
-            _inputActions.Disable();
+            _inputSet.Disable();
             _inputActions.Movement.performed -= OnMovementPerformed;
             _inputActions.Movement.canceled -= OnMovementCanceled;
             _inputActions.Jump.performed -= OnJumpPerformed;
+        }
 
+        public bool WasJumpPerformed()
+        {
+            return _jumpButton.IsRequested;
+        }
+
+        public void ConsumeJump()
+        {
+            _jumpButton.Consume();
+        }
+
+        public bool WasDashPerformed()
+        {
+            return _inputActions.Dash.WasPerformedThisFrame();
+        }
+
+        public bool WasAttackPerformed()
+        {
+            return _inputActions.Attack.WasPerformedThisFrame();
+        }
+
+        public void Dispose()
+        {
+            Disable();
             _inputSet.Dispose();
         }
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
-            MoveInput = context.ReadValue<Vector2>();
+            Move = context.ReadValue<Vector2>();
         }
 
         private void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            MoveInput = Vector2.zero;
+            Move = Vector2.zero;
         }
 
         private void OnJumpPerformed(InputAction.CallbackContext context)
         {
-            JumpRequested = true;
+            _jumpButton.Press();
         }
     }
 }
