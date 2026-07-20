@@ -72,7 +72,12 @@ namespace Characters.Enemy
 
         public void DrawGizmos()
         {
-            Gizmos.color = Color.yellow;
+            if (_owner == null)
+            {
+                return;
+            }
+
+            Gizmos.color = Color.red;
             Gizmos.DrawLine(
                 _checkPoint.position,
                 _checkPoint.position + new Vector3(_checkDistance * _owner.FacingDirection, 0f));

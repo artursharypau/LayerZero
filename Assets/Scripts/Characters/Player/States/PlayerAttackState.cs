@@ -43,7 +43,7 @@ namespace Characters.Player.States
                 Controller.SetHorizontalVelocity(0f);
             }
 
-            if (Controller.InputActions.Attack.WasPerformedThisFrame())
+            if (Controller.InputHandler.WasAttackPerformed())
             {
                 _nextAttackQueued = true;
             }
@@ -58,7 +58,7 @@ namespace Characters.Player.States
 
             if (!_nextAttackQueued || _currIndex > EndIndex)
             {
-                FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
+                FSM.ChangeState(Controller.InputHandler.Move.x != 0f ? Controller.MoveState : Controller.IdleState);
             }
             else
             {
@@ -85,8 +85,8 @@ namespace Characters.Player.States
             _velocityTimer.Start(Controller.AttackVelocityDuration);
 
             Vector2 velocity = Controller.AttackVelocities[_currIndex];
-            float velocityX = Controller.MoveInput.x != 0f
-                ? Controller.MoveInput.x * velocity.x
+            float velocityX = Controller.InputHandler.Move.x != 0f
+                ? Controller.InputHandler.Move.x * velocity.x
                 : velocity.x * Controller.FacingDirection;
 
             Controller.SetVelocity(velocityX, velocity.y);

@@ -40,7 +40,7 @@ namespace Characters.Player.States
         protected override void OnAttackFinished()
         {
             Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
-            FSM.ChangeState(Controller.MoveInput.x != 0f ? Controller.MoveState : Controller.IdleState);
+            FSM.ChangeState(Controller.InputHandler.Move.x != 0f ? Controller.MoveState : Controller.IdleState);
         }
     }
 }

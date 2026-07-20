@@ -29,7 +29,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputActions.Attack.WasPerformedThisFrame())
+            if (Controller.InputHandler.WasAttackPerformed())
             {
                 FSM.ChangeState(Controller.AttackState);
                 return true;
@@ -53,7 +53,7 @@ namespace Characters.Player.States
         protected bool IsRunningIntoWall()
         {
             return Controller.IsWalled
-                   && Mathf.Approximately(Controller.MoveInput.x, Controller.FacingDirection);
+                   && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.FacingDirection);
         }
     }
 }
