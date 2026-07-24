@@ -18,8 +18,8 @@ namespace Characters.Player.States
         private float _finishedTime;
         private bool _nextAttackQueued;
 
-        public PlayerAttackState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, AnimatorHashProvider.Attack)
+        public PlayerAttackState(PlayerController controller)
+            : base(controller, AnimatorHashProvider.Attack)
         {
             _velocityTimer = new CountdownTimer();
         }
@@ -57,11 +57,11 @@ namespace Characters.Player.States
 
             if (!_nextAttackQueued || _currIndex > EndIndex)
             {
-                FSM.ChangeState(Controller.InputHandler.Move.x != 0f ? Controller.MoveState : Controller.IdleState);
+                Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? StateId.Move : StateId.Idle);
             }
             else
             {
-                FSM.ChangeState(Controller.AttackState);
+                Controller.ChangeState(StateId.Attack);
             }
         }
 

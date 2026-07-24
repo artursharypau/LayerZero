@@ -4,8 +4,8 @@ namespace Characters.Enemy.States
 {
     public class EnemyPatrolState : EnemyGroundedState
     {
-        public EnemyPatrolState(StateMachine fsm, EnemyController controller)
-            : base(fsm, controller, EnemyAnimatorHashProvider.Patrol)
+        public EnemyPatrolState(EnemyController controller)
+            : base(controller, EnemyAnimatorHashProvider.Patrol)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Characters.Enemy.States
 
             if (!Controller.IsGrounded || Controller.IsWalled)
             {
-                FSM.ChangeState(Controller.IdleState);
+                Controller.ChangeState(StateId.Idle);
                 return true;
             }
 

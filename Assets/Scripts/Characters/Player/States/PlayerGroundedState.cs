@@ -9,11 +9,10 @@ namespace Characters.Player.States
     public abstract class PlayerGroundedState : PlayerState
     {
         protected PlayerGroundedState(
-            StateMachine fsm,
             PlayerController controller,
             int animParameterHash,
             AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(fsm, controller, animParameterHash, animParameterType)
+            : base(controller, animParameterHash, animParameterType)
         {
         }
 
@@ -33,19 +32,19 @@ namespace Characters.Player.States
 
             if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
-                FSM.ChangeState(Controller.AttackState);
+                Controller.ChangeState(StateId.Attack);
                 return true;
             }
 
             if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
-                FSM.ChangeState(Controller.JumpState);
+                Controller.ChangeState(StateId.Jump);
                 return true;
             }
 
             if (Controller.IsFalling)
             {
-                FSM.ChangeState(Controller.FallState);
+                Controller.ChangeState(StateId.Fall);
                 return true;
             }
 
@@ -54,8 +53,7 @@ namespace Characters.Player.States
 
         protected bool IsRunningIntoWall()
         {
-            return Controller.IsWalled
-                   && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.FacingDirection);
+            return Controller.IsWalled && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.FacingDirection);
         }
     }
 }

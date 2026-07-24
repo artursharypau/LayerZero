@@ -30,19 +30,14 @@ namespace Characters.Enemy
 
         public EnemyTargetDetector TargetDetector => _targetDetector;
 
-        public State IdleState { get; private set; }
-        public State PatrolState { get; private set; }
-        public State AttackState { get; private set; }
-        public State ChaseState { get; private set; }
-
         protected override void OnAwakened()
         {
             _combatSystem = GetComponent<CombatSystem>();
 
-            IdleState = new EnemyIdleState(FSM, this);
-            PatrolState = new EnemyPatrolState(FSM, this);
-            AttackState = new EnemyAttackState(FSM, this);
-            ChaseState = new EnemyChaseState(FSM, this);
+            RegisterState(StateId.Idle, new EnemyIdleState(this));
+            RegisterState(StateId.Patrol, new EnemyPatrolState(this));
+            RegisterState(StateId.Chase, new EnemyChaseState(this));
+            RegisterState(StateId.Attack, new EnemyAttackState(this));
 
             _targetDetector.Initialize(this, this);
         }
@@ -56,7 +51,7 @@ namespace Characters.Enemy
 
         protected override void OnStarted()
         {
-            FSM.Initialize(IdleState);
+            StartStateMachine(StateId.Idle);
         }
 
         protected override void OnUpdated()

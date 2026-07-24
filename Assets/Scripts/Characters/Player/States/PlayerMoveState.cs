@@ -5,8 +5,8 @@ namespace Characters.Player.States
 {
     public class PlayerMoveState : PlayerGroundedState
     {
-        public PlayerMoveState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, AnimatorHashProvider.Move)
+        public PlayerMoveState(PlayerController controller)
+            : base(controller, AnimatorHashProvider.Move)
         {
         }
 
@@ -19,7 +19,7 @@ namespace Characters.Player.States
 
             if (Controller.InputHandler.Move.x == 0f || IsRunningIntoWall())
             {
-                FSM.ChangeState(Controller.IdleState);
+                Controller.ChangeState(StateId.Idle);
                 return true;
             }
 

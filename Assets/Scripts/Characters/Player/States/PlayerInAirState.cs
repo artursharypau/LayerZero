@@ -9,11 +9,10 @@ namespace Characters.Player.States
         private bool _inputEnabled;
 
         protected PlayerInAirState(
-            StateMachine fsm,
             PlayerController controller,
             int animParameterHash,
             AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(fsm, controller, animParameterHash, animParameterType)
+            : base(controller, animParameterHash, animParameterType)
         {
             _inputEnabled = true;
         }
@@ -27,7 +26,7 @@ namespace Characters.Player.States
 
             if (_inputEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
-                FSM.ChangeState(Controller.JumpAttackState);
+                Controller.ChangeState(StateId.JumpAttack);
                 return true;
             }
 

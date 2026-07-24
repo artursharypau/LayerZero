@@ -7,8 +7,8 @@ namespace Characters.Player.States
 {
     public class PlayerWallSlideState : PlayerInAirState
     {
-        public PlayerWallSlideState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.WallSlide)
+        public PlayerWallSlideState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.WallSlide)
         {
             EnableInput(false);
         }
@@ -35,19 +35,19 @@ namespace Characters.Player.States
                     Controller.Flip();
                 }
 
-                FSM.ChangeState(Controller.IdleState);
+                Controller.ChangeState(StateId.Idle);
                 return true;
             }
 
             if (!Controller.IsWalled && Controller.IsFalling)
             {
-                FSM.ChangeState(Controller.FallState);
+                Controller.ChangeState(StateId.Fall);
                 return true;
             }
 
             if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
             {
-                FSM.ChangeState(Controller.WallJumpState);
+                Controller.ChangeState(StateId.WallJump);
                 return true;
             }
 

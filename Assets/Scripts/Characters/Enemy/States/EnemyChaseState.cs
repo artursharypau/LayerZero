@@ -1,5 +1,5 @@
 using Infrastructure.Animation;
-using StateMachine = Infrastructure.StateMachine.StateMachine;
+using Infrastructure.StateMachine;
 
 namespace Characters.Enemy.States
 {
@@ -7,8 +7,8 @@ namespace Characters.Enemy.States
     {
         private float _initialMoveAnimMultiplier;
 
-        public EnemyChaseState(StateMachine fsm, EnemyController controller)
-            : base(fsm, controller, EnemyAnimatorHashProvider.Chase)
+        public EnemyChaseState(EnemyController controller)
+            : base(controller, EnemyAnimatorHashProvider.Chase)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Characters.Enemy.States
 
             if (Controller.ShouldAttack())
             {
-                FSM.ChangeState(Controller.AttackState);
+                Controller.ChangeState(StateId.Attack);
                 return true;
             }
 
@@ -66,7 +66,7 @@ namespace Characters.Enemy.States
         private void OnTargetLost()
         {
             Controller.TargetDetector.TargetLost -= OnTargetLost;
-            FSM.ChangeState(Controller.IdleState);
+            Controller.ChangeState(StateId.Idle);
         }
     }
 }

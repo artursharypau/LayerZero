@@ -43,16 +43,6 @@ namespace Characters.Player
 
         public PlayerInputHandler InputHandler => _inputHandler;
 
-        public State IdleState { get; private set; }
-        public State MoveState { get; private set; }
-        public State DashState { get; private set; }
-        public State JumpState { get; private set; }
-        public State FallState { get; private set; }
-        public State WallSlideState { get; private set; }
-        public State WallJumpState { get; private set; }
-        public State AttackState { get; private set; }
-        public State JumpAttackState { get; private set; }
-
         protected override void OnAwakened()
         {
             _inputHandler.Initialize();
@@ -64,15 +54,15 @@ namespace Characters.Player
             };
             _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
 
-            IdleState = new PlayerIdleState(FSM, this);
-            MoveState = new PlayerMoveState(FSM, this);
-            DashState = new PlayerDashState(FSM, this);
-            JumpState = new PlayerJumpState(FSM, this);
-            FallState = new PlayerFallState(FSM, this);
-            WallSlideState = new PlayerWallSlideState(FSM, this);
-            WallJumpState = new PlayerWallJumpState(FSM, this);
-            AttackState = new PlayerAttackState(FSM, this);
-            JumpAttackState = new PlayerJumpAttackState(FSM, this);
+            RegisterState(StateId.Idle, new PlayerIdleState(this));
+            RegisterState(StateId.Move, new PlayerMoveState(this));
+            RegisterState(StateId.Dash, new PlayerDashState(this));
+            RegisterState(StateId.Jump, new PlayerJumpState(this));
+            RegisterState(StateId.Fall, new PlayerFallState(this));
+            RegisterState(StateId.WallSlide, new PlayerWallSlideState(this));
+            RegisterState(StateId.WallJump, new PlayerWallJumpState(this));
+            RegisterState(StateId.Attack, new PlayerAttackState(this));
+            RegisterState(StateId.JumpAttack, new PlayerJumpAttackState(this));
         }
 
         protected override void OnEnabled()
@@ -82,8 +72,8 @@ namespace Characters.Player
 
         protected override void OnStarted()
         {
+            StartStateMachine(StateId.Idle);
             RefillChargeableAbility(PlayerAbilityId.Jump);
-            FSM.Initialize(IdleState);
         }
 
         protected override void OnUpdated()
