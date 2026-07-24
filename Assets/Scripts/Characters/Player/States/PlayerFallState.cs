@@ -1,3 +1,4 @@
+using Characters.Player.Abilities;
 using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
@@ -16,7 +17,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.CanJump())
+            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
                 FSM.ChangeState(Controller.JumpState);
                 return true;

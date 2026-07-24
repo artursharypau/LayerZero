@@ -1,3 +1,4 @@
+using Characters.Player.Input;
 using Infrastructure.Animation;
 using Infrastructure.StateMachine;
 
@@ -24,7 +25,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_inputEnabled && Controller.InputHandler.WasAttackPerformed())
+            if (_inputEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
                 FSM.ChangeState(Controller.JumpAttackState);
                 return true;

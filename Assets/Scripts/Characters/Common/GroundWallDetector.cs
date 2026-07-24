@@ -13,19 +13,19 @@ namespace Characters.Common
         [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;
 
-        private IMovable _owner;
+        private IFacing _facing;
 
         public bool IsGrounded { get; private set; }
         public bool IsWalled { get; private set; }
 
-        public void Initialize(IMovable owner)
+        public void Initialize(IFacing owner)
         {
-            _owner = owner;
+            _facing = owner;
         }
 
         public void Tick(float deltaTime)
         {
-            Vector2 direction = Mathf.Approximately(_owner.FacingDirection, 1f) ? Vector2.right : Vector2.left;
+            Vector2 direction = Mathf.Approximately(_facing.FacingDirection, 1f) ? Vector2.right : Vector2.left;
 
             IsGrounded = true;
             IsWalled = true;
@@ -51,7 +51,7 @@ namespace Characters.Common
 
         public void DrawGizmos()
         {
-            if (_owner == null)
+            if (_facing == null)
             {
                 return;
             }
@@ -65,7 +65,7 @@ namespace Characters.Common
 
             foreach (Transform point in _wallCheckPoints)
             {
-                Gizmos.DrawLine(point.position, point.position + new Vector3(_wallCheckDistance * _owner.FacingDirection, 0f));
+                Gizmos.DrawLine(point.position, point.position + new Vector3(_wallCheckDistance * _facing.FacingDirection, 0f));
             }
         }
     }

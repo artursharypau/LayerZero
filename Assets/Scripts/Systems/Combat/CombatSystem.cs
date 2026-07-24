@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Infrastructure.Animation;
+using Characters.Common;
 using UnityEngine;
 
 namespace Systems.Combat
@@ -15,14 +15,14 @@ namespace Systems.Combat
         [SerializeField] private int _damageAmount = 10;
         [SerializeField] private DamageSource _damageSource;
 
-        private AnimatorTriggers _animTriggers;
+        private IAttackFeedback _animTriggers;
 
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
 
         private void Awake()
         {
-            _animTriggers = GetComponentInChildren<AnimatorTriggers>();
+            _animTriggers = GetComponentInChildren<IAttackFeedback>();
 
             _filter = new ContactFilter2D();
             _targetsBuffer = new List<Collider2D>(3);

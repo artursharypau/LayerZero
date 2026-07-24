@@ -1,3 +1,5 @@
+using Characters.Player.Abilities;
+using Characters.Player.Abilities.Jump;
 using Infrastructure.StateMachine;
 using Infrastructure.Utils;
 using UnityEngine;
@@ -18,12 +20,12 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            _moveLockTimer.Start(Controller.JumpAbility.WallJumpMoveLockDuration);
+            Controller.TryGetAbilityConfig(PlayerAbilityId.Jump, out PlayerJumpAbilityConfig config);
+
+            _moveLockTimer.Start(config.WallJumpMoveLockDuration);
 
             EnableInput(false);
-            Controller.SetVelocity(
-                Controller.JumpAbility.WallJumpForce.x * -Controller.FacingDirection,
-                Controller.JumpAbility.WallJumpForce.y);
+            Controller.SetVelocity(config.WallJumpForce.x * -Controller.FacingDirection, config.WallJumpForce.y);
         }
 
         public override bool TryTransition()
@@ -33,7 +35,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.CanJump())
+            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
                 FSM.ChangeState(Controller.JumpState);
                 return true;

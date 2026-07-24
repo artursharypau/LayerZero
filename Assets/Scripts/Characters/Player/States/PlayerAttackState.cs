@@ -1,4 +1,5 @@
 using Characters.Common;
+using Characters.Player.Input;
 using Infrastructure.Animation;
 using Infrastructure.StateMachine;
 using Infrastructure.Utils;
@@ -43,7 +44,7 @@ namespace Characters.Player.States
                 Controller.SetHorizontalVelocity(0f);
             }
 
-            if (Controller.InputHandler.WasAttackPerformed())
+            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
                 _nextAttackQueued = true;
             }

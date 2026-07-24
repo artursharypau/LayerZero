@@ -1,5 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
 using Characters.Common;
 using Characters.Player.Abilities;
+using Characters.Player.Abilities.Dash;
+using Characters.Player.Abilities.Jump;
+using Characters.Player.Input;
 using Characters.Player.States;
 using Infrastructure.StateMachine;
 using UnityEngine;
@@ -10,8 +15,8 @@ namespace Characters.Player
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
-        [SerializeField] private JumpAbility _jumpAbility = new();
-        [SerializeField] private DashAbility _dashAbility = new();
+        [SerializeField] private PlayerJumpAbility _jumpAbility;
+        [SerializeField] private PlayerDashAbility _dashAbility;
         [SerializeField] [Range(0, 1)] private float _inAirMoveMultiplier = 0.5f;
         [SerializeField] [Range(0, 1)] private float _wallSlideMultiplier = 0.8f;
 
@@ -23,9 +28,11 @@ namespace Characters.Player
 
         [SerializeField] private PlayerInputHandler _inputHandler;
 
+        private PlayerAbilityContext _abilityContext;
+        private Dictionary<PlayerAbilityId, IPlayerAbility> _abilities;
+        private IPlayerTickableAbility[] _tickableAbilities;
+
         public float MoveSpeed => _moveSpeed;
-        public JumpAbility JumpAbility => _jumpAbility;
-        public DashAbility DashAbility => _dashAbility;
         public float InAirMoveMultiplier => _inAirMoveMultiplier;
         public float WallSlideMultiplier => _wallSlideMultiplier;
 
@@ -48,6 +55,15 @@ namespace Characters.Player
 
         protected override void OnAwakened()
         {
+            _inputHandler.Initialize();
+            _abilityContext = new PlayerAbilityContext(this, _inputHandler);
+            _abilities = new Dictionary<PlayerAbilityId, IPlayerAbility>
+            {
+                { PlayerAbilityId.Jump, _jumpAbility },
+                { PlayerAbilityId.Dash, _dashAbility }
+            };
+            _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
+
             IdleState = new PlayerIdleState(FSM, this);
             MoveState = new PlayerMoveState(FSM, this);
             DashState = new PlayerDashState(FSM, this);
@@ -57,8 +73,6 @@ namespace Characters.Player
             WallJumpState = new PlayerWallJumpState(FSM, this);
             AttackState = new PlayerAttackState(FSM, this);
             JumpAttackState = new PlayerJumpAttackState(FSM, this);
-
-            _inputHandler.Initialize();
         }
 
         protected override void OnEnabled()
@@ -68,13 +82,18 @@ namespace Characters.Player
 
         protected override void OnStarted()
         {
+            RefillChargeableAbility(PlayerAbilityId.Jump);
             FSM.Initialize(IdleState);
         }
 
         protected override void OnUpdated()
         {
             _inputHandler.Tick(Time.deltaTime);
-            _dashAbility.Tick(Time.deltaTime);
+
+            foreach (IPlayerTickableAbility ability in _tickableAbilities)
+            {
+                ability.Tick(Time.deltaTime);
+            }
         }
 
         protected override void OnDisabled()
@@ -87,20 +106,57 @@ namespace Characters.Player
             _inputHandler.Dispose();
         }
 
-        public bool CanJump()
+        public bool TryGetAbilityConfig<TConfig>(PlayerAbilityId id, out TConfig config)
+            where TConfig : class, IPlayerAbilityConfig
         {
-            return _inputHandler.WasJumpPerformed() && _jumpAbility.HasJumpsLeft;
+            config = null;
+            bool result = false;
+
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability.GetConfig() is TConfig typedConfig)
+            {
+                config = typedConfig;
+                result = true;
+            }
+            else
+            {
+                Debug.unityLogger.LogError(
+                    $"{nameof(PlayerController)}.{nameof(TryGetAbilityConfig)}",
+                    $"Ability '{id}' has no config of type '{typeof(TConfig).Name}'");
+            }
+
+            return result;
         }
 
-        public void ConsumeJump()
+        public bool CanUseAbility(PlayerAbilityId id)
         {
-            _inputHandler.ConsumeJump();
-            _jumpAbility.Consume();
+            return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
         }
 
-        public bool CanDash()
+        public void TriggerAbility(PlayerAbilityId id)
         {
-            return _dashAbility.IsReady && !IsWalled && _inputHandler.WasDashPerformed();
+            if (TryGetAbility(id, out IPlayerAbility ability))
+            {
+                ability.Trigger(_abilityContext);
+            }
+        }
+
+        public void RefillChargeableAbility(PlayerAbilityId id)
+        {
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeableAbility)
+            {
+                chargeableAbility.Refill();
+            }
+        }
+
+        private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)
+        {
+            if (_abilities.TryGetValue(id, out ability))
+            {
+                return true;
+            }
+
+            Debug.unityLogger.LogError($"{nameof(PlayerController)}.{nameof(TryGetAbility)}", $"Ability '{id}' is not registered");
+            return false;
         }
     }
 }

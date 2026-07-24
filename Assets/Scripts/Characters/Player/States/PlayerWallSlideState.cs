@@ -1,3 +1,5 @@
+using Characters.Player.Abilities;
+using Characters.Player.Input;
 using Infrastructure.StateMachine;
 using UnityEngine;
 
@@ -15,8 +17,8 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.JumpAbility.Reset();
-            Controller.ConsumeJump();
+            Controller.RefillChargeableAbility(PlayerAbilityId.Jump);
+            Controller.TriggerAbility(PlayerAbilityId.Jump);
         }
 
         public override bool TryTransition()
@@ -43,7 +45,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.WasJumpPerformed())
+            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
             {
                 FSM.ChangeState(Controller.WallJumpState);
                 return true;

@@ -1,3 +1,5 @@
+using Characters.Player.Abilities;
+using Characters.Player.Abilities.Dash;
 using Infrastructure.StateMachine;
 using Infrastructure.Utils;
 using UnityEngine;
@@ -21,12 +23,14 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.DashAbility.Trigger();
-            Controller.RB.gravityScale = 0f;
+            Controller.TryGetAbilityConfig(PlayerAbilityId.Dash, out PlayerDashAbilityConfig config);
 
-            _timer.Start(Controller.DashAbility.Duration);
-            _velocityX = Controller.MoveSpeed * Controller.DashAbility.SpeedMultiplier;
+            _timer.Start(config.Duration);
+            _velocityX = Controller.MoveSpeed * config.SpeedMultiplier;
             _initialGravityScale = Controller.RB.gravityScale;
+
+            Controller.TriggerAbility(PlayerAbilityId.Dash);
+            Controller.RB.gravityScale = 0f;
         }
 
         public override bool TryTransition()
@@ -52,7 +56,7 @@ namespace Characters.Player.States
                 {
                     FSM.ChangeState(Controller.FallState);
                 }
-                else
+                else if (Controller.IsGrounded)
                 {
                     FSM.ChangeState(Controller.IdleState);
                 }
@@ -68,14 +72,22 @@ namespace Characters.Player.States
             base.Update();
 
             _timer.Tick(Time.deltaTime);
-            Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
+            if (_timer.IsExpired)
+            {
+                Controller.RB.gravityScale = _initialGravityScale;
+                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+            }
+            else
+            {
+                Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.SetVelocity(0f, 0f);
+            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
             Controller.RB.gravityScale = _initialGravityScale;
         }
     }

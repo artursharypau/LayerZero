@@ -1,4 +1,5 @@
 using Characters.Common;
+using Characters.Player.Abilities;
 using Infrastructure.Animation;
 using Infrastructure.StateMachine;
 
@@ -22,7 +23,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.CanDash())
+            if (Controller.CanUseAbility(PlayerAbilityId.Dash))
             {
                 FSM.ChangeState(Controller.DashState);
 
