@@ -22,21 +22,21 @@ namespace Characters.Common
         {
             base.Enter();
 
-            Controller.AnimTriggers.AttackFinished += HandleAttackFinished;
+            Controller.AttackFeedback.AttackFinished += HandleAttackFinished;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.AnimTriggers.AttackFinished -= HandleAttackFinished;
+            Controller.AttackFeedback.AttackFinished -= HandleAttackFinished;
         }
 
         protected abstract void OnAttackFinished();
 
         private void HandleAttackFinished()
         {
-            Controller.AnimTriggers.AttackFinished -= HandleAttackFinished;
+            Controller.AttackFeedback.AttackFinished -= HandleAttackFinished;
             OnAttackFinished();
         }
     }

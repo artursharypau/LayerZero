@@ -1,3 +1,5 @@
+using Characters.Player.Abilities;
+using Characters.Player.Abilities.Jump;
 using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
@@ -41,10 +43,12 @@ namespace Characters.Player.States
 
         private void Jump()
         {
-            if (Controller.CanJump())
+            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
-                Controller.ConsumeJump();
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, Controller.JumpAbility.Force);
+                Controller.TryGetAbilityConfig(PlayerAbilityId.Jump, out PlayerJumpAbilityConfig config);
+                Controller.TriggerAbility(PlayerAbilityId.Jump);
+
+                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, config.Force);
             }
         }
     }

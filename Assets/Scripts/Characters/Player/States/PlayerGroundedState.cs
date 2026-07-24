@@ -1,3 +1,5 @@
+using Characters.Player.Abilities;
+using Characters.Player.Input;
 using Infrastructure.Animation;
 using Infrastructure.StateMachine;
 using UnityEngine;
@@ -19,7 +21,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.JumpAbility.Reset();
+            Controller.RefillChargeableAbility(PlayerAbilityId.Jump);
         }
 
         public override bool TryTransition()
@@ -29,13 +31,13 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.WasAttackPerformed())
+            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
                 FSM.ChangeState(Controller.AttackState);
                 return true;
             }
 
-            if (Controller.CanJump())
+            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
                 FSM.ChangeState(Controller.JumpState);
                 return true;

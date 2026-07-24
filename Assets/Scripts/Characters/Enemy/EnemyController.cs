@@ -44,7 +44,7 @@ namespace Characters.Enemy
             AttackState = new EnemyAttackState(FSM, this);
             ChaseState = new EnemyChaseState(FSM, this);
 
-            _targetDetector.Initialize(this);
+            _targetDetector.Initialize(this, this);
         }
 
         protected override void OnEnabled()
@@ -71,7 +71,7 @@ namespace Characters.Enemy
             Health.Damaged -= OnDamaged;
         }
 
-        protected override void OnDrownGizmos()
+        protected override void OnGizmosDrawn()
         {
             _targetDetector.DrawGizmos();
         }

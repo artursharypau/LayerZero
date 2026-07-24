@@ -1,8 +1,9 @@
-namespace LayerZero.Characters.Player.Abilities
+namespace Characters.Player.Abilities
 {
-    public static class PlayerAbilityId
+    public enum PlayerAbilityId
     {
-        public const int Jump = 1;
-        public const int Dash = 2;
+        None,
+        Jump,
+        Dash
     }
 }

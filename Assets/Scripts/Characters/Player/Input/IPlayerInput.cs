@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LayerZero.Characters.Player.Input
+namespace Characters.Player.Input
 {
     public interface IPlayerInput
     {

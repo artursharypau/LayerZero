@@ -5,10 +5,10 @@ using InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Characters.Player
+namespace Characters.Player.Input
 {
     [Serializable]
-    public class PlayerInputHandler : ITickable, IDisposable
+    public class PlayerInputHandler : IPlayerInput, ITickable, IDisposable
     {
         [SerializeField] private float _jumpBufferDuration = 0.2f;
 
@@ -23,11 +23,6 @@ namespace Characters.Player
             _inputSet = new PlayerInputSet();
             _inputActions = _inputSet.Player;
             _jumpButton = new BufferedButton(_jumpBufferDuration);
-        }
-
-        public void Tick(float deltaTime)
-        {
-            _jumpButton.Tick(deltaTime);
         }
 
         public void Enable()
@@ -46,24 +41,30 @@ namespace Characters.Player
             _inputActions.Jump.performed -= OnJumpPerformed;
         }
 
-        public bool WasJumpPerformed()
+        public void Tick(float deltaTime)
         {
-            return _jumpButton.IsRequested;
+            _jumpButton.Tick(deltaTime);
         }
 
-        public void ConsumeJump()
+        public bool WasPerformed(PlayerInputAction action)
         {
-            _jumpButton.Consume();
+            return action switch
+            {
+                PlayerInputAction.Jump => _jumpButton.IsRequested,
+                PlayerInputAction.Dash => _inputActions.Dash.WasPerformedThisFrame(),
+                PlayerInputAction.Attack => _inputActions.Attack.WasPerformedThisFrame(),
+                _ => false
+            };
         }
 
-        public bool WasDashPerformed()
+        public void Consume(PlayerInputAction action)
         {
-            return _inputActions.Dash.WasPerformedThisFrame();
-        }
-
-        public bool WasAttackPerformed()
-        {
-            return _inputActions.Attack.WasPerformedThisFrame();
+            switch (action)
+            {
+                case PlayerInputAction.Jump:
+                    _jumpButton.Consume();
+                    break;
+            }
         }
 
         public void Dispose()

@@ -17,13 +17,15 @@ namespace Characters.Enemy
         [SerializeField] private Transform _checkPoint;
         [SerializeField] private float _checkDistance = 13f;
 
-        private IMovable _owner;
+        private IFacing _facing;
+        private IPositioned _positioned;
         private CountdownTimer _alertTimer;
         private CountdownTimer _checkTimer;
 
-        public void Initialize(IMovable owner)
+        public void Initialize(IFacing facing, IPositioned position)
         {
-            _owner = owner;
+            _facing = facing;
+            _positioned = position;
 
             _alertTimer = new CountdownTimer();
             _checkTimer = new CountdownTimer();
@@ -35,7 +37,7 @@ namespace Characters.Enemy
         public event Action TargetLost;
 
         public Transform Current { get; private set; }
-        public bool IsBehind => Current && !Mathf.Approximately(Direction, _owner.FacingDirection);
+        public bool IsBehind => Current && !Mathf.Approximately(Direction, _facing.FacingDirection);
 
         public float Direction
         {
@@ -46,7 +48,7 @@ namespace Characters.Enemy
                     return 0f;
                 }
 
-                return Current.position.x > _owner.RB.position.x ? 1 : -1;
+                return Current.position.x > _positioned.Position.x ? 1 : -1;
             }
         }
 
@@ -72,7 +74,7 @@ namespace Characters.Enemy
 
         public void DrawGizmos()
         {
-            if (_owner == null)
+            if (_facing == null)
             {
                 return;
             }
@@ -80,7 +82,7 @@ namespace Characters.Enemy
             Gizmos.color = Color.red;
             Gizmos.DrawLine(
                 _checkPoint.position,
-                _checkPoint.position + new Vector3(_checkDistance * _owner.FacingDirection, 0f));
+                _checkPoint.position + new Vector3(_checkDistance * _facing.FacingDirection, 0f));
         }
 
         private void UpdateCurrent()
@@ -124,7 +126,7 @@ namespace Characters.Enemy
         {
             RaycastHit2D raycast = Physics2D.Raycast(
                 _checkPoint.position,
-                Vector2.right * _owner.FacingDirection,
+                Vector2.right * _facing.FacingDirection,
                 _checkDistance,
                 LayerMaskProvider.Player | LayerMaskProvider.Ground);
 

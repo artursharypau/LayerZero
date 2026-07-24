@@ -1,9 +1,10 @@
 using System;
+using Characters.Common;
 using UnityEngine;
 
 namespace Infrastructure.Animation
 {
-    public class AnimatorTriggers : MonoBehaviour
+    public class AnimatorTriggers : MonoBehaviour, IAttackFeedback
     {
         public event Action AttackFinished;
         public event Action AttackHit;

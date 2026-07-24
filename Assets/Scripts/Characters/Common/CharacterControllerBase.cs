@@ -1,11 +1,10 @@
-using Infrastructure.Animation;
 using Infrastructure.StateMachine;
 using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Common
 {
-    public abstract class CharacterControllerBase : MonoBehaviour, IMovable
+    public abstract class CharacterControllerBase : MonoBehaviour, IMovable, IFacing, IPositioned
     {
         [SerializeField] private GroundWallDetector _groundWallDetector;
 
@@ -14,10 +13,11 @@ namespace Characters.Common
         public bool IsFalling => RB.linearVelocityY < 0f && !IsGrounded;
         public bool IsFacingRight { get; private set; } = true;
         public float FacingDirection => IsFacingRight ? 1f : -1f;
+        public Vector2 Position => transform.position;
 
         public Rigidbody2D RB { get; private set; }
         public Animator Anim { get; private set; }
-        public AnimatorTriggers AnimTriggers { get; private set; }
+        public IAttackFeedback AttackFeedback { get; private set; }
         public Health Health { get; private set; }
         public StateMachine FSM { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Characters.Common
         {
             RB = GetComponent<Rigidbody2D>();
             Anim = GetComponentInChildren<Animator>();
-            AnimTriggers = GetComponentInChildren<AnimatorTriggers>();
+            AttackFeedback = GetComponentInChildren<IAttackFeedback>();
             Health = GetComponent<Health>();
 
             FSM = new StateMachine();
@@ -67,7 +67,7 @@ namespace Characters.Common
         {
             _groundWallDetector.DrawGizmos();
 
-            OnDrownGizmos();
+            OnGizmosDrawn();
         }
 
         protected virtual void OnAwakened()
@@ -94,7 +94,7 @@ namespace Characters.Common
         {
         }
 
-        protected virtual void OnDrownGizmos()
+        protected virtual void OnGizmosDrawn()
         {
         }
 
