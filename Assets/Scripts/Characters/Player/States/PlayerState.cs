@@ -1,15 +1,11 @@
 using Characters.Common;
-using Core.Animation;
-using Core.StateMachine;
-using Core.Utils;
-using UnityEngine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
 {
     public abstract class PlayerState : CharacterState<PlayerController>
     {
-        private readonly CountdownTimer _dashTimer;
-
         protected PlayerState(
             StateMachine fsm,
             PlayerController controller,
@@ -17,7 +13,6 @@ namespace Characters.Player.States
             AnimatorParameterType type = AnimatorParameterType.Bool)
             : base(fsm, controller, hash, type)
         {
-            _dashTimer = new CountdownTimer();
         }
 
         public override bool TryTransition()
@@ -27,22 +22,14 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_dashTimer.IsExpired && !Controller.IsWalled && Controller.InputHandler.WasDashPerformed())
+            if (Controller.CanDash())
             {
                 FSM.ChangeState(Controller.DashState);
-                _dashTimer.Start(Controller.DashDuration + Controller.DashCooldown);
 
                 return true;
             }
 
             return false;
-        }
-
-        public override void Update()
-        {
-            base.Update();
-
-            _dashTimer.Tick(Time.deltaTime);
         }
     }
 }

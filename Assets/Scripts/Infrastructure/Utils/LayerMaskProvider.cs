@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Utils
+namespace Infrastructure.Utils
 {
     public static class LayerMaskProvider
     {

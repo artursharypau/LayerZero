@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.Animation
+namespace Infrastructure.Animation
 {
     public class AnimatorTriggers : MonoBehaviour
     {

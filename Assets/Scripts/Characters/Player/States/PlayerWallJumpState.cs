@@ -1,5 +1,5 @@
-using Core.StateMachine;
-using Core.Utils;
+using Infrastructure.StateMachine;
+using Infrastructure.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -18,10 +18,12 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            _moveLockTimer.Start(Controller.WallJumpMoveLockDuration);
+            _moveLockTimer.Start(Controller.JumpAbility.WallJumpMoveLockDuration);
 
             EnableInput(false);
-            Controller.SetVelocity(Controller.WallJumpForce.x * -Controller.FacingDirection, Controller.WallJumpForce.y);
+            Controller.SetVelocity(
+                Controller.JumpAbility.WallJumpForce.x * -Controller.FacingDirection,
+                Controller.JumpAbility.WallJumpForce.y);
         }
 
         public override bool TryTransition()

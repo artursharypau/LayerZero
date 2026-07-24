@@ -1,4 +1,4 @@
-using Core.StateMachine;
+using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
 {
@@ -43,8 +43,8 @@ namespace Characters.Player.States
         {
             if (Controller.CanJump())
             {
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, Controller.JumpForce);
                 Controller.ConsumeJump();
+                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, Controller.JumpAbility.Force);
             }
         }
     }

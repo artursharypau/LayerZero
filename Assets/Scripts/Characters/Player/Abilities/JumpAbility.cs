@@ -1,39 +1,39 @@
-using LayerZero.Characters.Common.Abilities;
-using LayerZero.Characters.Player.Config;
-using LayerZero.Characters.Player.Input;
+using System;
+using UnityEngine;
 
-namespace LayerZero.Characters.Player.Abilities
+namespace Characters.Player.Abilities
 {
-    public sealed class JumpAbility : IChargeableAbility
+    [Serializable]
+    public class JumpAbility
     {
-        private readonly AbilityCharges _charges;
-        private readonly IPlayerInput _input;
+        [SerializeField] private ushort _count = 2;
+        [SerializeField] private float _force = 13f;
+        [SerializeField] private Vector2 _wallJumpForce = new(6f, 12f);
+        [SerializeField] private float _wallJumpMoveLockDuration = 0.2f;
 
-        public JumpAbility(JumpAbilityConfig config, IPlayerInput input)
+        private ushort _available;
+
+        public JumpAbility()
         {
-            _charges = new AbilityCharges(config.Charges);
-            _input = input;
+            _available = _count;
         }
 
-        public bool CanUse()
+        public float Force => _force;
+        public Vector2 WallJumpForce => _wallJumpForce;
+        public float WallJumpMoveLockDuration => _wallJumpMoveLockDuration;
+        public bool HasJumpsLeft => _available > 0;
+
+        public void Consume()
         {
-            return _charges.HasCharges && _input.WasPerformed(PlayerInputAction.Jump);
+            if (_available > 0)
+            {
+                --_available;
+            }
         }
 
-        public void Use()
+        public void Reset()
         {
-            _input.Consume(PlayerInputAction.Jump);
-            _charges.Consume();
-        }
-
-        public void Refill()
-        {
-            _charges.Refill();
-        }
-
-        public void RefillTo(int amount)
-        {
-            _charges.RefillTo(amount);
+            _available = _count;
         }
     }
 }

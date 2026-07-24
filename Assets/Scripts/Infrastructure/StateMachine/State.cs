@@ -1,8 +1,8 @@
 using System;
-using Core.Animation;
+using Infrastructure.Animation;
 using UnityEngine;
 
-namespace Core.StateMachine
+namespace Infrastructure.StateMachine
 {
     public abstract class State
     {

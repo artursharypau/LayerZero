@@ -1,12 +1,12 @@
+using Characters.Common;
 using Characters.Enemy.States;
-using Core.StateMachine;
+using Infrastructure.StateMachine;
 using Systems.Combat;
 using UnityEngine;
-using CharacterController = Characters.Common.CharacterController;
 
 namespace Characters.Enemy
 {
-    public abstract class EnemyController : CharacterController
+    public abstract class EnemyController : CharacterControllerBase
     {
         [Header("Movement details")]
         [SerializeField] private float _idleDuration = 2f;

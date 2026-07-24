@@ -1,6 +1,6 @@
 using System;
-using Core.Tick;
-using Core.Utils;
+using Infrastructure.Tick;
+using Infrastructure.Utils;
 using UnityEngine;
 
 namespace Characters.Common

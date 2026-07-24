@@ -1,6 +1,6 @@
 using Characters.Common;
-using Core.Animation;
-using Core.StateMachine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
 {
@@ -39,7 +39,6 @@ namespace Characters.Player.States
 
         protected override void OnAttackFinished()
         {
-            Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
             FSM.ChangeState(Controller.InputHandler.Move.x != 0f ? Controller.MoveState : Controller.IdleState);
         }
     }
