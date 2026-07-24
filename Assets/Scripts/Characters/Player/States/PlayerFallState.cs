@@ -5,8 +5,8 @@ namespace Characters.Player.States
 {
     public class PlayerFallState : PlayerInAirState
     {
-        public PlayerFallState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerFallState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {
         }
 
@@ -19,19 +19,19 @@ namespace Characters.Player.States
 
             if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
-                FSM.ChangeState(Controller.JumpState);
+                Controller.ChangeState(StateId.Jump);
                 return true;
             }
 
             if (Controller.IsGrounded)
             {
-                FSM.ChangeState(Controller.IdleState);
+                Controller.ChangeState(StateId.Idle);
                 return true;
             }
 
             if (Controller.IsWalled)
             {
-                FSM.ChangeState(Controller.WallSlideState);
+                Controller.ChangeState(StateId.WallSlide);
                 return true;
             }
 

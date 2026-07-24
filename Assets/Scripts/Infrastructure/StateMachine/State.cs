@@ -9,15 +9,13 @@ namespace Infrastructure.StateMachine
         private readonly int _parameterHash;
         private readonly AnimatorParameterType _parameterType;
 
-        protected StateMachine FSM { get; }
         protected Animator Anim { get; }
 
-        protected State(StateMachine fsm, AnimatorContext animContext)
+        protected State(AnimatorContext animContext)
         {
             _parameterHash = animContext.ParameterHash;
             _parameterType = animContext.ParameterType;
 
-            FSM = fsm;
             Anim = animContext.Anim;
         }
 

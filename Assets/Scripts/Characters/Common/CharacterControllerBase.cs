@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Infrastructure.StateMachine;
 using Systems.Combat;
 using UnityEngine;
@@ -7,6 +8,9 @@ namespace Characters.Common
     public abstract class CharacterControllerBase : MonoBehaviour, IMovable, IFacing, IPositioned
     {
         [SerializeField] private GroundWallDetector _groundWallDetector;
+
+        private readonly Dictionary<StateId, State> _states = new(5);
+        private readonly StateMachine _stateMachine = new();
 
         public bool IsGrounded => _groundWallDetector.IsGrounded;
         public bool IsWalled => _groundWallDetector.IsWalled;
@@ -19,7 +23,6 @@ namespace Characters.Common
         public Animator Anim { get; private set; }
         public IAttackFeedback AttackFeedback { get; private set; }
         public Health Health { get; private set; }
-        public StateMachine FSM { get; private set; }
 
         private void Awake()
         {
@@ -27,8 +30,6 @@ namespace Characters.Common
             Anim = GetComponentInChildren<Animator>();
             AttackFeedback = GetComponentInChildren<IAttackFeedback>();
             Health = GetComponent<Health>();
-
-            FSM = new StateMachine();
 
             _groundWallDetector.Initialize(this);
 
@@ -48,9 +49,9 @@ namespace Characters.Common
         private void Update()
         {
             _groundWallDetector.Tick(Time.deltaTime);
+            _stateMachine.Update();
 
             OnUpdated();
-            FSM.Update();
         }
 
         private void OnDisable()
@@ -96,6 +97,28 @@ namespace Characters.Common
 
         protected virtual void OnGizmosDrawn()
         {
+        }
+
+        protected void StartStateMachine(StateId initialId)
+        {
+            _stateMachine.Start(_states[initialId]);
+        }
+
+        protected void RegisterState(StateId id, State state)
+        {
+            _states[id] = state;
+        }
+
+        public void ChangeState(StateId id)
+        {
+            if (_states.TryGetValue(id, out State state))
+            {
+                _stateMachine.ChangeState(state);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"State with id {id} was not found");
+            }
         }
 
         public void SetVelocity(float x, float y)

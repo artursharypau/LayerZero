@@ -6,14 +6,14 @@ namespace Characters.Enemy.States
 {
     public class EnemyAttackState : AttackState<EnemyController>
     {
-        public EnemyAttackState(StateMachine fsm, EnemyController controller)
-            : base(fsm, controller, AnimatorHashProvider.Attack)
+        public EnemyAttackState(EnemyController controller)
+            : base(controller, AnimatorHashProvider.Attack)
         {
         }
 
         protected override void OnAttackFinished()
         {
-            FSM.ChangeState(Controller.ChaseState);
+            Controller.ChangeState(StateId.Chase);
         }
     }
 }

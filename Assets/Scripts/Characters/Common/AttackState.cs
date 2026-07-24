@@ -8,12 +8,8 @@ namespace Characters.Common
     {
         protected TController Controller { get; }
 
-        protected AttackState(
-            StateMachine fsm,
-            TController controller,
-            int animHash,
-            AnimatorParameterType type = AnimatorParameterType.Trigger)
-            : base(fsm, new AnimatorContext(animHash, type, controller.Anim))
+        protected AttackState(TController controller, int animHash, AnimatorParameterType type = AnimatorParameterType.Trigger)
+            : base(new AnimatorContext(animHash, type, controller.Anim))
         {
             Controller = controller;
         }

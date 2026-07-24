@@ -7,12 +7,8 @@ namespace Characters.Player.States
 {
     public abstract class PlayerState : CharacterState<PlayerController>
     {
-        protected PlayerState(
-            StateMachine fsm,
-            PlayerController controller,
-            int hash,
-            AnimatorParameterType type = AnimatorParameterType.Bool)
-            : base(fsm, controller, hash, type)
+        protected PlayerState(PlayerController controller, int hash, AnimatorParameterType type = AnimatorParameterType.Bool)
+            : base(controller, hash, type)
         {
         }
 
@@ -25,7 +21,7 @@ namespace Characters.Player.States
 
             if (Controller.CanUseAbility(PlayerAbilityId.Dash))
             {
-                FSM.ChangeState(Controller.DashState);
+                Controller.ChangeState(StateId.Dash);
 
                 return true;
             }

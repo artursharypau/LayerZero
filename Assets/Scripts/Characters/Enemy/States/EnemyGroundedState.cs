@@ -6,11 +6,10 @@ namespace Characters.Enemy.States
     public abstract class EnemyGroundedState : EnemyState
     {
         protected EnemyGroundedState(
-            StateMachine fsm,
             EnemyController controller,
             int animParameterHash,
             AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(fsm, controller, animParameterHash, animParameterType)
+            : base(controller, animParameterHash, animParameterType)
         {
         }
 
@@ -31,7 +30,7 @@ namespace Characters.Enemy.States
         private void OnTargetFound()
         {
             Controller.TargetDetector.TargetFound -= OnTargetFound;
-            FSM.ChangeState(Controller.ChaseState);
+            Controller.ChangeState(StateId.Chase);
         }
     }
 }

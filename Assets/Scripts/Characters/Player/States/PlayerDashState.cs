@@ -13,8 +13,8 @@ namespace Characters.Player.States
         private float _velocityX;
         private float _initialGravityScale;
 
-        public PlayerDashState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.Dash)
+        public PlayerDashState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.Dash)
         {
             _timer = new CountdownTimer();
         }
@@ -42,7 +42,7 @@ namespace Characters.Player.States
 
             if (Controller.IsWalled)
             {
-                FSM.ChangeState(Controller.IsGrounded ? Controller.IdleState : Controller.WallSlideState);
+                Controller.ChangeState(Controller.IsGrounded ? StateId.Idle : StateId.WallSlide);
                 return true;
             }
 
@@ -50,15 +50,15 @@ namespace Characters.Player.States
             {
                 if (Controller.IsWalled)
                 {
-                    FSM.ChangeState(Controller.WallSlideState);
+                    Controller.ChangeState(StateId.WallSlide);
                 }
                 else if (Controller.IsFalling)
                 {
-                    FSM.ChangeState(Controller.FallState);
+                    Controller.ChangeState(StateId.Fall);
                 }
                 else if (Controller.IsGrounded)
                 {
-                    FSM.ChangeState(Controller.IdleState);
+                    Controller.ChangeState(StateId.Idle);
                 }
 
                 return true;

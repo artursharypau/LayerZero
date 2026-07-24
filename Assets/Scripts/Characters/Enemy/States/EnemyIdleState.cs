@@ -9,8 +9,8 @@ namespace Characters.Enemy.States
     {
         private readonly CountdownTimer _timer;
 
-        public EnemyIdleState(StateMachine fsm, EnemyController controller)
-            : base(fsm, controller, AnimatorHashProvider.Idle)
+        public EnemyIdleState(EnemyController controller)
+            : base(controller, AnimatorHashProvider.Idle)
         {
             _timer = new CountdownTimer();
         }
@@ -32,7 +32,7 @@ namespace Characters.Enemy.States
 
             if (_timer.IsExpired)
             {
-                FSM.ChangeState(Controller.PatrolState);
+                Controller.ChangeState(StateId.Patrol);
                 return true;
             }
 

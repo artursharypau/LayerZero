@@ -9,7 +9,7 @@ namespace Infrastructure.StateMachine
         public State Pending { get; private set; }
         public State Current { get; private set; }
 
-        public void Initialize(State initialState)
+        public void Start(State initialState)
         {
             Current = initialState;
             Current.Enter();

@@ -10,8 +10,8 @@ namespace Characters.Player.States
     {
         private readonly CountdownTimer _moveLockTimer;
 
-        public PlayerWallJumpState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerWallJumpState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {
             _moveLockTimer = new CountdownTimer();
         }
@@ -37,19 +37,19 @@ namespace Characters.Player.States
 
             if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
-                FSM.ChangeState(Controller.JumpState);
+                Controller.ChangeState(StateId.Jump);
                 return true;
             }
 
             if (Controller.IsFalling)
             {
-                FSM.ChangeState(Controller.FallState);
+                Controller.ChangeState(StateId.Fall);
                 return true;
             }
 
             if (Controller.IsWalled)
             {
-                FSM.ChangeState(Controller.WallSlideState);
+                Controller.ChangeState(StateId.WallSlide);
                 return true;
             }
 

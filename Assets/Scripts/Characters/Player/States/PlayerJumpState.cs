@@ -6,8 +6,8 @@ namespace Characters.Player.States
 {
     public class PlayerJumpState : PlayerInAirState
     {
-        public PlayerJumpState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerJumpState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Characters.Player.States
 
             if (Controller.RB.linearVelocityY <= 0f)
             {
-                FSM.ChangeState(Controller.FallState);
+                Controller.ChangeState(StateId.Fall);
                 return true;
             }
 

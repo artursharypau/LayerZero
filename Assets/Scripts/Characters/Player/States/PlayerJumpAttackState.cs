@@ -8,8 +8,8 @@ namespace Characters.Player.States
     {
         private bool _isGroundTouched;
 
-        public PlayerJumpAttackState(StateMachine fsm, PlayerController controller)
-            : base(fsm, controller, PlayerAnimatorHashProvider.JumpAttack, AnimatorParameterType.Bool)
+        public PlayerJumpAttackState(PlayerController controller)
+            : base(controller, PlayerAnimatorHashProvider.JumpAttack, AnimatorParameterType.Bool)
         {
         }
 
@@ -39,7 +39,7 @@ namespace Characters.Player.States
 
         protected override void OnAttackFinished()
         {
-            FSM.ChangeState(Controller.InputHandler.Move.x != 0f ? Controller.MoveState : Controller.IdleState);
+            Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? StateId.Move : StateId.Idle);
         }
     }
 }
