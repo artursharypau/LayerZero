@@ -1,4 +1,6 @@
-namespace Core.StateMachine
+using UnityEngine;
+
+namespace Infrastructure.StateMachine
 {
     public class StateMachine
     {
@@ -48,6 +50,10 @@ namespace Core.StateMachine
             {
                 if (guard++ >= _guardThreshold)
                 {
+                    Debug.unityLogger.LogWarning(
+                        $"{nameof(StateMachine)}.{nameof(ApplyPendingTransition)}",
+                        $"Guard threshold ({_guardThreshold}) reached while transitioning away from '{Current?.GetType().Name}'. Possible state transition loop — check TryTransition()/Enter() logic.");
+
                     break;
                 }
 

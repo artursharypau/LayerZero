@@ -1,10 +1,10 @@
-using Core.Animation;
-using Core.StateMachine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 
 namespace Characters.Common
 {
     public abstract class CharacterState<TController> : State
-        where TController : CharacterController
+        where TController : CharacterControllerBase
     {
         protected TController Controller { get; }
 

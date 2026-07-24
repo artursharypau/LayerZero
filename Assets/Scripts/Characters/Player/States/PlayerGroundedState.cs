@@ -1,5 +1,5 @@
-using Core.Animation;
-using Core.StateMachine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -19,7 +19,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.ResetJump();
+            Controller.JumpAbility.Reset();
         }
 
         public override bool TryTransition()

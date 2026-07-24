@@ -1,4 +1,4 @@
-namespace Core.Animation
+namespace Infrastructure.Animation
 {
     public enum AnimatorParameterType
     {

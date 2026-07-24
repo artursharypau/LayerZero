@@ -1,6 +1,6 @@
-using Core.Animation;
-using Core.StateMachine;
-using Core.Utils;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
+using Infrastructure.Utils;
 using UnityEngine;
 
 namespace Characters.Enemy.States

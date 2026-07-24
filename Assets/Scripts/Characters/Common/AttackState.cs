@@ -1,10 +1,10 @@
-using Core.Animation;
-using Core.StateMachine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 
 namespace Characters.Common
 {
     public abstract class AttackState<TController> : State
-        where TController : CharacterController
+        where TController : CharacterControllerBase
     {
         protected TController Controller { get; }
 
@@ -22,16 +22,22 @@ namespace Characters.Common
         {
             base.Enter();
 
-            Controller.AnimTriggers.AttackFinished += OnAttackFinished;
+            Controller.AnimTriggers.AttackFinished += HandleAttackFinished;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
+            Controller.AnimTriggers.AttackFinished -= HandleAttackFinished;
         }
 
         protected abstract void OnAttackFinished();
+
+        private void HandleAttackFinished()
+        {
+            Controller.AnimTriggers.AttackFinished -= HandleAttackFinished;
+            OnAttackFinished();
+        }
     }
 }

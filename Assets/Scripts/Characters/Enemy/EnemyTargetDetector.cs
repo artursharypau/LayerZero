@@ -1,7 +1,7 @@
 using System;
 using Characters.Common;
-using Core.Tick;
-using Core.Utils;
+using Infrastructure.Tick;
+using Infrastructure.Utils;
 using Systems.Combat;
 using UnityEngine;
 

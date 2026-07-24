@@ -1,21 +1,17 @@
+using Characters.Common;
+using Characters.Player.Abilities;
 using Characters.Player.States;
-using Core.StateMachine;
+using Infrastructure.StateMachine;
 using UnityEngine;
-using CharacterController = Characters.Common.CharacterController;
 
 namespace Characters.Player
 {
-    public sealed class PlayerController : CharacterController
+    public sealed class PlayerController : CharacterControllerBase
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
-        [SerializeField] private float _dashDuration = 0.2f;
-        [SerializeField] [Range(1, 5)] private float _dashMultiplier = 3f;
-        [SerializeField] private float _dashCooldown = 2f;
-        [SerializeField] private float _jumpForce = 13f;
-        [SerializeField] private ushort _jumpsCount = 2;
-        [SerializeField] private Vector2 _wallJumpForce = new(6f, 12f);
-        [SerializeField] private float _wallJumpMoveLockDuration = 0.2f;
+        [SerializeField] private JumpAbility _jumpAbility = new();
+        [SerializeField] private DashAbility _dashAbility = new();
         [SerializeField] [Range(0, 1)] private float _inAirMoveMultiplier = 0.5f;
         [SerializeField] [Range(0, 1)] private float _wallSlideMultiplier = 0.8f;
 
@@ -27,15 +23,9 @@ namespace Characters.Player
 
         [SerializeField] private PlayerInputHandler _inputHandler;
 
-        private ushort _availableJumps;
-
         public float MoveSpeed => _moveSpeed;
-        public float DashDuration => _dashDuration;
-        public float DashMultiplier => _dashMultiplier;
-        public float DashCooldown => _dashCooldown;
-        public float JumpForce => _jumpForce;
-        public Vector2 WallJumpForce => _wallJumpForce;
-        public float WallJumpMoveLockDuration => _wallJumpMoveLockDuration;
+        public JumpAbility JumpAbility => _jumpAbility;
+        public DashAbility DashAbility => _dashAbility;
         public float InAirMoveMultiplier => _inAirMoveMultiplier;
         public float WallSlideMultiplier => _wallSlideMultiplier;
 
@@ -78,14 +68,13 @@ namespace Characters.Player
 
         protected override void OnStarted()
         {
-            _availableJumps = _jumpsCount;
-
             FSM.Initialize(IdleState);
         }
 
         protected override void OnUpdated()
         {
             _inputHandler.Tick(Time.deltaTime);
+            _dashAbility.Tick(Time.deltaTime);
         }
 
         protected override void OnDisabled()
@@ -100,22 +89,18 @@ namespace Characters.Player
 
         public bool CanJump()
         {
-            return _inputHandler.WasJumpPerformed() && _availableJumps > 0;
+            return _inputHandler.WasJumpPerformed() && _jumpAbility.HasJumpsLeft;
         }
 
         public void ConsumeJump()
         {
             _inputHandler.ConsumeJump();
-
-            if (_availableJumps > 0)
-            {
-                --_availableJumps;
-            }
+            _jumpAbility.Consume();
         }
 
-        public void ResetJump()
+        public bool CanDash()
         {
-            _availableJumps = _jumpsCount;
+            return _dashAbility.IsReady && !IsWalled && _inputHandler.WasDashPerformed();
         }
     }
 }

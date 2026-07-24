@@ -1,4 +1,4 @@
-using Core.StateMachine;
+using Infrastructure.StateMachine;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -15,7 +15,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.ResetJump();
+            Controller.JumpAbility.Reset();
             Controller.ConsumeJump();
         }
 

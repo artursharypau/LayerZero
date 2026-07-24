@@ -1,6 +1,6 @@
-using Core.Tick;
+using Infrastructure.Tick;
 
-namespace Core.Utils
+namespace Infrastructure.Utils
 {
     public class BufferedButton : ITickable
     {

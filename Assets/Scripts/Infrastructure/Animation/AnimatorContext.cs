@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Animation
+namespace Infrastructure.Animation
 {
     public class AnimatorContext
     {

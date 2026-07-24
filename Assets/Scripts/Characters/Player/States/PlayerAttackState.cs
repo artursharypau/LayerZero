@@ -1,7 +1,7 @@
 using Characters.Common;
-using Core.Animation;
-using Core.StateMachine;
-using Core.Utils;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
+using Infrastructure.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -51,8 +51,6 @@ namespace Characters.Player.States
 
         protected override void OnAttackFinished()
         {
-            Controller.AnimTriggers.AttackFinished -= OnAttackFinished;
-
             ++_currIndex;
             _finishedTime = Time.time;
 

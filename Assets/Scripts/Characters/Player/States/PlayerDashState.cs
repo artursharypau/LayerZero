@@ -1,5 +1,5 @@
-using Core.StateMachine;
-using Core.Utils;
+using Infrastructure.StateMachine;
+using Infrastructure.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -21,11 +21,12 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            _timer.Start(Controller.DashDuration);
-            _velocityX = Controller.MoveSpeed * Controller.DashMultiplier;
-            _initialGravityScale = Controller.RB.gravityScale;
-
+            Controller.DashAbility.Trigger();
             Controller.RB.gravityScale = 0f;
+
+            _timer.Start(Controller.DashAbility.Duration);
+            _velocityX = Controller.MoveSpeed * Controller.DashAbility.SpeedMultiplier;
+            _initialGravityScale = Controller.RB.gravityScale;
         }
 
         public override bool TryTransition()

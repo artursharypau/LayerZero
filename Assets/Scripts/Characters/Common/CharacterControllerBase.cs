@@ -1,11 +1,11 @@
-using Core.Animation;
-using Core.StateMachine;
+using Infrastructure.Animation;
+using Infrastructure.StateMachine;
 using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Common
 {
-    public abstract class CharacterController : MonoBehaviour, IMovable
+    public abstract class CharacterControllerBase : MonoBehaviour, IMovable
     {
         [SerializeField] private GroundWallDetector _groundWallDetector;
 
