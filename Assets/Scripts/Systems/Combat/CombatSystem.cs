@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Systems.Damage;
 using UnityEngine;
 
 namespace Systems.Combat
@@ -9,19 +10,16 @@ namespace Systems.Combat
         [SerializeField] private Transform _targetCheckPoint;
         [SerializeField] private float _targetCheckRadius = 1f;
         [SerializeField] private LayerMask _targetLayerMask;
+        [SerializeField] private DamageDefinition _damageDefinition;
 
-        [Header("Damage details")]
-        [SerializeField] private int _damageAmount = 10;
-        [SerializeField] private DamageSource _damageSource;
-
-        private IAttackFeedback _animTriggers;
+        private IAttackAnimationEvents _animTriggers;
 
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
 
         private void Awake()
         {
-            _animTriggers = GetComponentInChildren<IAttackFeedback>();
+            _animTriggers = GetComponentInChildren<IAttackAnimationEvents>();
 
             _filter = new ContactFilter2D();
             _targetsBuffer = new List<Collider2D>(3);
@@ -52,12 +50,17 @@ namespace Systems.Combat
         private void OnAttackHit()
         {
             int count = UpdateTargets();
+            if (count == 0)
+            {
+                return;
+            }
 
+            DamageInfo damageInfo = DamageInfo.FromDefinition(_damageDefinition, transform);
             for (int i = 0; i < count; i++)
             {
                 if (_targetsBuffer[i].TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(new DamageInfo(_damageAmount, _damageSource, transform));
+                    damageable.TakeDamage(damageInfo);
                 }
             }
         }

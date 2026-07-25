@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Systems.Combat
+namespace Systems.Damage
 {
     public class Health : MonoBehaviour, IDamageable
     {

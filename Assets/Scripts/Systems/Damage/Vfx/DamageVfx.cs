@@ -1,7 +1,7 @@
 using Core.Utils;
 using UnityEngine;
 
-namespace Systems.Combat.Vfx
+namespace Systems.Damage.Vfx
 {
     public class DamageVfx : MonoBehaviour
     {
@@ -45,7 +45,6 @@ namespace Systems.Combat.Vfx
         private void OnDamaged(DamageInfo obj)
         {
             _sr.material = _material;
-
             _timer.Start(_duration);
         }
     }

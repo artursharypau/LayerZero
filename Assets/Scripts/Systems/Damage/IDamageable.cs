@@ -1,6 +1,6 @@
 using System;
 
-namespace Systems.Combat
+namespace Systems.Damage
 {
     public interface IDamageable
     {

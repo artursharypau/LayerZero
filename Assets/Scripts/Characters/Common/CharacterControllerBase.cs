@@ -3,6 +3,7 @@ using Characters.Common.Detection;
 using Characters.Common.States;
 using Core.StateMachine;
 using Systems.Combat;
+using Systems.Damage;
 using UnityEngine;
 
 namespace Characters.Common
@@ -23,14 +24,14 @@ namespace Characters.Common
 
         public Rigidbody2D RB { get; private set; }
         public Animator Anim { get; private set; }
-        public IAttackFeedback AttackFeedback { get; private set; }
+        public IAttackAnimationEvents AttackAnimationEvents { get; private set; }
         public Health Health { get; private set; }
 
         private void Awake()
         {
             RB = GetComponent<Rigidbody2D>();
             Anim = GetComponentInChildren<Animator>();
-            AttackFeedback = GetComponentInChildren<IAttackFeedback>();
+            AttackAnimationEvents = GetComponentInChildren<IAttackAnimationEvents>();
             Health = GetComponent<Health>();
 
             _groundWallDetector.Initialize(this);
@@ -40,6 +41,9 @@ namespace Characters.Common
 
         private void OnEnable()
         {
+            Health.Damaged += HandleDamaged;
+            Health.Died += HandleDied;
+
             OnEnabled();
         }
 
@@ -58,6 +62,9 @@ namespace Characters.Common
 
         private void OnDisable()
         {
+            Health.Damaged -= HandleDamaged;
+            Health.Died -= HandleDied;
+
             OnDisabled();
         }
 
@@ -71,6 +78,41 @@ namespace Characters.Common
             _groundWallDetector.DrawGizmos();
 
             OnGizmosDrawn();
+        }
+
+        public void ChangeState(StateId id)
+        {
+            if (_states.TryGetValue(id, out State state))
+            {
+                _stateMachine.ChangeState(state);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"State with id {id} was not found");
+            }
+        }
+
+        public void SetVelocity(float x, float y)
+        {
+            RB.linearVelocity = new Vector2(x, y);
+
+            if ((IsFacingRight && x < 0f) || (!IsFacingRight && x > 0f))
+            {
+                Flip();
+            }
+        }
+
+        public void SetHorizontalVelocity(float x)
+        {
+            SetVelocity(x, RB.linearVelocityY);
+        }
+
+        public void Flip()
+        {
+            transform.Rotate(0f, 180f, 0f);
+            IsFacingRight = !IsFacingRight;
+
+            _groundWallDetector.Tick(Time.deltaTime);
         }
 
         protected virtual void OnAwakened()
@@ -111,39 +153,30 @@ namespace Characters.Common
             _states[id] = state;
         }
 
-        public void ChangeState(StateId id)
+        protected virtual void OnDamaged(DamageInfo damageInfo)
         {
-            if (_states.TryGetValue(id, out State state))
+        }
+
+        protected virtual void OnDamageImpactReceived(DamageImpactInfo damageImpact)
+        {
+        }
+
+        protected virtual void OnDied()
+        {
+        }
+
+        private void HandleDamaged(DamageInfo damageInfo)
+        {
+            OnDamaged(damageInfo);
+            if (damageInfo.Impact != DamageImpactInfo.None)
             {
-                _stateMachine.ChangeState(state);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"State with id {id} was not found");
+                OnDamageImpactReceived(damageInfo.Impact);
             }
         }
 
-        public void SetVelocity(float x, float y)
+        private void HandleDied()
         {
-            RB.linearVelocity = new Vector2(x, y);
-
-            if ((IsFacingRight && x < 0f) || (!IsFacingRight && x > 0f))
-            {
-                Flip();
-            }
-        }
-
-        public void SetHorizontalVelocity(float x)
-        {
-            SetVelocity(x, RB.linearVelocityY);
-        }
-
-        public void Flip()
-        {
-            transform.Rotate(0f, 180f, 0f);
-            IsFacingRight = !IsFacingRight;
-
-            _groundWallDetector.Tick(Time.deltaTime);
+            OnDied();
         }
     }
 }

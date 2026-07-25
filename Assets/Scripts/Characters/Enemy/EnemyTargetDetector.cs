@@ -2,7 +2,7 @@ using System;
 using Characters.Common;
 using Core.Tick;
 using Core.Utils;
-using Systems.Combat;
+using Systems.Damage;
 using UnityEngine;
 
 namespace Characters.Enemy

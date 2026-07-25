@@ -2,6 +2,7 @@ using Characters.Common;
 using Characters.Common.States;
 using Characters.Enemy.States;
 using Systems.Combat;
+using Systems.Damage;
 using UnityEngine;
 
 namespace Characters.Enemy
@@ -42,13 +43,6 @@ namespace Characters.Enemy
             _targetDetector.Initialize(this, this);
         }
 
-        protected override void OnEnabled()
-        {
-            base.OnEnabled();
-
-            Health.Damaged += OnDamaged;
-        }
-
         protected override void OnStarted()
         {
             StartStateMachine(StateId.Idle);
@@ -59,26 +53,19 @@ namespace Characters.Enemy
             _targetDetector.Tick(Time.deltaTime);
         }
 
-        protected override void OnDisabled()
-        {
-            base.OnDisabled();
-
-            Health.Damaged -= OnDamaged;
-        }
-
         protected override void OnGizmosDrawn()
         {
             _targetDetector.DrawGizmos();
         }
 
+        protected override void OnDamaged(DamageInfo damageInfo)
+        {
+            TargetDetector.DamageAlert(damageInfo);
+        }
+
         public bool ShouldAttack()
         {
             return _combatSystem.HasTargets();
-        }
-
-        private void OnDamaged(DamageInfo damageInfo)
-        {
-            TargetDetector.DamageAlert(damageInfo);
         }
     }
 }
