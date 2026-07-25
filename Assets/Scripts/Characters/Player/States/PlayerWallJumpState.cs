@@ -1,5 +1,5 @@
 using Characters.Player.Abilities;
-using Characters.Player.Abilities.Jump;
+using Characters.Player.Abilities.Config;
 using Infrastructure.StateMachine;
 using Infrastructure.Utils;
 using UnityEngine;
@@ -8,11 +8,13 @@ namespace Characters.Player.States
 {
     public class PlayerWallJumpState : PlayerInAirState
     {
+        private readonly PlayerJumpAbilityConfig _config;
         private readonly CountdownTimer _moveLockTimer;
 
-        public PlayerWallJumpState(PlayerController controller)
+        public PlayerWallJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {
+            _config = config;
             _moveLockTimer = new CountdownTimer();
         }
 
@@ -20,12 +22,10 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.TryGetAbilityConfig(PlayerAbilityId.Jump, out PlayerJumpAbilityConfig config);
-
-            _moveLockTimer.Start(config.WallJumpMoveLockDuration);
+            _moveLockTimer.Start(_config.WallJumpMoveLockDuration);
 
             EnableInput(false);
-            Controller.SetVelocity(config.WallJumpForce.x * -Controller.FacingDirection, config.WallJumpForce.y);
+            Controller.SetVelocity(_config.WallJumpForce.x * -Controller.FacingDirection, _config.WallJumpForce.y);
         }
 
         public override bool TryTransition()

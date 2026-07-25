@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Characters.Common;
 using Characters.Player.Abilities;
-using Characters.Player.Abilities.Dash;
-using Characters.Player.Abilities.Jump;
+using Characters.Player.Abilities.Chargeable;
+using Characters.Player.Abilities.Config;
+using Characters.Player.Abilities.Tickable;
 using Characters.Player.Input;
 using Characters.Player.States;
 using Infrastructure.StateMachine;
@@ -15,10 +16,10 @@ namespace Characters.Player
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
-        [SerializeField] private PlayerJumpAbility _jumpAbility;
-        [SerializeField] private PlayerDashAbility _dashAbility;
         [SerializeField] [Range(0, 1)] private float _inAirMoveMultiplier = 0.5f;
         [SerializeField] [Range(0, 1)] private float _wallSlideMultiplier = 0.8f;
+        [SerializeField] private PlayerJumpAbilityConfig _jumpConfig;
+        [SerializeField] private PlayerDashAbilityConfig _dashConfig;
 
         [Header("Attack details")]
         [SerializeField] private Vector2[] _attackVelocities = { new(3f, 1.5f), new(1f, 2.5f), new(4f, 5f) };
@@ -49,18 +50,18 @@ namespace Characters.Player
             _abilityContext = new PlayerAbilityContext(this, _inputHandler);
             _abilities = new Dictionary<PlayerAbilityId, IPlayerAbility>
             {
-                { PlayerAbilityId.Jump, _jumpAbility },
-                { PlayerAbilityId.Dash, _dashAbility }
+                { PlayerAbilityId.Jump, new PlayerJumpAbility(_jumpConfig) },
+                { PlayerAbilityId.Dash, new PlayerDashAbility(_dashConfig) }
             };
             _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
 
             RegisterState(StateId.Idle, new PlayerIdleState(this));
             RegisterState(StateId.Move, new PlayerMoveState(this));
-            RegisterState(StateId.Dash, new PlayerDashState(this));
-            RegisterState(StateId.Jump, new PlayerJumpState(this));
+            RegisterState(StateId.Dash, new PlayerDashState(this, _dashConfig));
+            RegisterState(StateId.Jump, new PlayerJumpState(this, _jumpConfig));
             RegisterState(StateId.Fall, new PlayerFallState(this));
             RegisterState(StateId.WallSlide, new PlayerWallSlideState(this));
-            RegisterState(StateId.WallJump, new PlayerWallJumpState(this));
+            RegisterState(StateId.WallJump, new PlayerWallJumpState(this, _jumpConfig));
             RegisterState(StateId.Attack, new PlayerAttackState(this));
             RegisterState(StateId.JumpAttack, new PlayerJumpAttackState(this));
         }
@@ -96,45 +97,27 @@ namespace Characters.Player
             _inputHandler.Dispose();
         }
 
-        public bool TryGetAbilityConfig<TConfig>(PlayerAbilityId id, out TConfig config)
-            where TConfig : class, IPlayerAbilityConfig
-        {
-            config = null;
-            bool result = false;
-
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability.GetConfig() is TConfig typedConfig)
-            {
-                config = typedConfig;
-                result = true;
-            }
-            else
-            {
-                Debug.unityLogger.LogError(
-                    $"{nameof(PlayerController)}.{nameof(TryGetAbilityConfig)}",
-                    $"Ability '{id}' has no config of type '{typeof(TConfig).Name}'");
-            }
-
-            return result;
-        }
-
         public bool CanUseAbility(PlayerAbilityId id)
         {
             return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
         }
 
-        public void TriggerAbility(PlayerAbilityId id)
+        public bool TryTriggerAbility(PlayerAbilityId id)
         {
-            if (TryGetAbility(id, out IPlayerAbility ability))
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext))
             {
                 ability.Trigger(_abilityContext);
+                return true;
             }
+
+            return false;
         }
 
-        public void RefillChargeableAbility(PlayerAbilityId id)
+        public void RefillChargeableAbility(PlayerAbilityId id, int amount = -1)
         {
             if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeableAbility)
             {
-                chargeableAbility.Refill();
+                chargeableAbility.Refill(amount);
             }
         }
 

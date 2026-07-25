@@ -1,14 +1,17 @@
 using Characters.Player.Abilities;
-using Characters.Player.Abilities.Jump;
+using Characters.Player.Abilities.Config;
 using Infrastructure.StateMachine;
 
 namespace Characters.Player.States
 {
     public class PlayerJumpState : PlayerInAirState
     {
-        public PlayerJumpState(PlayerController controller)
+        private readonly PlayerJumpAbilityConfig _config;
+
+        public PlayerJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {
+            _config = config;
         }
 
         public override void Enter()
@@ -43,12 +46,9 @@ namespace Characters.Player.States
 
         private void Jump()
         {
-            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
+            if (Controller.TryTriggerAbility(PlayerAbilityId.Jump))
             {
-                Controller.TryGetAbilityConfig(PlayerAbilityId.Jump, out PlayerJumpAbilityConfig config);
-                Controller.TriggerAbility(PlayerAbilityId.Jump);
-
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, config.Force);
+                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force);
             }
         }
     }

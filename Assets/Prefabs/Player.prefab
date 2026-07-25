@@ -129,13 +129,19 @@ MonoBehaviour:
     - {fileID: 456699895117608732}
     _wallCheckDistance: 0.5
   _moveSpeed: 15
-  _dashDuration: 0.2
-  _dashMultiplier: 3
-  _dashCooldown: 2
-  _jumpForce: 14
-  _jumpsCount: 2
-  _wallJumpForce: {x: 6, y: 12}
-  _wallJumpMoveLockDuration: 0.2
+  _jumpAbility:
+    _config:
+      Force: 13
+      WallJumpForce: {x: 6, y: 12}
+      WallJumpMoveLockDuration: 0.2
+    _charge:
+      _config:
+        Charges: 2
+  _dashAbility:
+    _config:
+      Duration: 0.2
+      SpeedMultiplier: 3
+      Cooldown: 2
   _inAirMoveMultiplier: 0.5
   _wallSlideMultiplier: 0.8
   _attackVelocities:
