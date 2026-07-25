@@ -26,7 +26,7 @@ namespace Characters.Player.Abilities.Chargeable
 
         public void Refill(int amount)
         {
-            _available = amount > 0 ? Mathf.Max(amount, _charges) : _charges;
+            _available = amount > 0 ? Mathf.Min(amount, _charges) : _charges;
         }
     }
 }

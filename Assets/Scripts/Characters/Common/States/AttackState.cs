@@ -1,17 +1,13 @@
 using Characters.Common.Animation;
-using Core.StateMachine;
 
 namespace Characters.Common.States
 {
-    public abstract class AttackState<TController> : State
+    public abstract class AttackState<TController> : AnimatedState<TController>
         where TController : CharacterControllerBase
     {
-        protected TController Controller { get; }
-
         protected AttackState(TController controller, int animHash, AnimatorParameterType type = AnimatorParameterType.Trigger)
-            : base(new AnimatorContext(animHash, type, controller.Anim))
+            : base(controller, animHash, type)
         {
-            Controller = controller;
         }
 
         public override void Enter()

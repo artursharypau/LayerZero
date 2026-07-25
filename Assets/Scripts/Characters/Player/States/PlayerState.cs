@@ -1,10 +1,10 @@
+using Characters.Common.Animation;
 using Characters.Common.States;
 using Characters.Player.Abilities;
-using Core.StateMachine;
 
 namespace Characters.Player.States
 {
-    public abstract class PlayerState : CharacterState<PlayerController>
+    public abstract class PlayerState : AnimatedState<PlayerController>
     {
         protected PlayerState(PlayerController controller, int hash, AnimatorParameterType type = AnimatorParameterType.Bool)
             : base(controller, hash, type)

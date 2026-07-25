@@ -1,7 +1,7 @@
 using Characters.Common;
-using Characters.Common.Combat;
+using Characters.Common.States;
 using Characters.Enemy.States;
-using Core.StateMachine;
+using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Enemy

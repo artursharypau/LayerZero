@@ -1,5 +1,5 @@
 using Characters.Common.Animation;
-using Core.StateMachine;
+using Characters.Common.States;
 using Core.Utils;
 using UnityEngine;
 

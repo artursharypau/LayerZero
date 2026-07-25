@@ -1,5 +1,5 @@
+using Characters.Common.States;
 using Characters.Player.Abilities;
-using Core.StateMachine;
 
 namespace Characters.Player.States
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Characters.Common.Combat
+namespace Systems.Combat
 {
     public readonly struct DamageInfo
     {

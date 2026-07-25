@@ -1,6 +1,6 @@
 using Characters.Common.Animation;
+using Characters.Common.States;
 using Characters.Player.Input;
-using Core.StateMachine;
 
 namespace Characters.Player.States
 {
