@@ -1,9 +1,9 @@
 using System;
-using Infrastructure.Tick;
-using Infrastructure.Utils;
+using Core.Tick;
+using Core.Utils;
 using UnityEngine;
 
-namespace Characters.Common
+namespace Characters.Common.Detection
 {
     [Serializable]
     public class GroundWallDetector : ITickable

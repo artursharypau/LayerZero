@@ -1,4 +1,4 @@
-using Infrastructure.Tick;
+using Core.Tick;
 
 namespace Characters.Player.Abilities.Tickable
 {

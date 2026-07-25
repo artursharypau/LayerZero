@@ -1,6 +1,7 @@
+using Core.StateMachine;
 using UnityEngine;
 
-namespace Infrastructure.Animation
+namespace Characters.Common.Animation
 {
     public class AnimatorContext
     {

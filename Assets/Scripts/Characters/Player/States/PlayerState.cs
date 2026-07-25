@@ -1,7 +1,6 @@
-using Characters.Common;
+using Characters.Common.States;
 using Characters.Player.Abilities;
-using Infrastructure.Animation;
-using Infrastructure.StateMachine;
+using Core.StateMachine;
 
 namespace Characters.Player.States
 {

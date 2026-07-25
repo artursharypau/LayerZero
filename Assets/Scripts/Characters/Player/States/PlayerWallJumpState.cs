@@ -1,7 +1,7 @@
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
-using Infrastructure.StateMachine;
-using Infrastructure.Utils;
+using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States

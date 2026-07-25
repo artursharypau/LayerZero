@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Characters.Common;
 using UnityEngine;
 
-namespace Systems.Combat
+namespace Characters.Common.Combat
 {
     public class CombatSystem : MonoBehaviour
     {

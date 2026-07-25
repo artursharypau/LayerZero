@@ -1,4 +1,4 @@
-namespace Infrastructure.Tick
+namespace Core.Tick
 {
     public interface ITickable
     {

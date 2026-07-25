@@ -1,8 +1,7 @@
-using Infrastructure.Utils;
-using Systems.Combat;
+using Core.Utils;
 using UnityEngine;
 
-namespace Infrastructure.Vfx
+namespace Characters.Common.Combat.Vfx
 {
     public class DamageVfx : MonoBehaviour
     {

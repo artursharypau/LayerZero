@@ -1,7 +1,7 @@
-using Infrastructure.Animation;
-using Infrastructure.StateMachine;
+using Characters.Common.Animation;
+using Core.StateMachine;
 
-namespace Characters.Common
+namespace Characters.Common.States
 {
     public abstract class AttackState<TController> : State
         where TController : CharacterControllerBase

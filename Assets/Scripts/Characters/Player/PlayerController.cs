@@ -7,7 +7,7 @@ using Characters.Player.Abilities.Config;
 using Characters.Player.Abilities.Tickable;
 using Characters.Player.Input;
 using Characters.Player.States;
-using Infrastructure.StateMachine;
+using Core.StateMachine;
 using UnityEngine;
 
 namespace Characters.Player

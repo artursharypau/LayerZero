@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Infrastructure.Animation
+namespace Characters.Common.Animation
 {
     public static class AnimatorHashProvider
     {

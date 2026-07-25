@@ -1,6 +1,6 @@
 using System;
 
-namespace Systems.Combat
+namespace Characters.Common.Combat
 {
     public interface IDamageable
     {

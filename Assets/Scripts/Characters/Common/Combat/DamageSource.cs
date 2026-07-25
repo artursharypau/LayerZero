@@ -1,4 +1,4 @@
-namespace Systems.Combat
+namespace Characters.Common.Combat
 {
     public enum DamageSource
     {

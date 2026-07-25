@@ -1,6 +1,6 @@
 using Characters.Player.Abilities;
 using Characters.Player.Input;
-using Infrastructure.StateMachine;
+using Core.StateMachine;
 using UnityEngine;
 
 namespace Characters.Player.States
