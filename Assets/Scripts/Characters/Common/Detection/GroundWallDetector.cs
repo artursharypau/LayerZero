@@ -1,4 +1,5 @@
 using System;
+using Characters.Common.Extensions;
 using Core.Tick;
 using Core.Utils;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Characters.Common.Detection
     {
         [SerializeField] private Transform[] _groundCheckPoints;
         [SerializeField] private float _groundCheckDistance = 1.35f;
+
         [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;
 
@@ -25,28 +27,15 @@ namespace Characters.Common.Detection
 
         public void Tick(float deltaTime)
         {
-            Vector2 direction = Mathf.Approximately(_facing.FacingDirection, 1f) ? Vector2.right : Vector2.left;
-
-            IsGrounded = true;
-            IsWalled = true;
-
-            foreach (Transform point in _groundCheckPoints)
+            if (_facing == null)
             {
-                if (!Physics2D.Raycast(point.position, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground))
-                {
-                    IsGrounded = false;
-                    break;
-                }
+                return;
             }
 
-            foreach (Transform point in _wallCheckPoints)
-            {
-                if (!Physics2D.Raycast(point.position, direction, _wallCheckDistance, LayerMaskProvider.Ground))
-                {
-                    IsWalled = false;
-                    break;
-                }
-            }
+            Vector2 wallDirection = _facing.GetVector();
+
+            IsGrounded = AllRaysHit(_groundCheckPoints, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground);
+            IsWalled = AllRaysHit(_wallCheckPoints, wallDirection, _wallCheckDistance, LayerMaskProvider.Ground);
         }
 
         public void DrawGizmos()
@@ -57,15 +46,38 @@ namespace Characters.Common.Detection
             }
 
             Gizmos.color = Color.yellow;
+            DrawRays(_groundCheckPoints, Vector2.down * _groundCheckDistance);
+            DrawRays(_wallCheckPoints, Vector2.right * (_wallCheckDistance * _facing.FacingDirection));
+        }
 
-            foreach (Transform point in _groundCheckPoints)
+        private static bool AllRaysHit(Transform[] points, Vector2 direction, float distance, LayerMask mask)
+        {
+            if (points == null || points.Length == 0)
             {
-                Gizmos.DrawLine(point.position, point.position + new Vector3(0f, -_groundCheckDistance));
+                return false;
             }
 
-            foreach (Transform point in _wallCheckPoints)
+            foreach (Transform point in points)
             {
-                Gizmos.DrawLine(point.position, point.position + new Vector3(_wallCheckDistance * _facing.FacingDirection, 0f));
+                if (!Physics2D.Raycast(point.position, direction, distance, mask))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void DrawRays(Transform[] points, Vector3 offset)
+        {
+            if (points == null)
+            {
+                return;
+            }
+
+            foreach (Transform point in points)
+            {
+                Gizmos.DrawLine(point.position, point.position + offset);
             }
         }
     }

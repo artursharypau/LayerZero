@@ -1,13 +1,10 @@
 namespace Characters.Common
 {
-    public interface IMovable
+    public interface IMovable : IMovementState
     {
-        bool IsGrounded { get; }
-        bool IsWalled { get; }
-        bool IsFalling { get; }
-
         void SetVelocity(float x, float y);
         void SetHorizontalVelocity(float x);
         void Flip();
+        void SetGravityScale(float scale);
     }
 }

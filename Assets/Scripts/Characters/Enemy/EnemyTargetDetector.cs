@@ -1,5 +1,6 @@
 using System;
 using Characters.Common;
+using Characters.Common.Extensions;
 using Core.Tick;
 using Core.Utils;
 using Systems.Damage;
@@ -126,7 +127,7 @@ namespace Characters.Enemy
         {
             RaycastHit2D raycast = Physics2D.Raycast(
                 _checkPoint.position,
-                Vector2.right * _facing.FacingDirection,
+                _facing.GetVector(),
                 _checkDistance,
                 LayerMaskProvider.Player | LayerMaskProvider.Ground);
 

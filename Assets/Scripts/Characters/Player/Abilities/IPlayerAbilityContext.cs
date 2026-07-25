@@ -1,10 +1,11 @@
+using Characters.Common;
 using Characters.Player.Input;
 
 namespace Characters.Player.Abilities
 {
     public interface IPlayerAbilityContext
     {
-        bool IsWalled { get; }
+        IMovementState MovementState { get; }
         IPlayerInput Input { get; }
     }
 }

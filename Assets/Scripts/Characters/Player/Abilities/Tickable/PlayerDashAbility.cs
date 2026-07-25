@@ -21,7 +21,7 @@ namespace Characters.Player.Abilities.Tickable
 
         public bool CanBeUsed(IPlayerAbilityContext context)
         {
-            return _cooldownTimer.IsExpired && !context.IsWalled && context.Input.WasPerformed(PlayerInputAction.Dash);
+            return _cooldownTimer.IsExpired && !context.MovementState.IsWalled && context.Input.WasPerformed(PlayerInputAction.Dash);
         }
 
         public void Trigger(IPlayerAbilityContext context)

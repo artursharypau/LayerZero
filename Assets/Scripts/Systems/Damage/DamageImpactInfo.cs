@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Systems.Damage
 {
-    public readonly struct DamageImpactInfo
+    public readonly struct DamageImpactInfo : IEquatable<DamageImpactInfo>
     {
         public static readonly DamageImpactInfo None = new();
 
@@ -23,6 +24,21 @@ namespace Systems.Damage
         public static bool operator !=(DamageImpactInfo left, DamageImpactInfo right)
         {
             return !(left == right);
+        }
+
+        public bool Equals(DamageImpactInfo other)
+        {
+            return Knockback.Equals(other.Knockback) && StunDuration.Equals(other.StunDuration);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DamageImpactInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Knockback, StunDuration);
         }
     }
 }

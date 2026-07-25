@@ -63,8 +63,8 @@ namespace Characters.Player.States
         private void HandleSliding()
         {
             float velocityY = Controller.InputHandler.Move.y < 0f
-                ? Controller.RB.linearVelocityY
-                : Controller.RB.linearVelocityY * Controller.WallSlideMultiplier;
+                ? Controller.VelocityY
+                : Controller.VelocityY * Controller.WallSlideMultiplier;
 
             Controller.SetVelocity(Controller.InputHandler.Move.x, velocityY);
         }
