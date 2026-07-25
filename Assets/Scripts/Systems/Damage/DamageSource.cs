@@ -1,9 +1,10 @@
-namespace Systems.Combat
+namespace Systems.Damage
 {
     public enum DamageSource
     {
         None,
         Player,
-        Enemy
+        Enemy,
+        Hazard
     }
 }
