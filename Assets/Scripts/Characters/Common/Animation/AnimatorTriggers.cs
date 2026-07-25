@@ -1,8 +1,7 @@
 using System;
-using Characters.Common;
 using UnityEngine;
 
-namespace Infrastructure.Animation
+namespace Characters.Common.Animation
 {
     public class AnimatorTriggers : MonoBehaviour, IAttackFeedback
     {

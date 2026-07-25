@@ -1,6 +1,6 @@
 using System;
-using Infrastructure.Tick;
-using Infrastructure.Utils;
+using Core.Tick;
+using Core.Utils;
 using InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;

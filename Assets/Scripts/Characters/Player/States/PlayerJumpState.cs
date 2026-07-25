@@ -1,6 +1,6 @@
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
-using Infrastructure.StateMachine;
+using Core.StateMachine;
 
 namespace Characters.Player.States
 {

@@ -1,8 +1,8 @@
-using Characters.Common;
+using Characters.Common.Animation;
+using Characters.Common.States;
 using Characters.Player.Input;
-using Infrastructure.Animation;
-using Infrastructure.StateMachine;
-using Infrastructure.Utils;
+using Core.StateMachine;
+using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Player.States

@@ -1,5 +1,4 @@
-using Infrastructure.Animation;
-using Infrastructure.StateMachine;
+using Core.StateMachine;
 
 namespace Characters.Enemy.States
 {

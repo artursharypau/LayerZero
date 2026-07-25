@@ -1,4 +1,4 @@
-namespace Infrastructure.StateMachine
+namespace Core.StateMachine
 {
     public enum StateId
     {

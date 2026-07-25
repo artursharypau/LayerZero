@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using Infrastructure.StateMachine;
-using Systems.Combat;
+using Characters.Common.Combat;
+using Characters.Common.Detection;
+using Core.StateMachine;
 using UnityEngine;
 
 namespace Characters.Common

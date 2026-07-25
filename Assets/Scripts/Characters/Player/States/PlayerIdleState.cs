@@ -1,5 +1,5 @@
-using Infrastructure.Animation;
-using Infrastructure.StateMachine;
+using Characters.Common.Animation;
+using Core.StateMachine;
 
 namespace Characters.Player.States
 {

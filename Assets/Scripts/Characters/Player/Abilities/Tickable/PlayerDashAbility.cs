@@ -1,6 +1,6 @@
 using Characters.Player.Abilities.Config;
 using Characters.Player.Input;
-using Infrastructure.Utils;
+using Core.Utils;
 
 namespace Characters.Player.Abilities.Tickable
 {

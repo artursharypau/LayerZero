@@ -1,33 +1,17 @@
-using LayerZero.Characters.Common.Animation;
-using LayerZero.Characters.Common.Movement;
-using LayerZero.Core.StateMachine;
+using Characters.Common.Animation;
+using Core.StateMachine;
 
-namespace LayerZero.Characters.Common.States
+namespace Characters.Common.States
 {
-    public abstract class CharacterState<TCharacter> : StateBase
-        where TCharacter : Character2D
+    public abstract class CharacterState<TController> : State
+        where TController : CharacterControllerBase
     {
-        private readonly AnimatorParameter _parameter;
+        protected TController Controller { get; }
 
-        protected CharacterState(TCharacter owner, AnimatorParameter parameter)
+        protected CharacterState(TController controller, int hash, AnimatorParameterType type = AnimatorParameterType.Bool)
+            : base(new AnimatorContext(hash, type, controller.Anim))
         {
-            Owner = owner;
-
-            _parameter = parameter;
-        }
-
-        protected TCharacter Owner { get; }
-        protected CharacterAnimator Animator => Owner.Animator;
-        protected IMovement2D Movement => Owner.Movement;
-
-        public override void Enter()
-        {
-            Animator.Enter(_parameter);
-        }
-
-        public override void Exit()
-        {
-            Animator.Exit(_parameter);
+            Controller = controller;
         }
     }
 }
