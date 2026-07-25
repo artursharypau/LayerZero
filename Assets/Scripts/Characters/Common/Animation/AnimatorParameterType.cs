@@ -1,4 +1,4 @@
-namespace Core.StateMachine
+namespace Characters.Common.Animation
 {
     public enum AnimatorParameterType
     {

@@ -1,4 +1,4 @@
-using Core.StateMachine;
+using Characters.Common.States;
 
 namespace Characters.Enemy.States
 {

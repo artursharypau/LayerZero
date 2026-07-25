@@ -1,8 +1,8 @@
 using System;
 using Characters.Common;
-using Characters.Common.Combat;
 using Core.Tick;
 using Core.Utils;
+using Systems.Combat;
 using UnityEngine;
 
 namespace Characters.Enemy

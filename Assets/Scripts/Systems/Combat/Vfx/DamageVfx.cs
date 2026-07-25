@@ -1,7 +1,7 @@
 using Core.Utils;
 using UnityEngine;
 
-namespace Characters.Common.Combat.Vfx
+namespace Systems.Combat.Vfx
 {
     public class DamageVfx : MonoBehaviour
     {

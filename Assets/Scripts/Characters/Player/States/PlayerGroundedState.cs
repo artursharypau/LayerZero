@@ -1,6 +1,7 @@
+using Characters.Common.Animation;
+using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Input;
-using Core.StateMachine;
 using UnityEngine;
 
 namespace Characters.Player.States

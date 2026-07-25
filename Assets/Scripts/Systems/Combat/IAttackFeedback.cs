@@ -1,6 +1,6 @@
 using System;
 
-namespace Characters.Common
+namespace Systems.Combat
 {
     public interface IAttackFeedback
     {
