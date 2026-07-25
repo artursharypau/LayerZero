@@ -15,24 +15,31 @@ namespace Characters.Common
         private readonly Dictionary<StateId, State> _states = new(5);
         private readonly StateMachine _stateMachine = new();
 
+        private Rigidbody2D _rb;
+        private Health _health;
+
         public bool IsGrounded => _groundWallDetector.IsGrounded;
         public bool IsWalled => _groundWallDetector.IsWalled;
-        public bool IsFalling => RB.linearVelocityY < 0f && !IsGrounded;
+        public bool IsFalling => _rb.linearVelocityY < 0f && !IsGrounded;
+        public float VelocityX => _rb.linearVelocityX;
+        public float VelocityY => _rb.linearVelocityY;
+        public float GravityScale => _rb.gravityScale;
+
         public bool IsFacingRight { get; private set; } = true;
         public float FacingDirection => IsFacingRight ? 1f : -1f;
+
         public Vector2 Position => transform.position;
 
-        public Rigidbody2D RB { get; private set; }
         public Animator Anim { get; private set; }
         public IAttackAnimationEvents AttackAnimationEvents { get; private set; }
-        public Health Health { get; private set; }
 
         private void Awake()
         {
-            RB = GetComponent<Rigidbody2D>();
+            _rb = GetComponent<Rigidbody2D>();
+            _health = GetComponent<Health>();
+
             Anim = GetComponentInChildren<Animator>();
             AttackAnimationEvents = GetComponentInChildren<IAttackAnimationEvents>();
-            Health = GetComponent<Health>();
 
             _groundWallDetector.Initialize(this);
 
@@ -41,8 +48,8 @@ namespace Characters.Common
 
         private void OnEnable()
         {
-            Health.Damaged += HandleDamaged;
-            Health.Died += HandleDied;
+            _health.Damaged += HandleDamaged;
+            _health.Died += HandleDied;
 
             OnEnabled();
         }
@@ -62,8 +69,8 @@ namespace Characters.Common
 
         private void OnDisable()
         {
-            Health.Damaged -= HandleDamaged;
-            Health.Died -= HandleDied;
+            _health.Damaged -= HandleDamaged;
+            _health.Died -= HandleDied;
 
             OnDisabled();
         }
@@ -94,7 +101,7 @@ namespace Characters.Common
 
         public void SetVelocity(float x, float y)
         {
-            RB.linearVelocity = new Vector2(x, y);
+            _rb.linearVelocity = new Vector2(x, y);
 
             if ((IsFacingRight && x < 0f) || (!IsFacingRight && x > 0f))
             {
@@ -104,7 +111,7 @@ namespace Characters.Common
 
         public void SetHorizontalVelocity(float x)
         {
-            SetVelocity(x, RB.linearVelocityY);
+            SetVelocity(x, VelocityY);
         }
 
         public void Flip()
@@ -113,6 +120,11 @@ namespace Characters.Common
             IsFacingRight = !IsFacingRight;
 
             _groundWallDetector.Tick(Time.deltaTime);
+        }
+
+        public void SetGravityScale(float scale)
+        {
+            _rb.gravityScale = scale;
         }
 
         protected virtual void OnAwakened()

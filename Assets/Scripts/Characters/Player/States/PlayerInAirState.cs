@@ -37,7 +37,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.RB.linearVelocityY);
+            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.VelocityY);
 
             HandleMove();
         }

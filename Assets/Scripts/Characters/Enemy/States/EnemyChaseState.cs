@@ -41,7 +41,7 @@ namespace Characters.Enemy.States
         {
             base.Update();
 
-            Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.RB.linearVelocityX);
+            Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.VelocityY);
 
             if (Controller.TargetDetector.IsBehind)
             {

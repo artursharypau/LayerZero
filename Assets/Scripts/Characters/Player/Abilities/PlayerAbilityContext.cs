@@ -5,15 +5,15 @@ namespace Characters.Player.Abilities
 {
     public class PlayerAbilityContext : IPlayerAbilityContext
     {
-        private readonly IMovable _movable;
+        private readonly IMovementState _movementState;
 
-        public PlayerAbilityContext(IMovable movable, IPlayerInput input)
+        public PlayerAbilityContext(IMovementState movementState, IPlayerInput input)
         {
-            _movable = movable;
+            MovementState = movementState;
             Input = input;
         }
 
-        public bool IsWalled => _movable.IsWalled;
+        public IMovementState MovementState { get; }
         public IPlayerInput Input { get; }
     }
 }

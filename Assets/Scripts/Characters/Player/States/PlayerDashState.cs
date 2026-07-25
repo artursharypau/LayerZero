@@ -25,14 +25,14 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            _initialGravityScale = Controller.RB.gravityScale;
+            _initialGravityScale = Controller.GravityScale;
 
             if (Controller.TryTriggerAbility(PlayerAbilityId.Dash))
             {
                 _timer.Start(_config.Duration);
                 _velocityX = Controller.MoveSpeed * _config.SpeedMultiplier;
 
-                Controller.RB.gravityScale = 0f;
+                Controller.SetGravityScale(0f);
             }
         }
 
@@ -77,8 +77,8 @@ namespace Characters.Player.States
             _timer.Tick(Time.deltaTime);
             if (_timer.IsExpired)
             {
-                Controller.RB.gravityScale = _initialGravityScale;
-                Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
+                Controller.SetGravityScale(_initialGravityScale);
+                Controller.SetVelocity(0f, Controller.VelocityY);
             }
             else
             {
@@ -90,8 +90,8 @@ namespace Characters.Player.States
         {
             base.Exit();
 
-            Controller.SetVelocity(0f, Controller.RB.linearVelocityY);
-            Controller.RB.gravityScale = _initialGravityScale;
+            Controller.SetGravityScale(_initialGravityScale);
+            Controller.SetVelocity(0f, Controller.VelocityY);
         }
     }
 }

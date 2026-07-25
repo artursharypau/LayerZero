@@ -28,7 +28,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.RB.linearVelocityY <= 0f)
+            if (Controller.VelocityY <= 0f)
             {
                 Controller.ChangeState(StateId.Fall);
                 return true;
