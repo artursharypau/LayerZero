@@ -4,6 +4,5 @@ namespace Characters.Player.Abilities
     {
         bool CanBeUsed(IPlayerAbilityContext context);
         void Trigger(IPlayerAbilityContext context);
-        IPlayerAbilityConfig GetConfig();
     }
 }

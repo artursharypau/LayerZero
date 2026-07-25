@@ -1,5 +1,5 @@
 using Characters.Player.Abilities;
-using Characters.Player.Abilities.Dash;
+using Characters.Player.Abilities.Config;
 using Infrastructure.StateMachine;
 using Infrastructure.Utils;
 using UnityEngine;
@@ -8,14 +8,16 @@ namespace Characters.Player.States
 {
     public class PlayerDashState : PlayerState
     {
+        private readonly PlayerDashAbilityConfig _config;
         private readonly CountdownTimer _timer;
 
         private float _velocityX;
         private float _initialGravityScale;
 
-        public PlayerDashState(PlayerController controller)
+        public PlayerDashState(PlayerController controller, PlayerDashAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.Dash)
         {
+            _config = config;
             _timer = new CountdownTimer();
         }
 
@@ -23,14 +25,15 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.TryGetAbilityConfig(PlayerAbilityId.Dash, out PlayerDashAbilityConfig config);
-
-            _timer.Start(config.Duration);
-            _velocityX = Controller.MoveSpeed * config.SpeedMultiplier;
             _initialGravityScale = Controller.RB.gravityScale;
 
-            Controller.TriggerAbility(PlayerAbilityId.Dash);
-            Controller.RB.gravityScale = 0f;
+            if (Controller.TryTriggerAbility(PlayerAbilityId.Dash))
+            {
+                _timer.Start(_config.Duration);
+                _velocityX = Controller.MoveSpeed * _config.SpeedMultiplier;
+
+                Controller.RB.gravityScale = 0f;
+            }
         }
 
         public override bool TryTransition()

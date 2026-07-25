@@ -1,20 +1,17 @@
-using System;
+using Characters.Player.Abilities.Config;
 using Characters.Player.Input;
 using Infrastructure.Utils;
-using UnityEngine;
 
-namespace Characters.Player.Abilities.Dash
+namespace Characters.Player.Abilities.Tickable
 {
-    [Serializable]
     public class PlayerDashAbility : IPlayerTickableAbility
     {
-        [SerializeField] private PlayerDashAbilityConfig _config;
+        private readonly float _cooldown;
+        private readonly CountdownTimer _cooldownTimer = new();
 
-        private readonly CountdownTimer _cooldownTimer;
-
-        public PlayerDashAbility()
+        public PlayerDashAbility(PlayerDashAbilityConfig config)
         {
-            _cooldownTimer = new CountdownTimer();
+            _cooldown = config.Duration + config.Cooldown;
         }
 
         public void Tick(float deltaTime)
@@ -29,12 +26,7 @@ namespace Characters.Player.Abilities.Dash
 
         public void Trigger(IPlayerAbilityContext context)
         {
-            _cooldownTimer.Start(_config.Duration + _config.Cooldown);
-        }
-
-        public IPlayerAbilityConfig GetConfig()
-        {
-            return _config;
+            _cooldownTimer.Start(_cooldown);
         }
     }
 }

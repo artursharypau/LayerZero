@@ -17,8 +17,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.RefillChargeableAbility(PlayerAbilityId.Jump);
-            Controller.TriggerAbility(PlayerAbilityId.Jump);
+            Controller.RefillChargeableAbility(PlayerAbilityId.Jump, 1);
         }
 
         public override bool TryTransition()
