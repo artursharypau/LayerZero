@@ -26,6 +26,7 @@ namespace Characters.Player.Abilities.Tickable
 
         public void Trigger(IPlayerAbilityContext context)
         {
+            context.Input.Consume(PlayerInputAction.Dash);
             _cooldownTimer.Start(_cooldown);
         }
     }

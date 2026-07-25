@@ -11,10 +11,12 @@ namespace Characters.Player.Input
     public class PlayerInputHandler : IPlayerInput, ITickable, IDisposable
     {
         [SerializeField] private float _jumpBufferDuration = 0.2f;
+        [SerializeField] private float _dashBufferDuration = 0.1f;
 
         private PlayerInputSet _inputSet;
         private PlayerInputSet.PlayerActions _inputActions;
         private BufferedButton _jumpButton;
+        private BufferedButton _dashButton;
 
         public Vector2 Move { get; private set; }
 
@@ -23,6 +25,7 @@ namespace Characters.Player.Input
             _inputSet = new PlayerInputSet();
             _inputActions = _inputSet.Player;
             _jumpButton = new BufferedButton(_jumpBufferDuration);
+            _dashButton = new BufferedButton(_dashBufferDuration);
         }
 
         public void Enable()
@@ -31,6 +34,7 @@ namespace Characters.Player.Input
             _inputActions.Movement.performed += OnMovementPerformed;
             _inputActions.Movement.canceled += OnMovementCanceled;
             _inputActions.Jump.performed += OnJumpPerformed;
+            _inputActions.Dash.performed += OnDashPerformed;
         }
 
         public void Disable()
@@ -39,11 +43,13 @@ namespace Characters.Player.Input
             _inputActions.Movement.performed -= OnMovementPerformed;
             _inputActions.Movement.canceled -= OnMovementCanceled;
             _inputActions.Jump.performed -= OnJumpPerformed;
+            _inputActions.Dash.performed -= OnDashPerformed;
         }
 
         public void Tick(float deltaTime)
         {
             _jumpButton.Tick(deltaTime);
+            _dashButton.Tick(deltaTime);
         }
 
         public bool WasPerformed(PlayerInputAction action)
@@ -51,7 +57,7 @@ namespace Characters.Player.Input
             return action switch
             {
                 PlayerInputAction.Jump => _jumpButton.IsRequested,
-                PlayerInputAction.Dash => _inputActions.Dash.WasPerformedThisFrame(),
+                PlayerInputAction.Dash => _dashButton.IsRequested,
                 PlayerInputAction.Attack => _inputActions.Attack.WasPerformedThisFrame(),
                 _ => false
             };
@@ -63,6 +69,9 @@ namespace Characters.Player.Input
             {
                 case PlayerInputAction.Jump:
                     _jumpButton.Consume();
+                    break;
+                case PlayerInputAction.Dash:
+                    _dashButton.Consume();
                     break;
             }
         }
@@ -86,6 +95,11 @@ namespace Characters.Player.Input
         private void OnJumpPerformed(InputAction.CallbackContext context)
         {
             _jumpButton.Press();
+        }
+
+        private void OnDashPerformed(InputAction.CallbackContext context)
+        {
+            _dashButton.Press();
         }
     }
 }
