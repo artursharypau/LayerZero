@@ -11,6 +11,11 @@ namespace Core.StateMachine
 
         public void Start(State initialState)
         {
+            if (initialState == null)
+            {
+                return;
+            }
+
             Current = initialState;
             Current.Enter();
         }
@@ -40,6 +45,19 @@ namespace Core.StateMachine
             }
         }
 
+        public void FixedUpdate()
+        {
+            if (Current == null)
+            {
+                return;
+            }
+
+            if (!Current.TryFixedTransition())
+            {
+                Current.FixedUpdate();
+            }
+        }
+
         private void ApplyPendingTransition()
         {
             int guard = 0;
@@ -57,7 +75,7 @@ namespace Core.StateMachine
                     break;
                 }
 
-                Current.Exit();
+                Current?.Exit();
                 Current = Pending;
                 Pending = null;
                 Current.Enter();

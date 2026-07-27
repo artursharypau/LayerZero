@@ -17,7 +17,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.Move.x == 0f || IsRunningIntoWall())
+            if (Controller.InputHandler.Move.x == 0f)
             {
                 Controller.ChangeState(StateId.Idle);
                 return true;
@@ -26,9 +26,25 @@ namespace Characters.Player.States
             return false;
         }
 
-        public override void Update()
+        public override bool TryFixedTransition()
         {
-            base.Update();
+            if (base.TryFixedTransition())
+            {
+                return true;
+            }
+
+            if (IsRunningIntoWall())
+            {
+                Controller.ChangeState(StateId.Idle);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
 
             Controller.SetVelocityX(Controller.MoveSpeed * Controller.InputHandler.Move.x, true);
         }

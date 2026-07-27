@@ -59,10 +59,17 @@ namespace Characters.Common
 
         private void Update()
         {
-            _groundWallDetector.Tick(Time.deltaTime);
             _stateMachine.Update();
 
             OnUpdated();
+        }
+
+        private void FixedUpdate()
+        {
+            _groundWallDetector.Tick(Time.fixedDeltaTime);
+            _stateMachine.FixedUpdate();
+
+            OnFixedUpdated();
         }
 
         private void OnDisable()
@@ -137,6 +144,10 @@ namespace Characters.Common
         }
 
         protected virtual void OnUpdated()
+        {
+        }
+
+        protected virtual void OnFixedUpdated()
         {
         }
 

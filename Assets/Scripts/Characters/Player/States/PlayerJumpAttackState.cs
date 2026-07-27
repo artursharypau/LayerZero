@@ -23,9 +23,9 @@ namespace Characters.Player.States
                 Controller.JumpAttackVelocity.y);
         }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
             if (Controller.IsGrounded && !_isGroundTouched)
             {

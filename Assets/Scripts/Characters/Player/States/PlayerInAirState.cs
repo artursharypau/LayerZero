@@ -38,6 +38,11 @@ namespace Characters.Player.States
             base.Update();
 
             Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.VelocityY);
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
 
             HandleMove();
         }

@@ -23,6 +23,16 @@ namespace Characters.Player.States
                 return true;
             }
 
+            return false;
+        }
+
+        public override bool TryFixedTransition()
+        {
+            if (base.TryFixedTransition())
+            {
+                return true;
+            }
+
             if (Controller.IsGrounded)
             {
                 Controller.ChangeState(StateId.Idle);
