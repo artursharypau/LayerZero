@@ -42,6 +42,11 @@ namespace Characters.Enemy.States
             base.Update();
 
             Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.VelocityX);
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
 
             if (Controller.TargetDetector.IsBehind)
             {

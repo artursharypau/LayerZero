@@ -21,9 +21,9 @@ namespace Characters.Enemy.States
             Anim.SetFloat(EnemyAnimatorHashProvider.MoveAnimMultiplier, Controller.MoveAnimMultiplier);
         }
 
-        public override bool TryTransition()
+        public override bool TryFixedTransition()
         {
-            if (base.TryTransition())
+            if (base.TryFixedTransition())
             {
                 return true;
             }
@@ -37,9 +37,9 @@ namespace Characters.Enemy.States
             return false;
         }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
             Controller.SetVelocityX(Controller.MoveSpeed * Controller.FacingDirection);
         }

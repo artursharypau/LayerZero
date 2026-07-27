@@ -68,7 +68,7 @@ namespace Characters.Player.States
 
         public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
             _moveLockTimer.Tick(Time.fixedDeltaTime);
             if (_moveLockTimer.IsExpired)
