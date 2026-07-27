@@ -32,7 +32,7 @@ namespace Characters.Player.States
                 _isGroundTouched = true;
 
                 Anim.SetTrigger(PlayerAnimatorHashProvider.JumpAttackTrigger);
-                Controller.SetHorizontalVelocity(0f);
+                Controller.SetVelocityX(0f);
             }
         }
 

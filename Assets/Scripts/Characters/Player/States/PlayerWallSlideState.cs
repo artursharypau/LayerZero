@@ -10,7 +10,7 @@ namespace Characters.Player.States
         public PlayerWallSlideState(PlayerController controller)
             : base(controller, PlayerAnimatorHashProvider.WallSlide)
         {
-            EnableInput(false);
+            EnableMovement(false);
         }
 
         public override void Enter()
@@ -66,7 +66,7 @@ namespace Characters.Player.States
                 ? Controller.VelocityY
                 : Controller.VelocityY * Controller.WallSlideMultiplier;
 
-            Controller.SetVelocity(Controller.InputHandler.Move.x, velocityY);
+            Controller.SetVelocity(0f, velocityY);
         }
     }
 }

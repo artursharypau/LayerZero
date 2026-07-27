@@ -14,21 +14,21 @@ namespace Characters.Common.States
         {
             base.Enter();
 
-            Controller.AttackAnimationEvents.AttackFinished += HandleAttackFinished;
+            Controller.AttackAnimatorEvents.AttackFinished += HandleAttackFinished;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.AttackAnimationEvents.AttackFinished -= HandleAttackFinished;
+            Controller.AttackAnimatorEvents.AttackFinished -= HandleAttackFinished;
         }
 
         protected abstract void OnAttackFinished();
 
         private void HandleAttackFinished()
         {
-            Controller.AttackAnimationEvents.AttackFinished -= HandleAttackFinished;
+            Controller.AttackAnimatorEvents.AttackFinished -= HandleAttackFinished;
             OnAttackFinished();
         }
     }

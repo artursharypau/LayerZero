@@ -6,7 +6,7 @@ namespace Characters.Player.States
 {
     public abstract class PlayerInAirState : PlayerState
     {
-        private bool _inputEnabled;
+        private bool _movementEnabled;
 
         protected PlayerInAirState(
             PlayerController controller,
@@ -14,7 +14,7 @@ namespace Characters.Player.States
             AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
             : base(controller, animParameterHash, animParameterType)
         {
-            _inputEnabled = true;
+            _movementEnabled = true;
         }
 
         public override bool TryTransition()
@@ -24,7 +24,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_inputEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
+            if (_movementEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
                 Controller.ChangeState(StateId.JumpAttack);
                 return true;
@@ -42,16 +42,18 @@ namespace Characters.Player.States
             HandleMove();
         }
 
-        protected void EnableInput(bool enable)
+        protected void EnableMovement(bool enable)
         {
-            _inputEnabled = enable;
+            _movementEnabled = enable;
         }
 
         private void HandleMove()
         {
-            if (_inputEnabled && Controller.InputHandler.Move.x != 0f)
+            if (_movementEnabled && Controller.InputHandler.Move.x != 0f)
             {
-                Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.InputHandler.Move.x);
+                Controller.SetVelocityX(
+                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.InputHandler.Move.x,
+                    true);
             }
         }
     }

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Characters.Common
 {
-    public abstract class CharacterControllerBase : MonoBehaviour, IMovable, IFacing, IPositioned
+    public abstract class CharacterControllerBase : MonoBehaviour, IMovable, IPositioned
     {
         [SerializeField] private GroundWallDetector _groundWallDetector;
 
@@ -25,13 +25,11 @@ namespace Characters.Common
         public float VelocityY => _rb.linearVelocityY;
         public float GravityScale => _rb.gravityScale;
 
-        public bool IsFacingRight { get; private set; } = true;
-        public float FacingDirection => IsFacingRight ? 1f : -1f;
-
+        public float FacingDirection { get; private set; } = 1f;
         public Vector2 Position => transform.position;
 
         public Animator Anim { get; private set; }
-        public IAttackAnimationEvents AttackAnimationEvents { get; private set; }
+        public IAttackAnimatorEvents AttackAnimatorEvents { get; private set; }
 
         private void Awake()
         {
@@ -39,7 +37,7 @@ namespace Characters.Common
             _health = GetComponent<Health>();
 
             Anim = GetComponentInChildren<Animator>();
-            AttackAnimationEvents = GetComponentInChildren<IAttackAnimationEvents>();
+            AttackAnimatorEvents = GetComponentInChildren<IAttackAnimatorEvents>();
 
             _groundWallDetector.Initialize(this);
 
@@ -99,25 +97,24 @@ namespace Characters.Common
             }
         }
 
-        public void SetVelocity(float x, float y)
+        public void SetVelocityX(float x, bool updateFacing = false)
         {
-            _rb.linearVelocity = new Vector2(x, y);
-
-            if ((IsFacingRight && x < 0f) || (!IsFacingRight && x > 0f))
-            {
-                Flip();
-            }
+            SetVelocity(x, VelocityY, updateFacing);
         }
 
-        public void SetHorizontalVelocity(float x)
+        public void SetVelocity(float x, float y, bool updateFacing = false)
         {
-            SetVelocity(x, VelocityY);
+            _rb.linearVelocity = new Vector2(x, y);
+            if (updateFacing)
+            {
+                TryFaceTowards(x);
+            }
         }
 
         public void Flip()
         {
             transform.Rotate(0f, 180f, 0f);
-            IsFacingRight = !IsFacingRight;
+            FacingDirection = -FacingDirection;
 
             _groundWallDetector.Tick(Time.deltaTime);
         }
@@ -189,6 +186,14 @@ namespace Characters.Common
         private void HandleDied()
         {
             OnDied();
+        }
+
+        private void TryFaceTowards(float x)
+        {
+            if ((FacingDirection > 0f && x < 0f) || (FacingDirection < 0f && x > 0f))
+            {
+                Flip();
+            }
         }
     }
 }

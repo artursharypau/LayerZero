@@ -41,14 +41,14 @@ namespace Characters.Enemy.States
         {
             base.Update();
 
-            Controller.SetHorizontalVelocity(Controller.MoveSpeed * Controller.FacingDirection);
+            Controller.SetVelocityX(Controller.MoveSpeed * Controller.FacingDirection);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.SetHorizontalVelocity(0f);
+            Controller.SetVelocityX(0f);
         }
     }
 }

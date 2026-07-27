@@ -2,8 +2,8 @@ namespace Characters.Common
 {
     public interface IMovable : IMovementState
     {
-        void SetVelocity(float x, float y);
-        void SetHorizontalVelocity(float x);
+        void SetVelocity(float x, float y, bool updateFacing = false);
+        void SetVelocityX(float x, bool updateFacing = false);
         void Flip();
         void SetGravityScale(float scale);
     }

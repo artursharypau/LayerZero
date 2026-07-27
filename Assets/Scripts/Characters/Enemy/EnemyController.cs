@@ -40,7 +40,12 @@ namespace Characters.Enemy
             RegisterState(StateId.Chase, new EnemyChaseState(this));
             RegisterState(StateId.Attack, new EnemyAttackState(this));
 
-            _targetDetector.Initialize(this, this);
+            _targetDetector.Initialize(this);
+        }
+
+        public bool ShouldAttack()
+        {
+            return _combatSystem.HasTargets();
         }
 
         protected override void OnStarted()
@@ -61,11 +66,6 @@ namespace Characters.Enemy
         protected override void OnDamaged(DamageInfo damageInfo)
         {
             TargetDetector.DamageAlert(damageInfo);
-        }
-
-        public bool ShouldAttack()
-        {
-            return _combatSystem.HasTargets();
         }
     }
 }

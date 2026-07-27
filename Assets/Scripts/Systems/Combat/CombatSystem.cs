@@ -12,14 +12,14 @@ namespace Systems.Combat
         [SerializeField] private LayerMask _targetLayerMask;
         [SerializeField] private DamageDefinition _damageDefinition;
 
-        private IAttackAnimationEvents _animTriggers;
+        private IAttackAnimatorEvents _animTriggers;
 
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
 
         private void Awake()
         {
-            _animTriggers = GetComponentInChildren<IAttackAnimationEvents>();
+            _animTriggers = GetComponentInChildren<IAttackAnimatorEvents>();
 
             _filter = new ContactFilter2D();
             _targetsBuffer = new List<Collider2D>(3);

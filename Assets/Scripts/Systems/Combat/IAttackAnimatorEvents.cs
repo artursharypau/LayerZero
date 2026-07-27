@@ -2,7 +2,7 @@ using System;
 
 namespace Systems.Combat
 {
-    public interface IAttackAnimationEvents
+    public interface IAttackAnimatorEvents
     {
         event Action AttackHit;
         event Action AttackFinished;
