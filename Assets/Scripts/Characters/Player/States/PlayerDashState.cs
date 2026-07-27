@@ -31,14 +31,12 @@ namespace Characters.Player.States
             {
                 _timer.Start(_config.Duration);
                 _velocityX = Controller.MoveSpeed * _config.SpeedMultiplier;
-
-                Controller.SetGravityScale(0f);
             }
         }
 
-        public override bool TryTransition()
+        public override bool TryFixedTransition()
         {
-            if (base.TryTransition())
+            if (base.TryFixedTransition())
             {
                 return true;
             }
@@ -70,11 +68,11 @@ namespace Characters.Player.States
             return false;
         }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
-            _timer.Tick(Time.deltaTime);
+            _timer.Tick(Time.fixedDeltaTime);
             if (_timer.IsExpired)
             {
                 Controller.SetGravityScale(_initialGravityScale);
@@ -82,6 +80,7 @@ namespace Characters.Player.States
             }
             else
             {
+                Controller.SetGravityScale(0f);
                 Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
             }
         }

@@ -11,7 +11,16 @@ namespace Core.StateMachine
             return false;
         }
 
+        public virtual bool TryFixedTransition()
+        {
+            return false;
+        }
+
         public virtual void Update()
+        {
+        }
+
+        public virtual void FixedUpdate()
         {
         }
 

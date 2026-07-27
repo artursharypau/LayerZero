@@ -41,6 +41,16 @@ namespace Characters.Player.States
                 return true;
             }
 
+            return false;
+        }
+
+        public override bool TryFixedTransition()
+        {
+            if (base.TryFixedTransition())
+            {
+                return true;
+            }
+
             if (Controller.IsFalling)
             {
                 Controller.ChangeState(StateId.Fall);
@@ -56,11 +66,11 @@ namespace Characters.Player.States
             return false;
         }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
             base.Update();
 
-            _moveLockTimer.Tick(Time.deltaTime);
+            _moveLockTimer.Tick(Time.fixedDeltaTime);
             if (_moveLockTimer.IsExpired)
             {
                 EnableMovement(true);

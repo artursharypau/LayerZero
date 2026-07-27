@@ -27,6 +27,22 @@ namespace Characters.Player.States
                 return true;
             }
 
+            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
+            {
+                Controller.ChangeState(StateId.WallJump);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool TryFixedTransition()
+        {
+            if (base.TryFixedTransition())
+            {
+                return true;
+            }
+
             if (Controller.IsGrounded)
             {
                 if (!Mathf.Approximately(Controller.FacingDirection, Controller.InputHandler.Move.x))
@@ -44,18 +60,12 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
-            {
-                Controller.ChangeState(StateId.WallJump);
-                return true;
-            }
-
             return false;
         }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
             HandleSliding();
         }

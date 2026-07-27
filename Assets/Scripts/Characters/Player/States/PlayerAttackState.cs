@@ -37,15 +37,20 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            _velocityTimer.Tick(Time.deltaTime);
-            if (_velocityTimer.IsExpired)
-            {
-                Controller.SetVelocityX(0f);
-            }
-
             if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
                 _nextAttackQueued = true;
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            _velocityTimer.Tick(Time.fixedDeltaTime);
+            if (_velocityTimer.IsExpired)
+            {
+                Controller.SetVelocityX(0f);
             }
         }
 
