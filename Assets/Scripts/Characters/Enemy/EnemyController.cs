@@ -53,9 +53,9 @@ namespace Characters.Enemy
             StartStateMachine(StateId.Idle);
         }
 
-        protected override void OnUpdated()
+        protected override void OnFixedUpdated()
         {
-            _targetDetector.Tick(Time.deltaTime);
+            _targetDetector.Tick(Time.fixedDeltaTime);
         }
 
         protected override void OnGizmosDrawn()

@@ -17,9 +17,9 @@ namespace Characters.Player.States
             Controller.SetVelocityX(0f);
         }
 
-        public override bool TryTransition()
+        public override bool TryFixedTransition()
         {
-            if (base.TryTransition())
+            if (base.TryFixedTransition())
             {
                 return true;
             }

@@ -53,8 +53,8 @@ namespace Characters.Enemy
 
         public void Tick(float deltaTime)
         {
-            _alertTimer.Tick(Time.deltaTime);
-            _checkTimer.Tick(Time.deltaTime);
+            _alertTimer.Tick(deltaTime);
+            _checkTimer.Tick(deltaTime);
 
             if (_checkTimer.IsExpired)
             {
