@@ -50,7 +50,7 @@ namespace Characters.Enemy.States
 
             if (Controller.IsGrounded && !Controller.IsWalled)
             {
-                Controller.SetHorizontalVelocity(
+                Controller.SetVelocityX(
                     Controller.MoveSpeed * Controller.ChaseMoveSpeedMultiplier * Controller.TargetDetector.Direction);
             }
         }

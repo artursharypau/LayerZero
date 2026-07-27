@@ -44,6 +44,30 @@ namespace Characters.Player
 
         public PlayerInputHandler InputHandler => _inputHandler;
 
+        public bool CanUseAbility(PlayerAbilityId id)
+        {
+            return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
+        }
+
+        public bool TryTriggerAbility(PlayerAbilityId id)
+        {
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext))
+            {
+                ability.Trigger(_abilityContext);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void RefillChargeableAbility(PlayerAbilityId id, int amount = -1)
+        {
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeableAbility)
+            {
+                chargeableAbility.Refill(amount);
+            }
+        }
+
         protected override void OnAwakened()
         {
             _inputHandler.Initialize();
@@ -95,30 +119,6 @@ namespace Characters.Player
         protected override void OnDestroyed()
         {
             _inputHandler.Dispose();
-        }
-
-        public bool CanUseAbility(PlayerAbilityId id)
-        {
-            return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
-        }
-
-        public bool TryTriggerAbility(PlayerAbilityId id)
-        {
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext))
-            {
-                ability.Trigger(_abilityContext);
-                return true;
-            }
-
-            return false;
-        }
-
-        public void RefillChargeableAbility(PlayerAbilityId id, int amount = -1)
-        {
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeableAbility)
-            {
-                chargeableAbility.Refill(amount);
-            }
         }
 
         private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)

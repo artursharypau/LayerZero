@@ -48,7 +48,7 @@ namespace Characters.Player.States
         {
             if (Controller.TryTriggerAbility(PlayerAbilityId.Jump))
             {
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force);
+                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force, true);
             }
         }
     }

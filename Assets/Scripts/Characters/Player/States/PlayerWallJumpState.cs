@@ -24,8 +24,8 @@ namespace Characters.Player.States
 
             _moveLockTimer.Start(_config.WallJumpMoveLockDuration);
 
-            EnableInput(false);
-            Controller.SetVelocity(_config.WallJumpForce.x * -Controller.FacingDirection, _config.WallJumpForce.y);
+            EnableMovement(false);
+            Controller.SetVelocity(_config.WallJumpForce.x * -Controller.FacingDirection, _config.WallJumpForce.y, true);
         }
 
         public override bool TryTransition()
@@ -63,7 +63,7 @@ namespace Characters.Player.States
             _moveLockTimer.Tick(Time.deltaTime);
             if (_moveLockTimer.IsExpired)
             {
-                EnableInput(true);
+                EnableMovement(true);
             }
         }
     }

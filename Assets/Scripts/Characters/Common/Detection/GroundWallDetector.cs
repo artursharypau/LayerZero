@@ -15,24 +15,24 @@ namespace Characters.Common.Detection
         [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;
 
-        private IFacing _facing;
+        private IPositioned _positioned;
 
         public bool IsGrounded { get; private set; }
         public bool IsWalled { get; private set; }
 
-        public void Initialize(IFacing owner)
+        public void Initialize(IPositioned positioned)
         {
-            _facing = owner;
+            _positioned = positioned;
         }
 
         public void Tick(float deltaTime)
         {
-            if (_facing == null)
+            if (_positioned == null)
             {
                 return;
             }
 
-            Vector2 wallDirection = _facing.GetVector();
+            Vector2 wallDirection = _positioned.GetFacingDirectionVector();
 
             IsGrounded = AllRaysHit(_groundCheckPoints, Vector2.down, _groundCheckDistance, LayerMaskProvider.Ground);
             IsWalled = AllRaysHit(_wallCheckPoints, wallDirection, _wallCheckDistance, LayerMaskProvider.Ground);
@@ -40,14 +40,14 @@ namespace Characters.Common.Detection
 
         public void DrawGizmos()
         {
-            if (_facing == null)
+            if (_positioned == null)
             {
                 return;
             }
 
             Gizmos.color = Color.yellow;
             DrawRays(_groundCheckPoints, Vector2.down * _groundCheckDistance);
-            DrawRays(_wallCheckPoints, Vector2.right * (_wallCheckDistance * _facing.FacingDirection));
+            DrawRays(_wallCheckPoints, Vector2.right * (_wallCheckDistance * _positioned.FacingDirection));
         }
 
         private static bool AllRaysHit(Transform[] points, Vector2 direction, float distance, LayerMask mask)

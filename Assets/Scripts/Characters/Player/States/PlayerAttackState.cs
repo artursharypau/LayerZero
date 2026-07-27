@@ -1,7 +1,6 @@
 using Characters.Common.Animation;
 using Characters.Common.States;
 using Characters.Player.Input;
-using Core.StateMachine;
 using Core.Utils;
 using UnityEngine;
 
@@ -41,7 +40,7 @@ namespace Characters.Player.States
             _velocityTimer.Tick(Time.deltaTime);
             if (_velocityTimer.IsExpired)
             {
-                Controller.SetHorizontalVelocity(0f);
+                Controller.SetVelocityX(0f);
             }
 
             if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Characters.Common.Animation
 {
-    public class AnimatorTriggers : MonoBehaviour, IAttackAnimationEvents
+    public class AnimatorTriggers : MonoBehaviour, IAttackAnimatorEvents
     {
         public event Action AttackFinished;
         public event Action AttackHit;
