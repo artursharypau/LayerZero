@@ -19,6 +19,7 @@ namespace Characters.Player.States
 
             _isGroundTouched = false;
 
+            Controller.Combat.SetActiveAttackDefinition(Controller.JumpAttackDefinition);
             Controller.Movement.SetVelocity(
                 Controller.JumpAttackVelocity.x * Controller.Movement.FacingDirection,
                 Controller.JumpAttackVelocity.y);

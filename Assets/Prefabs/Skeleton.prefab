@@ -285,6 +285,11 @@ MonoBehaviour:
     _checkCooldown: 0.5
     _checkPoint: {fileID: 1613318259418196058}
     _checkDistance: 13
+  _attackDamage:
+    _amount: 10
+    _source: 2
+    _knockback: {x: 4, y: 2}
+    _stunDuration: 0
 --- !u!114 &5630542884956237323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,11 +339,6 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  _damageDefinition:
-    _amount: 10
-    _source: 2
-    _knockback: {x: 0, y: 0}
-    _stunDuration: 0
 --- !u!114 &3401725131487728625
 MonoBehaviour:
   m_ObjectHideFlags: 0

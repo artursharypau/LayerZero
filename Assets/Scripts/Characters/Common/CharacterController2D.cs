@@ -14,6 +14,7 @@ namespace Characters.Common
     {
         public Health Health { get; private set; }
         public CharacterMovement2D Movement { get; private set; }
+        public CombatSystem Combat { get; private set; }
 
         public Animator Anim { get; private set; }
         public IAttackAnimatorEvents AttackAnimatorEvents { get; private set; }
@@ -24,6 +25,7 @@ namespace Characters.Common
         {
             Health = GetComponent<Health>();
             Movement = GetComponent<CharacterMovement2D>();
+            Combat = GetComponent<CombatSystem>();
 
             Anim = GetComponentInChildren<Animator>();
             AttackAnimatorEvents = GetComponentInChildren<IAttackAnimatorEvents>();

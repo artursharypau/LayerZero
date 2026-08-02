@@ -18,9 +18,9 @@ namespace Characters.Enemy
         [SerializeField] [Range(0, 5)] private float _chaseMoveSpeedMultiplier = 2f;
         [SerializeField] [Range(0, 5)] private float _chaseMoveAnimMultiplier = 2f;
 
+        [Header("Attack details")]
         [SerializeField] private EnemyTargetDetector _targetDetector;
-
-        private CombatSystem _combatSystem;
+        [SerializeField] private DamageDefinition _attackDefinition = new(10, DamageSource.Enemy, new Vector2(4f, 2f));
 
         public float IdleDuration => _idleDuration;
         public float MoveSpeed => _moveSpeed;
@@ -30,11 +30,10 @@ namespace Characters.Enemy
         public float ChaseMoveAnimMultiplier => _chaseMoveAnimMultiplier;
 
         public EnemyTargetDetector TargetDetector => _targetDetector;
+        public DamageDefinition AttackDefinition => _attackDefinition;
 
         protected override void OnAwakened()
         {
-            _combatSystem = GetComponent<CombatSystem>();
-
             RegisterState(EnemyStateId.Idle, new EnemyIdleState(this));
             RegisterState(EnemyStateId.Patrol, new EnemyPatrolState(this));
             RegisterState(EnemyStateId.Chase, new EnemyChaseState(this));
@@ -45,7 +44,7 @@ namespace Characters.Enemy
 
         public bool ShouldAttack()
         {
-            return _combatSystem.IsInRange(TargetDetector.Target);
+            return Combat.IsInRange(TargetDetector.Target);
         }
 
         protected override void OnStarted()
