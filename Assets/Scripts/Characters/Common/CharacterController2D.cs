@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Characters.Common.Movement;
 using Core.StateMachine;
@@ -11,34 +10,34 @@ namespace Characters.Common
 {
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(DamageReceiver))]
-    public abstract class CharacterController2D : MonoBehaviour, IDamageResistanceProvider
+    [RequireComponent(typeof(CombatSystem))]
+    [RequireComponent(typeof(IDamageReceiver))]
+    public abstract class CharacterController2D : MonoBehaviour
     {
-        [SerializeField] private DamageResistanceSheet _damageResistance = new();
+        private readonly StateMachine _stateMachine = new();
+        private readonly Dictionary<int, State> _states = new();
 
-        private Dictionary<int, State> _states;
-        private StateMachine _stateMachine;
-
-        public Health Health { get; private set; }
-        public DamageReceiver DamageReceiver { get; private set; }
         public CharacterMovement2D Movement { get; private set; }
+        public Health Health { get; private set; }
         public CombatSystem Combat { get; private set; }
+        public IDamageReceiver DamageReceiver { get; private set; }
+        public IDamageResistanceApplier DamageResistanceApplier { get; private set; }
 
         public Animator Anim { get; private set; }
         public IAttackAnimatorEvents AttackAnimatorEvents { get; private set; }
 
         private void Awake()
         {
-            _states = new Dictionary<int, State>();
-            _stateMachine = new StateMachine();
-
-            Health = GetComponent<Health>();
-            DamageReceiver = GetComponent<DamageReceiver>();
             Movement = GetComponent<CharacterMovement2D>();
+            Health = GetComponent<Health>();
             Combat = GetComponent<CombatSystem>();
+            DamageReceiver = GetComponent<IDamageReceiver>();
+            DamageResistanceApplier = new DamageResistanceApplier();
 
             Anim = GetComponentInChildren<Animator>();
             AttackAnimatorEvents = GetComponentInChildren<IAttackAnimatorEvents>();
+
+            DamageReceiver.SetDamageResistanceApplier(DamageResistanceApplier);
 
             OnAwakened();
         }
@@ -180,11 +179,6 @@ namespace Characters.Common
         private void HandleDied()
         {
             OnDied();
-        }
-
-        public DamageResistance GetActive()
-        {
-            throw new NotImplementedException();
         }
     }
 }

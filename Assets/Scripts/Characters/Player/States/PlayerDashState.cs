@@ -2,6 +2,7 @@ using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
 using Characters.Player.Animation;
 using Core.Utils;
+using Systems.Damage.Resistance;
 using UnityEngine;
 
 namespace Characters.Player.States
@@ -13,6 +14,8 @@ namespace Characters.Player.States
 
         private float _velocityX;
         private float _initialGravityScale;
+
+        private int _appliedResistanceIndex;
 
         public override int Id => (int)PlayerStateId.Dash;
 
@@ -33,6 +36,9 @@ namespace Characters.Player.States
             {
                 _timer.Start(_config.Duration);
                 _velocityX = Controller.MoveSpeed * _config.SpeedMultiplier;
+
+                DamageResistance resistance = DamageResistance.Create().WithInvulnerability();
+                _appliedResistanceIndex = Controller.DamageResistanceApplier.Apply(resistance);
             }
         }
 
@@ -93,6 +99,12 @@ namespace Characters.Player.States
 
             Controller.Movement.SetGravityScale(_initialGravityScale);
             Controller.Movement.SetVelocity(0f, Controller.Movement.VelocityY);
+
+            if (_appliedResistanceIndex != -1)
+            {
+                Controller.DamageResistanceApplier.Remove(_appliedResistanceIndex);
+                _appliedResistanceIndex = -1;
+            }
         }
     }
 }

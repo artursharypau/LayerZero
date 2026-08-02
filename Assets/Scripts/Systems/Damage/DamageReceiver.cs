@@ -1,46 +1,38 @@
 using System;
-using Systems.Combat;
+using System.Collections.Generic;
 using Systems.Damage.Resistance;
 using UnityEngine;
 
 namespace Systems.Damage
 {
-    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(IDamageable))]
     public class DamageReceiver : MonoBehaviour, IDamageReceiver
     {
-        private CombatSystem _combatSystem;
         private IDamageable _damageable;
-        private IDamageResistanceProvider _resistanceProvider;
+        private IDamageResistanceApplier _resistanceApplier;
 
         public event Action<DamageInfo> Damaged;
         public event Action<DamageImpactInfo> DamageImpactReceived;
 
         private void Awake()
         {
-            _combatSystem = GetComponent<CombatSystem>();
             _damageable = GetComponent<IDamageable>();
-            _resistanceProvider = GetComponent<IDamageResistanceProvider>();
         }
 
-        private void OnEnable()
+        public void SetDamageResistanceApplier(IDamageResistanceApplier resistanceApplier)
         {
-            _combatSystem.Damaged += OnDamaged;
+            _resistanceApplier = resistanceApplier;
         }
 
-        private void OnDisable()
+        public void TakeDamage(DamageInfo damageInfo)
         {
-            _combatSystem.Damaged -= OnDamaged;
-        }
-
-        private void OnDamaged(DamageInfo damageInfo)
-        {
-            DamageResistance resistance = GetActiveResistance();
-            if (resistance.IsInvulnerable)
+            List<DamageResistance> resistances = _resistanceApplier?.AppliedResistances;
+            if (HasInvulnerability(resistances))
             {
                 return;
             }
 
-            DamageImpactInfo resolvedDamageImpact = ResolveImpact(damageInfo.Impact, resistance);
+            DamageImpactInfo resolvedDamageImpact = ResolveImpact(damageInfo.Impact, resistances);
             DamageInfo resolvedDamage = new(damageInfo.Amount, damageInfo.Source, damageInfo.AttackerTransform, resolvedDamageImpact);
 
             _damageable.TakeDamage(resolvedDamage.Amount);
@@ -52,22 +44,48 @@ namespace Systems.Damage
             }
         }
 
-        private static DamageImpactInfo ResolveImpact(DamageImpactInfo incoming, DamageResistance resistance)
+        private static bool HasInvulnerability(List<DamageResistance> resistances)
+        {
+            if (resistances == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < resistances.Count; i++)
+            {
+                if (resistances[i].IsInvulnerable)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static DamageImpactInfo ResolveImpact(DamageImpactInfo incoming, List<DamageResistance> resistances)
         {
             if (!incoming.HasImpact)
             {
                 return DamageImpactInfo.None;
             }
 
-            Vector2 knockback = incoming.Knockback * resistance.KnockbackMultiplier;
-            float stunDuration = resistance.CanBeStunned ? incoming.StunDuration : 0f;
+            bool ignoresStun = false;
+            float knockbackMultiplier = 1f;
+
+            if (resistances != null && resistances.Count > 0)
+            {
+                for (int i = 0; i < resistances.Count; i++)
+                {
+                    DamageResistance resistance = resistances[i];
+                    ignoresStun |= resistance.IgnoresStun;
+                    knockbackMultiplier *= resistance.KnockbackReduceMultiplier;
+                }
+            }
+
+            Vector2 knockback = incoming.Knockback * knockbackMultiplier;
+            float stunDuration = ignoresStun ? 0f : incoming.StunDuration;
 
             return new DamageImpactInfo(knockback, stunDuration);
-        }
-
-        private DamageResistance GetActiveResistance()
-        {
-            return _resistanceProvider?.GetActive() ?? DamageResistance.None;
         }
     }
 }

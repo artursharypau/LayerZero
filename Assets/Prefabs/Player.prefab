@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 193036875018734244}
   - component: {fileID: 4145020159193950360}
   - component: {fileID: 9099559585489720659}
+  - component: {fileID: 4454657804293619681}
   - component: {fileID: 1558889594841445991}
   m_Layer: 7
   m_Name: Player
@@ -139,7 +140,7 @@ MonoBehaviour:
   - {x: 4, y: 5}
   _attackVelocityDuration: 0.1
   _attackResetTime: 1
-  _attackDamages:
+  _attackDefinitions:
   - _amount: 15
     _source: 1
     _knockback: {x: 4, y: 0}
@@ -153,7 +154,7 @@ MonoBehaviour:
     _knockback: {x: 7, y: 3}
     _stunDuration: 0
   _jumpAttackVelocity: {x: 3, y: -5}
-  _jumpAttackDamage:
+  _jumpAttackDefinition:
     _amount: 40
     _source: 1
     _knockback: {x: 3, y: 0}
@@ -212,6 +213,18 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &4454657804293619681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514101050448271214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Systems.Damage.DamageReceiver
 --- !u!114 &1558889594841445991
 MonoBehaviour:
   m_ObjectHideFlags: 0

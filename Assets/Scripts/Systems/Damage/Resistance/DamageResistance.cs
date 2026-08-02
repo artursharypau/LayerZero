@@ -1,30 +1,32 @@
-using System;
-using UnityEngine;
-
 namespace Systems.Damage.Resistance
 {
-    [Serializable]
-    public class DamageResistance
+    public struct DamageResistance
     {
-        public static DamageResistance None { get; } = new(false, true, 1f);
+        public bool IsInvulnerable { get; private set; }
+        public bool IgnoresStun { get; private set; }
+        public float KnockbackReduceMultiplier { get; private set; }
 
-        [SerializeField] private bool _isInvulnerable;
-        [SerializeField] private bool _canBeStunned = true;
-        [SerializeField] [Min(0f)] private float _knockbackMultiplier = 1f;
-
-        public DamageResistance()
+        public DamageResistance WithInvulnerability()
         {
+            IsInvulnerable = true;
+            return this;
         }
 
-        public DamageResistance(bool isInvulnerable, bool canBeStunned, float knockbackMultiplier)
+        public DamageResistance WithIgnoreStun()
         {
-            _isInvulnerable = isInvulnerable;
-            _canBeStunned = canBeStunned;
-            _knockbackMultiplier = knockbackMultiplier;
+            IgnoresStun = true;
+            return this;
         }
 
-        public bool IsInvulnerable => _isInvulnerable;
-        public bool CanBeStunned => _canBeStunned;
-        public float KnockbackMultiplier => _knockbackMultiplier;
+        public DamageResistance WithKnockbackReduceMultiplier(float multiplier)
+        {
+            KnockbackReduceMultiplier = multiplier;
+            return this;
+        }
+
+        public static DamageResistance Create()
+        {
+            return new DamageResistance();
+        }
     }
 }
