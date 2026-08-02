@@ -23,9 +23,14 @@ namespace Characters.Player.Abilities.Chargeable
             _charges.Consume();
         }
 
-        public void Refill(int amount)
+        public void Refill()
         {
-            _charges.Refill(amount);
+            _charges.Refill();
+        }
+
+        public void RefillTo(int amount)
+        {
+            _charges.RefillTo(amount);
         }
     }
 }

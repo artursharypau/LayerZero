@@ -5,8 +5,8 @@ namespace Characters.Common.Movement
         bool IsGrounded { get; }
         bool IsWalled { get; }
         bool IsFalling { get; }
-        public float VelocityX { get; }
-        public float VelocityY { get; }
-        public float GravityScale { get; }
+        float VelocityX { get; }
+        float VelocityY { get; }
+        float GravityScale { get; }
     }
 }

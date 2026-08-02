@@ -8,12 +8,10 @@ namespace Environment.Parallax
 
         private Camera _camera;
         private float _previousCameraPositionX;
-        private float _cameraHalfWidth;
 
         private void Awake()
         {
             _camera = Camera.main;
-            _cameraHalfWidth = _camera!.orthographicSize * _camera.aspect;
 
             foreach (ParallaxLayer layer in _layers)
             {
@@ -32,8 +30,9 @@ namespace Environment.Parallax
             float distance = currentCameraPositionX - _previousCameraPositionX;
             _previousCameraPositionX = currentCameraPositionX;
 
-            float cameraLeftEdge = currentCameraPositionX - _cameraHalfWidth;
-            float cameraRightEdge = currentCameraPositionX + _cameraHalfWidth;
+            float cameraHalfWidth = _camera.orthographicSize * _camera.aspect;
+            float cameraLeftEdge = currentCameraPositionX - cameraHalfWidth;
+            float cameraRightEdge = currentCameraPositionX + cameraHalfWidth;
 
             foreach (ParallaxLayer layer in _layers)
             {

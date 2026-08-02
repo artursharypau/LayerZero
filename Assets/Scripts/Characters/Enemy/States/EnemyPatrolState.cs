@@ -1,3 +1,5 @@
+using Characters.Enemy.Animation;
+
 namespace Characters.Enemy.States
 {
     public class EnemyPatrolState : EnemyGroundedState

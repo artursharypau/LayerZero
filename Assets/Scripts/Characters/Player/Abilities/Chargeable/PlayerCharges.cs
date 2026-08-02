@@ -4,14 +4,14 @@ namespace Characters.Player.Abilities.Chargeable
 {
     public class PlayerCharges
     {
-        private readonly int _charges;
+        private readonly int _max;
 
         private int _available;
 
-        public PlayerCharges(int charges)
+        public PlayerCharges(int max)
         {
-            _charges = charges;
-            _available = charges;
+            _max = Mathf.Max(0, max);
+            _available = _max;
         }
 
         public bool HasCharges => _available > 0;
@@ -24,9 +24,14 @@ namespace Characters.Player.Abilities.Chargeable
             }
         }
 
-        public void Refill(int amount)
+        public void Refill()
         {
-            _available = amount > 0 ? Mathf.Min(amount, _charges) : _charges;
+            _available = _max;
+        }
+
+        public void RefillTo(int amount)
+        {
+            _available = Mathf.Clamp(amount, 0, _max);
         }
     }
 }

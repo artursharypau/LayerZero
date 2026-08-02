@@ -1,4 +1,5 @@
 using Characters.Common.Animation;
+using Characters.Enemy.Animation;
 
 namespace Characters.Enemy.States
 {

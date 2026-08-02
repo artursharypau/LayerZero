@@ -1,4 +1,5 @@
 using Characters.Player.Abilities;
+using Characters.Player.Animation;
 
 namespace Characters.Player.States
 {

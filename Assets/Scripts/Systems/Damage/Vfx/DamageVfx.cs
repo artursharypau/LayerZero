@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Systems.Damage.Vfx
 {
+    [RequireComponent(typeof(IDamageable))]
     public class DamageVfx : MonoBehaviour
     {
         [SerializeField] private float _duration = 0.15f;

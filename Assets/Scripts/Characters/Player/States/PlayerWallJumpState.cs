@@ -1,5 +1,6 @@
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
+using Characters.Player.Animation;
 using Core.Utils;
 using UnityEngine;
 

@@ -6,9 +6,11 @@ namespace Systems.Combat
 {
     public class CombatSystem : MonoBehaviour
     {
+        private const int TargetsBufferCapacity = 3;
+
         [Header("Target detection")]
         [SerializeField] private Transform _targetCheckPoint;
-        [SerializeField] private float _targetCheckRadius = 1f;
+        [SerializeField] [Min(0f)] private float _targetCheckRadius = 1f;
         [SerializeField] private LayerMask _targetLayerMask;
         [SerializeField] private DamageDefinition _damageDefinition;
 
@@ -22,7 +24,7 @@ namespace Systems.Combat
             _animTriggers = GetComponentInChildren<IAttackAnimatorEvents>();
 
             _filter = new ContactFilter2D();
-            _targetsBuffer = new List<Collider2D>(3);
+            _targetsBuffer = new List<Collider2D>(TargetsBufferCapacity);
 
             _filter.SetLayerMask(_targetLayerMask);
         }
@@ -37,7 +39,7 @@ namespace Systems.Combat
             _animTriggers.AttackHit -= OnAttackHit;
         }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(_targetCheckPoint.position, _targetCheckRadius);
         }

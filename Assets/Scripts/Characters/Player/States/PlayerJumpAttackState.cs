@@ -1,5 +1,6 @@
 using Characters.Common.Animation;
 using Characters.Common.States;
+using Characters.Player.Animation;
 
 namespace Characters.Player.States
 {
@@ -38,7 +39,7 @@ namespace Characters.Player.States
 
         protected override void OnAttackFinished()
         {
-            Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
+            Controller.ChangeState(Controller.Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
         }
     }
 }

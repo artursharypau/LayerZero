@@ -23,7 +23,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_movementEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
+            if (_movementEnabled && Controller.Input.WasPerformed(PlayerInputAction.Attack))
             {
                 Controller.ChangeState(PlayerStateId.JumpAttack);
                 return true;
@@ -53,10 +53,10 @@ namespace Characters.Player.States
 
         private void HandleMove()
         {
-            if (_movementEnabled && Controller.InputHandler.Move.x != 0f)
+            if (_movementEnabled && Controller.Input.Move.x != 0f)
             {
                 Controller.Movement.SetVelocityX(
-                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.InputHandler.Move.x,
+                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.Input.Move.x,
                     true);
             }
         }

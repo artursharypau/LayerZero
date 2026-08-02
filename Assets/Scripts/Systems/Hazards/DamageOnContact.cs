@@ -8,7 +8,7 @@ namespace Systems.Hazards
     public class DamageOnContact : MonoBehaviour
     {
         [SerializeField] private DamageDefinition _damage;
-        [SerializeField] private float _tickInterval = 0.5f;
+        [SerializeField] [Min(0f)] private float _tickInterval = 0.5f;
 
         private readonly Dictionary<IDamageable, float> _nextHitTime = new();
 
@@ -20,6 +20,19 @@ namespace Systems.Hazards
         private void OnTriggerStay2D(Collider2D other)
         {
             TryDamage(other);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                _nextHitTime.Remove(damageable);
+            }
+        }
+
+        private void OnDisable()
+        {
+            _nextHitTime.Clear();
         }
 
         private void TryDamage(Collider2D other)

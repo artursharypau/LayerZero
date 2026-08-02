@@ -1,5 +1,6 @@
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
+using Characters.Player.Animation;
 
 namespace Characters.Player.States
 {
@@ -47,7 +48,7 @@ namespace Characters.Player.States
         {
             if (Controller.TryTriggerAbility(PlayerAbilityId.Jump))
             {
-                Controller.Movement.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force, true);
+                Controller.Movement.SetVelocity(Controller.MoveSpeed * Controller.Input.Move.x, _config.Force, true);
             }
         }
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Characters.Enemy
+namespace Characters.Enemy.Animation
 {
     public static class EnemyAnimatorHashProvider
     {

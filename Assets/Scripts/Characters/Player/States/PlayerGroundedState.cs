@@ -29,7 +29,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
+            if (Controller.Input.WasPerformed(PlayerInputAction.Attack))
             {
                 Controller.ChangeState(PlayerStateId.Attack);
                 return true;
@@ -63,7 +63,7 @@ namespace Characters.Player.States
         protected bool IsRunningIntoWall()
         {
             return Controller.Movement.IsWalled
-                && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.Movement.FacingDirection);
+                && Mathf.Approximately(Controller.Input.Move.x, Controller.Movement.FacingDirection);
         }
     }
 }

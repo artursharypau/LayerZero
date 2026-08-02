@@ -4,9 +4,9 @@ namespace Core.Utils
 {
     public static class LayerMaskProvider
     {
-        public static LayerMask Ground = LayerMask.GetMask("Ground");
-        public static LayerMask Player = LayerMask.GetMask("Player");
-        public static LayerMask Enemy = LayerMask.GetMask("Enemy");
+        public static readonly LayerMask Ground = LayerMask.GetMask("Ground");
+        public static readonly LayerMask Player = LayerMask.GetMask("Player");
+        public static readonly LayerMask Enemy = LayerMask.GetMask("Enemy");
 
         public static bool Contains(int objectLayer, params LayerMask[] masks)
         {

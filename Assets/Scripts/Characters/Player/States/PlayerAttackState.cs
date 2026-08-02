@@ -1,5 +1,6 @@
 using Characters.Common.Animation;
 using Characters.Common.States;
+using Characters.Player.Animation;
 using Characters.Player.Input;
 using Core.Utils;
 using UnityEngine;
@@ -9,7 +10,6 @@ namespace Characters.Player.States
     public class PlayerAttackState : AttackState<PlayerController>
     {
         private const int StartIndex = 0;
-        private const int EndIndex = 2;
 
         private readonly CountdownTimer _velocityTimer;
 
@@ -22,6 +22,8 @@ namespace Characters.Player.States
         {
             _velocityTimer = new CountdownTimer();
         }
+
+        private int LastIndex => Controller.AttackVelocities.Length - 1;
 
         public override void Enter()
         {
@@ -37,7 +39,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
+            if (Controller.Input.WasPerformed(PlayerInputAction.Attack))
             {
                 _nextAttackQueued = true;
             }
@@ -59,9 +61,9 @@ namespace Characters.Player.States
             ++_currIndex;
             _finishedTime = Time.time;
 
-            if (!_nextAttackQueued || _currIndex > EndIndex)
+            if (!_nextAttackQueued || _currIndex > LastIndex)
             {
-                Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
+                Controller.ChangeState(Controller.Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
             }
             else
             {
@@ -71,13 +73,14 @@ namespace Characters.Player.States
 
         private void SetIndex()
         {
-            if (Time.time - _finishedTime > Controller.AttackResetTime)
+            bool comboExpired = Time.time - _finishedTime > Controller.AttackResetTime;
+            if (comboExpired || _currIndex > LastIndex)
             {
                 _currIndex = StartIndex;
             }
             else
             {
-                _currIndex = _currIndex > EndIndex ? StartIndex : _currIndex;
+                _currIndex = _currIndex > LastIndex ? StartIndex : _currIndex;
             }
 
             Anim.SetInteger(PlayerAnimatorHashProvider.AttackIndex, _currIndex);
@@ -88,8 +91,8 @@ namespace Characters.Player.States
             _velocityTimer.Start(Controller.AttackVelocityDuration);
 
             Vector2 velocity = Controller.AttackVelocities[_currIndex];
-            float velocityX = Controller.InputHandler.Move.x != 0f
-                ? Controller.InputHandler.Move.x * velocity.x
+            float velocityX = Controller.Input.Move.x != 0f
+                ? Controller.Input.Move.x * velocity.x
                 : velocity.x * Controller.Movement.FacingDirection;
 
             Controller.Movement.SetVelocity(velocityX, velocity.y);

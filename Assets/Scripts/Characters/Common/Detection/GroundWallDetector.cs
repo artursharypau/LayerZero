@@ -1,14 +1,13 @@
 using System;
 using Characters.Common.Extensions;
 using Characters.Common.Movement;
-using Core.Tick;
 using Core.Utils;
 using UnityEngine;
 
 namespace Characters.Common.Detection
 {
     [Serializable]
-    public class GroundWallDetector : ITickable
+    public class GroundWallDetector
     {
         [SerializeField] private Transform[] _groundCheckPoints;
         [SerializeField] private float _groundCheckDistance = 0.2f;
@@ -26,7 +25,7 @@ namespace Characters.Common.Detection
             _positioned = positioned;
         }
 
-        public void Tick(float deltaTime)
+        public void Refresh()
         {
             if (_positioned == null)
             {
