@@ -5,6 +5,7 @@ namespace Characters.Enemy.States
         Idle,
         Patrol,
         Chase,
-        Attack
+        Attack,
+        Hurt
     }
 }

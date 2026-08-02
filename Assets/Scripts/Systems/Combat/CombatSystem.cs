@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Systems.Damage;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace Systems.Combat
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
         private DamageDefinition _activeAttackDefinition;
+
+        public event Action<DamageInfo> Damaged;
 
         private void Awake()
         {
@@ -85,10 +88,7 @@ namespace Systems.Combat
             DamageInfo damageInfo = DamageInfo.FromDefinition(_activeAttackDefinition, transform);
             for (int i = 0; i < count; i++)
             {
-                if (_targetsBuffer[i].TryGetComponent(out IDamageable damageable))
-                {
-                    damageable.TakeDamage(damageInfo);
-                }
+                Damaged?.Invoke(damageInfo);
             }
         }
 

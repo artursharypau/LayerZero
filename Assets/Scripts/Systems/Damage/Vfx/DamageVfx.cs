@@ -10,14 +10,14 @@ namespace Systems.Damage.Vfx
         [SerializeField] private Material _material;
 
         private SpriteRenderer _sr;
-        private IDamageable _damageable;
+        private IDamageReceiver _damageReceiver;
         private CountdownTimer _timer;
         private Material _initialMaterial;
 
         private void Awake()
         {
             _sr = GetComponentInChildren<SpriteRenderer>();
-            _damageable = GetComponent<IDamageable>();
+            _damageReceiver = GetComponent<IDamageReceiver>();
 
             _timer = new CountdownTimer();
 
@@ -26,12 +26,12 @@ namespace Systems.Damage.Vfx
 
         private void OnEnable()
         {
-            _damageable.Damaged += OnDamaged;
+            _damageReceiver.Damaged += OnDamaged;
         }
 
         private void OnDisable()
         {
-            _damageable.Damaged -= OnDamaged;
+            _damageReceiver.Damaged -= OnDamaged;
         }
 
         private void Update()

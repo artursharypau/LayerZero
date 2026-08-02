@@ -10,6 +10,7 @@ namespace Characters.Player.States
         WallSlide,
         WallJump,
         Attack,
-        JumpAttack
+        JumpAttack,
+        Hurt
     }
 }
