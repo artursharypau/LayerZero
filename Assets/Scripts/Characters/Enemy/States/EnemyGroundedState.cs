@@ -1,5 +1,4 @@
 using Characters.Common.Animation;
-using Characters.Common.States;
 
 namespace Characters.Enemy.States
 {
@@ -30,7 +29,7 @@ namespace Characters.Enemy.States
         private void OnTargetFound()
         {
             Controller.TargetDetector.TargetFound -= OnTargetFound;
-            Controller.ChangeState(StateId.Chase);
+            Controller.ChangeState(EnemyStateId.Chase);
         }
     }
 }

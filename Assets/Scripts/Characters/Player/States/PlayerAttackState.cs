@@ -61,11 +61,11 @@ namespace Characters.Player.States
 
             if (!_nextAttackQueued || _currIndex > EndIndex)
             {
-                Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? StateId.Move : StateId.Idle);
+                Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
             }
             else
             {
-                Controller.ChangeState(StateId.Attack);
+                Controller.ChangeState(PlayerStateId.Attack);
             }
         }
 

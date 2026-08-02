@@ -38,7 +38,7 @@ namespace Characters.Player.States
 
         protected override void OnAttackFinished()
         {
-            Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? StateId.Move : StateId.Idle);
+            Controller.ChangeState(Controller.InputHandler.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
         }
     }
 }

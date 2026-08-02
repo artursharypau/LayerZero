@@ -12,7 +12,7 @@ namespace Characters.Enemy.States
 
         protected override void OnAttackFinished()
         {
-            Controller.ChangeState(StateId.Chase);
+            Controller.ChangeState(EnemyStateId.Chase);
         }
     }
 }

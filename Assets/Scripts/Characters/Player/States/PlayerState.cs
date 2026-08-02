@@ -20,7 +20,7 @@ namespace Characters.Player.States
 
             if (Controller.CanUseAbility(PlayerAbilityId.Dash))
             {
-                Controller.ChangeState(StateId.Dash);
+                Controller.ChangeState(PlayerStateId.Dash);
                 return true;
             }
 

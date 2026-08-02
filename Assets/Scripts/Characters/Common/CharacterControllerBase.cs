@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using Characters.Common.Movement;
-using Characters.Common.States;
 using Core.StateMachine;
 using Systems.Combat;
 using Systems.Damage;
@@ -12,22 +12,23 @@ namespace Characters.Common
     [RequireComponent(typeof(Health))]
     public abstract class CharacterControllerBase : MonoBehaviour
     {
-        private readonly Dictionary<StateId, State> _states = new(5);
-        private readonly StateMachine _stateMachine = new();
+        public Health Health { get; private set; }
+        public CharacterMovement2D Movement { get; private set; }
 
         public Animator Anim { get; private set; }
         public IAttackAnimatorEvents AttackAnimatorEvents { get; private set; }
 
-        public Health Health { get; private set; }
-        public CharacterMovement2D Movement { get; private set; }
+        protected StateMachine StateMachine { get; private set; }
 
         private void Awake()
         {
+            Health = GetComponent<Health>();
+            Movement = GetComponent<CharacterMovement2D>();
+
             Anim = GetComponentInChildren<Animator>();
             AttackAnimatorEvents = GetComponentInChildren<IAttackAnimatorEvents>();
 
-            Health = GetComponent<Health>();
-            Movement = GetComponent<CharacterMovement2D>();
+            StateMachine = new StateMachine();
 
             OnAwakened();
         }
@@ -47,7 +48,7 @@ namespace Characters.Common
 
         private void Update()
         {
-            _stateMachine.Update();
+            StateMachine.Update();
 
             OnUpdated();
         }
@@ -55,7 +56,7 @@ namespace Characters.Common
         private void FixedUpdate()
         {
             Movement.Tick(Time.fixedDeltaTime);
-            _stateMachine.FixedUpdate();
+            StateMachine.FixedUpdate();
 
             OnFixedUpdated();
         }
@@ -81,18 +82,6 @@ namespace Characters.Common
             }
 
             OnGizmosDrawn();
-        }
-
-        public void ChangeState(StateId id)
-        {
-            if (_states.TryGetValue(id, out State state))
-            {
-                _stateMachine.ChangeState(state);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"State with id {id} was not found");
-            }
         }
 
         protected virtual void OnAwakened()
@@ -127,16 +116,6 @@ namespace Characters.Common
         {
         }
 
-        protected void StartStateMachine(StateId initialId)
-        {
-            _stateMachine.Start(_states[initialId]);
-        }
-
-        protected void RegisterState(StateId id, State state)
-        {
-            _states[id] = state;
-        }
-
         protected virtual void OnDamaged(DamageInfo damageInfo)
         {
         }
@@ -161,6 +140,34 @@ namespace Characters.Common
         private void HandleDied()
         {
             OnDied();
+        }
+    }
+
+    public abstract class CharacterControllerBase<TStateId> : CharacterControllerBase
+        where TStateId : struct, Enum
+    {
+        private readonly Dictionary<TStateId, State> _states = new(4);
+
+        public void ChangeState(TStateId id)
+        {
+            if (_states.TryGetValue(id, out State state))
+            {
+                StateMachine.ChangeState(state);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"State with id {id} was not found");
+            }
+        }
+
+        protected void RegisterState(TStateId id, State state)
+        {
+            _states[id] = state;
+        }
+
+        protected void StartStateMachine(TStateId initialId)
+        {
+            StateMachine.Start(_states[initialId]);
         }
     }
 }

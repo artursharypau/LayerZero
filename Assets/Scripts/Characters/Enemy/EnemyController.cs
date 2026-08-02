@@ -1,5 +1,4 @@
 using Characters.Common;
-using Characters.Common.States;
 using Characters.Enemy.States;
 using Systems.Combat;
 using Systems.Damage;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace Characters.Enemy
 {
-    public abstract class EnemyController : CharacterControllerBase
+    public abstract class EnemyController : CharacterControllerBase<EnemyStateId>
     {
         [Header("Movement details")]
         [SerializeField] private float _idleDuration = 2f;
@@ -35,22 +34,22 @@ namespace Characters.Enemy
         {
             _combatSystem = GetComponent<CombatSystem>();
 
-            RegisterState(StateId.Idle, new EnemyIdleState(this));
-            RegisterState(StateId.Patrol, new EnemyPatrolState(this));
-            RegisterState(StateId.Chase, new EnemyChaseState(this));
-            RegisterState(StateId.Attack, new EnemyAttackState(this));
+            RegisterState(EnemyStateId.Idle, new EnemyIdleState(this));
+            RegisterState(EnemyStateId.Patrol, new EnemyPatrolState(this));
+            RegisterState(EnemyStateId.Chase, new EnemyChaseState(this));
+            RegisterState(EnemyStateId.Attack, new EnemyAttackState(this));
 
             _targetDetector.Initialize(Movement);
         }
 
         public bool ShouldAttack()
         {
-            return _combatSystem.HasTargets();
+            return _combatSystem.IsInRange(TargetDetector.Current);
         }
 
         protected override void OnStarted()
         {
-            StartStateMachine(StateId.Idle);
+            StartStateMachine(EnemyStateId.Idle);
         }
 
         protected override void OnFixedUpdated()

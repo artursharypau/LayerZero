@@ -1,5 +1,4 @@
 using Characters.Common.Animation;
-using Characters.Common.States;
 using Core.Utils;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ namespace Characters.Enemy.States
 
             if (_timer.IsExpired)
             {
-                Controller.ChangeState(StateId.Patrol);
+                Controller.ChangeState(EnemyStateId.Patrol);
                 return true;
             }
 

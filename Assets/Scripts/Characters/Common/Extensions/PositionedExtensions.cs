@@ -1,3 +1,4 @@
+using Characters.Common.Movement;
 using UnityEngine;
 
 namespace Characters.Common.Extensions

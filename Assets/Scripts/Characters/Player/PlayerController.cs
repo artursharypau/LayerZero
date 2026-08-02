@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Characters.Common;
-using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Chargeable;
 using Characters.Player.Abilities.Config;
@@ -12,7 +11,7 @@ using UnityEngine;
 
 namespace Characters.Player
 {
-    public sealed class PlayerController : CharacterControllerBase
+    public sealed class PlayerController : CharacterControllerBase<PlayerStateId>
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
@@ -79,15 +78,15 @@ namespace Characters.Player
             };
             _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
 
-            RegisterState(StateId.Idle, new PlayerIdleState(this));
-            RegisterState(StateId.Move, new PlayerMoveState(this));
-            RegisterState(StateId.Dash, new PlayerDashState(this, _dashConfig));
-            RegisterState(StateId.Jump, new PlayerJumpState(this, _jumpConfig));
-            RegisterState(StateId.Fall, new PlayerFallState(this));
-            RegisterState(StateId.WallSlide, new PlayerWallSlideState(this));
-            RegisterState(StateId.WallJump, new PlayerWallJumpState(this, _jumpConfig));
-            RegisterState(StateId.Attack, new PlayerAttackState(this));
-            RegisterState(StateId.JumpAttack, new PlayerJumpAttackState(this));
+            RegisterState(PlayerStateId.Idle, new PlayerIdleState(this));
+            RegisterState(PlayerStateId.Move, new PlayerMoveState(this));
+            RegisterState(PlayerStateId.Dash, new PlayerDashState(this, _dashConfig));
+            RegisterState(PlayerStateId.Jump, new PlayerJumpState(this, _jumpConfig));
+            RegisterState(PlayerStateId.Fall, new PlayerFallState(this));
+            RegisterState(PlayerStateId.WallSlide, new PlayerWallSlideState(this));
+            RegisterState(PlayerStateId.WallJump, new PlayerWallJumpState(this, _jumpConfig));
+            RegisterState(PlayerStateId.Attack, new PlayerAttackState(this));
+            RegisterState(PlayerStateId.JumpAttack, new PlayerJumpAttackState(this));
         }
 
         protected override void OnEnabled()
@@ -97,7 +96,7 @@ namespace Characters.Player
 
         protected override void OnStarted()
         {
-            StartStateMachine(StateId.Idle);
+            StartStateMachine(PlayerStateId.Idle);
             RefillChargeableAbility(PlayerAbilityId.Jump);
         }
 

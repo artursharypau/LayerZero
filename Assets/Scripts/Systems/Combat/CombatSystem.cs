@@ -42,9 +42,23 @@ namespace Systems.Combat
             Gizmos.DrawWireSphere(_targetCheckPoint.position, _targetCheckRadius);
         }
 
-        public bool HasTargets()
+        public bool IsInRange(Transform target)
         {
-            return UpdateTargets() > 0;
+            if (!target)
+            {
+                return false;
+            }
+
+            int count = UpdateTargets();
+            for (int i = 0; i < count; i++)
+            {
+                if (_targetsBuffer[i].transform == target)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OnAttackHit()

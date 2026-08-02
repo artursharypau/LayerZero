@@ -1,5 +1,6 @@
 using System;
 using Characters.Common.Extensions;
+using Characters.Common.Movement;
 using Core.Tick;
 using Core.Utils;
 using UnityEngine;
