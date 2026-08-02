@@ -1,4 +1,5 @@
 using System;
+using Systems.Damage.Resistance;
 
 namespace Systems.Damage
 {
@@ -6,5 +7,8 @@ namespace Systems.Damage
     {
         event Action<DamageInfo> Damaged;
         event Action<DamageImpactInfo> DamageImpactReceived;
+
+        void SetDamageResistanceApplier(IDamageResistanceApplier resistanceApplier);
+        void TakeDamage(DamageInfo damageInfo);
     }
 }

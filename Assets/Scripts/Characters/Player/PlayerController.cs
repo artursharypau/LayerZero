@@ -153,7 +153,7 @@ namespace Characters.Player
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            ChangeState(PlayerStateId.Hurt);
+            // ChangeState(PlayerStateId.Hurt);
         }
 
         private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)

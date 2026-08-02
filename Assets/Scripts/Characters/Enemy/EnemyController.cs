@@ -37,11 +37,6 @@ namespace Characters.Enemy
             ChangeState((int)id);
         }
 
-        public bool ShouldAttack()
-        {
-            return Combat.IsInRange(TargetDetector.Target);
-        }
-
         protected override void OnAwakened()
         {
             RegisterState(new EnemyIdleState(this));
@@ -75,7 +70,7 @@ namespace Characters.Enemy
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            ChangeState(EnemyStateId.Hurt);
+            // ChangeState(EnemyStateId.Hurt);
         }
     }
 }

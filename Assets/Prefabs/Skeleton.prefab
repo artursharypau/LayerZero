@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 5630542884956237323}
   - component: {fileID: 6929327695061375567}
   - component: {fileID: 7765971437028232559}
+  - component: {fileID: 3589202579622647878}
   - component: {fileID: 3401725131487728625}
   m_Layer: 8
   m_Name: Skeleton
@@ -285,7 +286,7 @@ MonoBehaviour:
     _checkCooldown: 0.5
     _checkPoint: {fileID: 1613318259418196058}
     _checkDistance: 13
-  _attackDamage:
+  _attackDefinition:
     _amount: 10
     _source: 2
     _knockback: {x: 4, y: 2}
@@ -339,6 +340,18 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &3589202579622647878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466222321441341585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Systems.Damage.DamageReceiver
 --- !u!114 &3401725131487728625
 MonoBehaviour:
   m_ObjectHideFlags: 0

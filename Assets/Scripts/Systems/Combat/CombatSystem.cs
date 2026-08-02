@@ -88,7 +88,10 @@ namespace Systems.Combat
             DamageInfo damageInfo = DamageInfo.FromDefinition(_activeAttackDefinition, transform);
             for (int i = 0; i < count; i++)
             {
-                Damaged?.Invoke(damageInfo);
+                if (_targetsBuffer[i].TryGetComponent(out IDamageReceiver receiver))
+                {
+                    receiver.TakeDamage(damageInfo);
+                }
             }
         }
 

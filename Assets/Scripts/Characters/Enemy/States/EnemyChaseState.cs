@@ -30,7 +30,7 @@ namespace Characters.Enemy.States
                 return true;
             }
 
-            if (Controller.ShouldAttack())
+            if (Controller.Combat.IsInRange(Controller.TargetDetector.Target))
             {
                 Controller.ChangeState(EnemyStateId.Attack);
                 return true;
