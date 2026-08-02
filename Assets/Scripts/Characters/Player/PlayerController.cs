@@ -65,6 +65,11 @@ namespace Characters.Player
             ChangeState((int)id);
         }
 
+        public void ChangeState<TArg>(PlayerStateId id, TArg arg)
+        {
+            ChangeState((int)id, arg);
+        }
+
         public bool CanUseAbility(PlayerAbilityId id)
         {
             return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
@@ -153,7 +158,7 @@ namespace Characters.Player
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            // ChangeState(PlayerStateId.Hurt);
+            ChangeState(PlayerStateId.Hurt, damageImpact);
         }
 
         private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)

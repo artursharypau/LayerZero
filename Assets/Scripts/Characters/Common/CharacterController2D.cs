@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Characters.Common.Movement;
 using Core.StateMachine;
 using Systems.Combat;
@@ -14,8 +13,7 @@ namespace Characters.Common
     [RequireComponent(typeof(IDamageReceiver))]
     public abstract class CharacterController2D : MonoBehaviour
     {
-        private readonly StateMachine _stateMachine = new();
-        private readonly Dictionary<int, State> _states = new();
+        private readonly StateMachineHolder _stateMachineHolder = new();
 
         public CharacterMovement2D Movement { get; private set; }
         public Health Health { get; private set; }
@@ -58,16 +56,14 @@ namespace Characters.Common
 
         private void Update()
         {
-            _stateMachine.Update();
-
+            _stateMachineHolder.Update();
             OnUpdated();
         }
 
         private void FixedUpdate()
         {
             Movement.Refresh();
-            _stateMachine.FixedUpdate();
-
+            _stateMachineHolder.FixedUpdate();
             OnFixedUpdated();
         }
 
@@ -141,29 +137,22 @@ namespace Characters.Common
 
         protected void RegisterState(State state)
         {
-            _states[state.Id] = state;
+            _stateMachineHolder.Register(state);
         }
 
         protected void StartStateMachine(int initialId)
         {
-            if (!_states.TryGetValue(initialId, out State state))
-            {
-                throw new KeyNotFoundException($"State with id {initialId} was not found");
-            }
-
-            _stateMachine.Start(state);
+            _stateMachineHolder.Start(initialId);
         }
 
         protected void ChangeState(int id)
         {
-            if (_states.TryGetValue(id, out State state))
-            {
-                _stateMachine.ChangeState(state);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"State with id {id} was not found");
-            }
+            _stateMachineHolder.ChangeState(id);
+        }
+
+        protected void ChangeState<TArg>(int id, TArg arg)
+        {
+            _stateMachineHolder.ChangeState(id, arg);
         }
 
         private void HandleDamaged(DamageInfo damageInfo)

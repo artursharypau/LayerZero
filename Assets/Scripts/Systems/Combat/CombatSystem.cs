@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Systems.Damage;
 using UnityEngine;
@@ -19,8 +18,6 @@ namespace Systems.Combat
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
         private DamageDefinition _activeAttackDefinition;
-
-        public event Action<DamageInfo> Damaged;
 
         private void Awake()
         {
