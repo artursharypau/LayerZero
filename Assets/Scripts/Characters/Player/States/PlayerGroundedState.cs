@@ -52,7 +52,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.IsFalling)
+            if (Controller.Movement.IsFalling)
             {
                 Controller.ChangeState(StateId.Fall);
                 return true;
@@ -63,7 +63,8 @@ namespace Characters.Player.States
 
         protected bool IsRunningIntoWall()
         {
-            return Controller.IsWalled && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.FacingDirection);
+            return Controller.Movement.IsWalled
+                && Mathf.Approximately(Controller.InputHandler.Move.x, Controller.Movement.FacingDirection);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Characters.Player.States
 
             _isGroundTouched = false;
 
-            Controller.SetVelocity(
-                Controller.JumpAttackVelocity.x * Controller.FacingDirection,
+            Controller.Movement.SetVelocity(
+                Controller.JumpAttackVelocity.x * Controller.Movement.FacingDirection,
                 Controller.JumpAttackVelocity.y);
         }
 
@@ -27,12 +27,12 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            if (Controller.IsGrounded && !_isGroundTouched)
+            if (Controller.Movement.IsGrounded && !_isGroundTouched)
             {
                 _isGroundTouched = true;
 
                 Anim.SetTrigger(PlayerAnimatorHashProvider.JumpAttackTrigger);
-                Controller.SetVelocityX(0f);
+                Controller.Movement.SetVelocityX(0f);
             }
         }
 

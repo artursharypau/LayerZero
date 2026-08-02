@@ -25,7 +25,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            _initialGravityScale = Controller.GravityScale;
+            _initialGravityScale = Controller.Movement.GravityScale;
 
             if (Controller.TryTriggerAbility(PlayerAbilityId.Dash))
             {
@@ -41,23 +41,23 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.IsWalled)
+            if (Controller.Movement.IsWalled)
             {
-                Controller.ChangeState(Controller.IsGrounded ? StateId.Idle : StateId.WallSlide);
+                Controller.ChangeState(Controller.Movement.IsGrounded ? StateId.Idle : StateId.WallSlide);
                 return true;
             }
 
             if (_timer.IsExpired)
             {
-                if (Controller.IsWalled)
+                if (Controller.Movement.IsWalled)
                 {
                     Controller.ChangeState(StateId.WallSlide);
                 }
-                else if (Controller.IsFalling)
+                else if (Controller.Movement.IsFalling)
                 {
                     Controller.ChangeState(StateId.Fall);
                 }
-                else if (Controller.IsGrounded)
+                else if (Controller.Movement.IsGrounded)
                 {
                     Controller.ChangeState(StateId.Idle);
                 }
@@ -75,13 +75,13 @@ namespace Characters.Player.States
             _timer.Tick(Time.fixedDeltaTime);
             if (_timer.IsExpired)
             {
-                Controller.SetGravityScale(_initialGravityScale);
-                Controller.SetVelocity(0f, Controller.VelocityY);
+                Controller.Movement.SetGravityScale(_initialGravityScale);
+                Controller.Movement.SetVelocity(0f, Controller.Movement.VelocityY);
             }
             else
             {
-                Controller.SetGravityScale(0f);
-                Controller.SetVelocity(_velocityX * Controller.FacingDirection, 0f);
+                Controller.Movement.SetGravityScale(0f);
+                Controller.Movement.SetVelocity(_velocityX * Controller.Movement.FacingDirection, 0f);
             }
         }
 
@@ -89,8 +89,8 @@ namespace Characters.Player.States
         {
             base.Exit();
 
-            Controller.SetGravityScale(_initialGravityScale);
-            Controller.SetVelocity(0f, Controller.VelocityY);
+            Controller.Movement.SetGravityScale(_initialGravityScale);
+            Controller.Movement.SetVelocity(0f, Controller.Movement.VelocityY);
         }
     }
 }

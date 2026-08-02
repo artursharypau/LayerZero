@@ -18,7 +18,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Jump();
+            TryJump();
         }
 
         public override bool TryFixedTransition()
@@ -28,7 +28,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.VelocityY <= 0f)
+            if (Controller.Movement.VelocityY <= 0f)
             {
                 Controller.ChangeState(StateId.Fall);
                 return true;
@@ -41,14 +41,14 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            Jump();
+            TryJump();
         }
 
-        private void Jump()
+        private void TryJump()
         {
             if (Controller.TryTriggerAbility(PlayerAbilityId.Jump))
             {
-                Controller.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force, true);
+                Controller.Movement.SetVelocity(Controller.MoveSpeed * Controller.InputHandler.Move.x, _config.Force, true);
             }
         }
     }

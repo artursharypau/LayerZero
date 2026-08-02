@@ -33,13 +33,13 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.IsGrounded)
+            if (Controller.Movement.IsGrounded)
             {
                 Controller.ChangeState(StateId.Idle);
                 return true;
             }
 
-            if (Controller.IsWalled)
+            if (Controller.Movement.IsWalled)
             {
                 Controller.ChangeState(StateId.WallSlide);
                 return true;

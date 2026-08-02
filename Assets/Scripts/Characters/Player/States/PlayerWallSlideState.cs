@@ -43,18 +43,18 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.IsGrounded)
+            if (Controller.Movement.IsGrounded)
             {
-                if (!Mathf.Approximately(Controller.FacingDirection, Controller.InputHandler.Move.x))
+                if (!Mathf.Approximately(Controller.Movement.FacingDirection, Controller.InputHandler.Move.x))
                 {
-                    Controller.Flip();
+                    Controller.Movement.Flip();
                 }
 
                 Controller.ChangeState(StateId.Idle);
                 return true;
             }
 
-            if (!Controller.IsWalled && Controller.IsFalling)
+            if (!Controller.Movement.IsWalled && Controller.Movement.IsFalling)
             {
                 Controller.ChangeState(StateId.Fall);
                 return true;
@@ -73,10 +73,10 @@ namespace Characters.Player.States
         private void HandleSliding()
         {
             float velocityY = Controller.InputHandler.Move.y < 0f
-                ? Controller.VelocityY
-                : Controller.VelocityY * Controller.WallSlideMultiplier;
+                ? Controller.Movement.VelocityY
+                : Controller.Movement.VelocityY * Controller.WallSlideMultiplier;
 
-            Controller.SetVelocity(0f, velocityY);
+            Controller.Movement.SetVelocity(0f, velocityY);
         }
     }
 }

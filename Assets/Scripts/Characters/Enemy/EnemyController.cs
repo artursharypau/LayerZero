@@ -40,7 +40,7 @@ namespace Characters.Enemy
             RegisterState(StateId.Chase, new EnemyChaseState(this));
             RegisterState(StateId.Attack, new EnemyAttackState(this));
 
-            _targetDetector.Initialize(this);
+            _targetDetector.Initialize(Movement);
         }
 
         public bool ShouldAttack()

@@ -14,12 +14,12 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.SetVelocityX(0f);
+            Controller.Movement.SetVelocityX(0f);
         }
 
-        public override bool TryFixedTransition()
+        public override bool TryTransition()
         {
-            if (base.TryFixedTransition())
+            if (base.TryTransition())
             {
                 return true;
             }

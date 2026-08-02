@@ -37,7 +37,7 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.VelocityY);
+            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.Movement.VelocityY);
         }
 
         public override void FixedUpdate()
@@ -56,7 +56,7 @@ namespace Characters.Player.States
         {
             if (_movementEnabled && Controller.InputHandler.Move.x != 0f)
             {
-                Controller.SetVelocityX(
+                Controller.Movement.SetVelocityX(
                     Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.InputHandler.Move.x,
                     true);
             }
