@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Characters.Enemy
 {
+    [RequireComponent(typeof(CombatSystem))]
     public abstract class EnemyController : CharacterController2D<EnemyStateId>
     {
         [Header("Movement details")]
@@ -44,7 +45,7 @@ namespace Characters.Enemy
 
         public bool ShouldAttack()
         {
-            return _combatSystem.IsInRange(TargetDetector.Current);
+            return _combatSystem.IsInRange(TargetDetector.Target);
         }
 
         protected override void OnStarted()

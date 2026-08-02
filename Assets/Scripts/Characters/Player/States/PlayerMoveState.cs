@@ -16,7 +16,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.Move.x == 0f)
+            if (Controller.Input.Move.x == 0f)
             {
                 Controller.ChangeState(PlayerStateId.Idle);
                 return true;
@@ -45,7 +45,7 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            Controller.Movement.SetVelocityX(Controller.MoveSpeed * Controller.InputHandler.Move.x, true);
+            Controller.Movement.SetVelocityX(Controller.MoveSpeed * Controller.Input.Move.x, true);
         }
 
         public override void Exit()

@@ -55,7 +55,7 @@ namespace Characters.Common
 
         private void FixedUpdate()
         {
-            Movement.Tick(Time.fixedDeltaTime);
+            Movement.Refresh();
             StateMachine.FixedUpdate();
 
             OnFixedUpdated();
@@ -131,7 +131,7 @@ namespace Characters.Common
         private void HandleDamaged(DamageInfo damageInfo)
         {
             OnDamaged(damageInfo);
-            if (damageInfo.Impact != DamageImpactInfo.None)
+            if (damageInfo.Impact.HasImpact)
             {
                 OnDamageImpactReceived(damageInfo.Impact);
             }

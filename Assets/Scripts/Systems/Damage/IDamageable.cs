@@ -7,8 +7,8 @@ namespace Systems.Damage
         event Action<DamageInfo> Damaged;
         event Action Died;
 
-        float CurrentHealth { get; }
-        float MaxHealth { get; }
+        int CurrentHealth { get; }
+        int MaxHealth { get; }
         bool IsDead { get; }
 
         void TakeDamage(DamageInfo damageInfo);

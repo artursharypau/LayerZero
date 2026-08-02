@@ -4,7 +4,7 @@ namespace Core.StateMachine
 {
     public class StateMachine
     {
-        private const int _guardThreshold = 8;
+        private const int GuardThreshold = 8;
 
         public State Pending { get; private set; }
         public State Current { get; private set; }
@@ -47,6 +47,8 @@ namespace Core.StateMachine
 
         public void FixedUpdate()
         {
+            ApplyPendingTransition();
+
             if (Current == null)
             {
                 return;
@@ -66,11 +68,11 @@ namespace Core.StateMachine
             // We must keep draining it so Current never ends up being a state that already requested its own replacement.
             while (Pending != null)
             {
-                if (guard++ >= _guardThreshold)
+                if (guard++ >= GuardThreshold)
                 {
                     Debug.unityLogger.LogWarning(
                         $"{nameof(StateMachine)}.{nameof(ApplyPendingTransition)}",
-                        $"Guard threshold ({_guardThreshold}) reached while transitioning away from '{Current?.GetType().Name}'. Possible state transition loop — check TryTransition()/Enter() logic.");
+                        $"Guard threshold ({GuardThreshold}) reached while transitioning away from '{Current?.GetType().Name}'. Possible state transition loop — check TryTransition()/Enter() logic.");
 
                     break;
                 }

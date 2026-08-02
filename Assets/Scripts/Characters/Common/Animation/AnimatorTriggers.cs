@@ -9,12 +9,12 @@ namespace Characters.Common.Animation
         public event Action AttackFinished;
         public event Action AttackHit;
 
-        private void TriggerAttackFinished()
+        public void TriggerAttackFinished()
         {
             AttackFinished?.Invoke();
         }
 
-        private void TriggerAttackHit()
+        public void TriggerAttackHit()
         {
             AttackHit?.Invoke();
         }

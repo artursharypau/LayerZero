@@ -1,5 +1,6 @@
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
+using Characters.Player.Animation;
 using Core.Utils;
 using UnityEngine;
 
@@ -52,13 +53,13 @@ namespace Characters.Player.States
                 {
                     Controller.ChangeState(PlayerStateId.WallSlide);
                 }
-                else if (Controller.Movement.IsFalling)
-                {
-                    Controller.ChangeState(PlayerStateId.Fall);
-                }
                 else if (Controller.Movement.IsGrounded)
                 {
                     Controller.ChangeState(PlayerStateId.Idle);
+                }
+                else
+                {
+                    Controller.ChangeState(PlayerStateId.Fall);
                 }
 
                 return true;

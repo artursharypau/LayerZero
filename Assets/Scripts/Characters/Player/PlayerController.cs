@@ -41,7 +41,7 @@ namespace Characters.Player
         public float AttackResetTime => _attackResetTime;
         public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
 
-        public PlayerInputHandler InputHandler => _inputHandler;
+        public IPlayerInput Input => _inputHandler;
 
         public bool CanUseAbility(PlayerAbilityId id)
         {
@@ -59,11 +59,19 @@ namespace Characters.Player
             return false;
         }
 
-        public void RefillChargeableAbility(PlayerAbilityId id, int amount = -1)
+        public void RefillChargeableAbility(PlayerAbilityId id)
         {
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeableAbility)
+            if (TryGetChargeableAbility(id, out IPlayerChargeableAbility ability))
             {
-                chargeableAbility.Refill(amount);
+                ability.Refill();
+            }
+        }
+
+        public void RefillChargeableAbility(PlayerAbilityId id, int amount)
+        {
+            if (TryGetChargeableAbility(id, out IPlayerChargeableAbility ability))
+            {
+                ability.RefillTo(amount);
             }
         }
 
@@ -128,6 +136,18 @@ namespace Characters.Player
             }
 
             Debug.unityLogger.LogError($"{nameof(PlayerController)}.{nameof(TryGetAbility)}", $"Ability '{id}' is not registered");
+            return false;
+        }
+
+        private bool TryGetChargeableAbility(PlayerAbilityId id, out IPlayerChargeableAbility chargeableAbility)
+        {
+            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeable)
+            {
+                chargeableAbility = chargeable;
+                return true;
+            }
+
+            chargeableAbility = null;
             return false;
         }
     }

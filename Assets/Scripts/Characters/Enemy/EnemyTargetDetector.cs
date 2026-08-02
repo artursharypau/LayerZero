@@ -35,19 +35,19 @@ namespace Characters.Enemy
         public event Action TargetFound;
         public event Action TargetLost;
 
-        public Transform Current { get; private set; }
-        public bool IsBehind => Current && !Mathf.Approximately(Direction, _positioned.FacingDirection);
+        public Transform Target { get; private set; }
+        public bool IsBehind => Target && !Mathf.Approximately(Direction, _positioned.FacingDirection);
 
         public float Direction
         {
             get
             {
-                if (!Current)
+                if (!Target)
                 {
                     return 0f;
                 }
 
-                return Current.position.x > _positioned.Position.x ? 1 : -1;
+                return Target.position.x > _positioned.Position.x ? 1 : -1;
             }
         }
 
@@ -101,23 +101,23 @@ namespace Characters.Enemy
 
             if (_alertTimer.IsExpired)
             {
-                if (Current)
+                if (Target)
                 {
                     TargetLost?.Invoke();
                 }
 
-                Current = null;
+                Target = null;
             }
         }
 
         private void SetTarget(Transform target)
         {
-            if (!Current)
+            if (!Target)
             {
                 TargetFound?.Invoke();
             }
 
-            Current = target;
+            Target = target;
             _alertTimer.Start(_alertDuration);
         }
 

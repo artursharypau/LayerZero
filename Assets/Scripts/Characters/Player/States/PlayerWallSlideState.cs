@@ -1,4 +1,5 @@
 using Characters.Player.Abilities;
+using Characters.Player.Animation;
 using Characters.Player.Input;
 using UnityEngine;
 
@@ -9,13 +10,13 @@ namespace Characters.Player.States
         public PlayerWallSlideState(PlayerController controller)
             : base(controller, PlayerAnimatorHashProvider.WallSlide)
         {
-            EnableMovement(false);
         }
 
         public override void Enter()
         {
             base.Enter();
 
+            EnableMovement(false);
             Controller.RefillChargeableAbility(PlayerAbilityId.Jump, 1);
         }
 
@@ -26,7 +27,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
+            if (Controller.Input.WasPerformed(PlayerInputAction.Jump))
             {
                 Controller.ChangeState(PlayerStateId.WallJump);
                 return true;
@@ -44,7 +45,7 @@ namespace Characters.Player.States
 
             if (Controller.Movement.IsGrounded)
             {
-                if (!Mathf.Approximately(Controller.Movement.FacingDirection, Controller.InputHandler.Move.x))
+                if (!Mathf.Approximately(Controller.Movement.FacingDirection, Controller.Input.Move.x))
                 {
                     Controller.Movement.Flip();
                 }
@@ -71,7 +72,7 @@ namespace Characters.Player.States
 
         private void HandleSliding()
         {
-            float velocityY = Controller.InputHandler.Move.y < 0f
+            float velocityY = Controller.Input.Move.y < 0f
                 ? Controller.Movement.VelocityY
                 : Controller.Movement.VelocityY * Controller.WallSlideMultiplier;
 

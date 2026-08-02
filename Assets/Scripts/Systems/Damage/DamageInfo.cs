@@ -21,7 +21,7 @@ namespace Systems.Damage
         {
             DamageImpactInfo damageImpact = DamageImpactInfo.None;
 
-            if (damageDefinition.Knockback != Vector2.zero || damageDefinition.StunDuration != 0f)
+            if (damageDefinition.HasImpact)
             {
                 Vector2 knockback = attackerTransform.TransformDirection(damageDefinition.Knockback);
                 damageImpact = new DamageImpactInfo(knockback, damageDefinition.StunDuration);

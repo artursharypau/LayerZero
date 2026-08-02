@@ -26,9 +26,9 @@ namespace Characters.Common.Movement
             _groundWallDetector.Initialize(this);
         }
 
-        public void Tick(float deltaTime)
+        public void Refresh()
         {
-            _groundWallDetector.Tick(deltaTime);
+            _groundWallDetector.Refresh();
         }
 
         public void DrawGizmos()
@@ -55,7 +55,7 @@ namespace Characters.Common.Movement
             transform.Rotate(0f, 180f, 0f);
             FacingDirection = -FacingDirection;
 
-            _groundWallDetector.Tick(Time.deltaTime);
+            _groundWallDetector.Refresh();
         }
 
         public void SetGravityScale(float scale)

@@ -23,7 +23,7 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.InputHandler.Move.x != 0f && !IsRunningIntoWall())
+            if (Controller.Input.Move.x != 0f && !IsRunningIntoWall())
             {
                 Controller.ChangeState(PlayerStateId.Move);
                 return true;
