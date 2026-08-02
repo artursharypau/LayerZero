@@ -7,6 +7,8 @@ namespace Characters.Player.States
 {
     public class PlayerWallSlideState : PlayerInAirState
     {
+        public override int Id => (int)PlayerStateId.WallSlide;
+
         public PlayerWallSlideState(PlayerController controller)
             : base(controller, PlayerAnimatorHashProvider.WallSlide)
         {

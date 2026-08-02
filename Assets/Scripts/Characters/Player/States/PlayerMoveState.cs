@@ -4,6 +4,8 @@ namespace Characters.Player.States
 {
     public class PlayerMoveState : PlayerGroundedState
     {
+        public override int Id => (int)PlayerStateId.Move;
+
         public PlayerMoveState(PlayerController controller)
             : base(controller, AnimatorHashProvider.Move)
         {

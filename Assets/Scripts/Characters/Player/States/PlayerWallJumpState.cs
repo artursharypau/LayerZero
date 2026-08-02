@@ -11,6 +11,8 @@ namespace Characters.Player.States
         private readonly PlayerJumpAbilityConfig _config;
         private readonly CountdownTimer _moveLockTimer;
 
+        public override int Id => (int)PlayerStateId.WallJump;
+
         public PlayerWallJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {

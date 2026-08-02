@@ -4,6 +4,7 @@ using Characters.Common.Movement;
 using Core.StateMachine;
 using Systems.Combat;
 using Systems.Damage;
+using Systems.Damage.Resistance;
 using UnityEngine;
 
 namespace Characters.Common
@@ -11,8 +12,13 @@ namespace Characters.Common
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(DamageReceiver))]
-    public abstract class CharacterController2D : MonoBehaviour
+    public abstract class CharacterController2D : MonoBehaviour, IDamageResistanceProvider
     {
+        [SerializeField] private DamageResistanceSheet _damageResistance = new();
+
+        private Dictionary<int, State> _states;
+        private StateMachine _stateMachine;
+
         public Health Health { get; private set; }
         public DamageReceiver DamageReceiver { get; private set; }
         public CharacterMovement2D Movement { get; private set; }
@@ -21,10 +27,11 @@ namespace Characters.Common
         public Animator Anim { get; private set; }
         public IAttackAnimatorEvents AttackAnimatorEvents { get; private set; }
 
-        protected StateMachine StateMachine { get; private set; }
-
         private void Awake()
         {
+            _states = new Dictionary<int, State>();
+            _stateMachine = new StateMachine();
+
             Health = GetComponent<Health>();
             DamageReceiver = GetComponent<DamageReceiver>();
             Movement = GetComponent<CharacterMovement2D>();
@@ -33,14 +40,13 @@ namespace Characters.Common
             Anim = GetComponentInChildren<Animator>();
             AttackAnimatorEvents = GetComponentInChildren<IAttackAnimatorEvents>();
 
-            StateMachine = new StateMachine();
-
             OnAwakened();
         }
 
         private void OnEnable()
         {
             Health.Died += HandleDied;
+            DamageReceiver.Damaged += HandleDamaged;
             DamageReceiver.DamageImpactReceived += HandleDamageImpactReceived;
 
             OnEnabled();
@@ -53,7 +59,7 @@ namespace Characters.Common
 
         private void Update()
         {
-            StateMachine.Update();
+            _stateMachine.Update();
 
             OnUpdated();
         }
@@ -61,7 +67,7 @@ namespace Characters.Common
         private void FixedUpdate()
         {
             Movement.Refresh();
-            StateMachine.FixedUpdate();
+            _stateMachine.FixedUpdate();
 
             OnFixedUpdated();
         }
@@ -134,6 +140,33 @@ namespace Characters.Common
         {
         }
 
+        protected void RegisterState(State state)
+        {
+            _states[state.Id] = state;
+        }
+
+        protected void StartStateMachine(int initialId)
+        {
+            if (!_states.TryGetValue(initialId, out State state))
+            {
+                throw new KeyNotFoundException($"State with id {initialId} was not found");
+            }
+
+            _stateMachine.Start(state);
+        }
+
+        protected void ChangeState(int id)
+        {
+            if (_states.TryGetValue(id, out State state))
+            {
+                _stateMachine.ChangeState(state);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"State with id {id} was not found");
+            }
+        }
+
         private void HandleDamaged(DamageInfo damageInfo)
         {
             OnDamaged(damageInfo);
@@ -148,33 +181,10 @@ namespace Characters.Common
         {
             OnDied();
         }
-    }
 
-    public abstract class CharacterController2D<TStateId> : CharacterController2D
-        where TStateId : struct, Enum
-    {
-        private readonly Dictionary<TStateId, State> _states = new(4);
-
-        public void ChangeState(TStateId id)
+        public DamageResistance GetActive()
         {
-            if (_states.TryGetValue(id, out State state))
-            {
-                StateMachine.ChangeState(state);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"State with id {id} was not found");
-            }
-        }
-
-        protected void RegisterState(TStateId id, State state)
-        {
-            _states[id] = state;
-        }
-
-        protected void StartStateMachine(TStateId initialId)
-        {
-            StateMachine.Start(_states[initialId]);
+            throw new NotImplementedException();
         }
     }
 }

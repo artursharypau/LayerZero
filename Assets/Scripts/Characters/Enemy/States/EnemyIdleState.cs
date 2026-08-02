@@ -8,6 +8,8 @@ namespace Characters.Enemy.States
     {
         private readonly CountdownTimer _timer;
 
+        public override int Id => (int)EnemyStateId.Idle;
+
         public EnemyIdleState(EnemyController controller)
             : base(controller, AnimatorHashProvider.Idle)
         {

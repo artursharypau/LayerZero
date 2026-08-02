@@ -5,6 +5,8 @@ namespace Characters.Player.States
 {
     public class PlayerHurtState : HurtState<PlayerController>
     {
+        public override int Id => (int)PlayerStateId.Hurt;
+
         public PlayerHurtState(PlayerController controller)
             : base(controller, AnimatorHashProvider.Hurt, AnimatorParameterType.Bool)
         {

@@ -21,7 +21,7 @@ namespace Characters.Common.States
         {
             base.Enter();
 
-            DamageImpactInfo impact = Controller.ConsumeResolvedImpact();
+            DamageImpactInfo impact = DamageImpactInfo.None;
             Controller.Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
 
             float duration = impact.StunDuration;

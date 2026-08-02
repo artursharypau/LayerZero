@@ -5,6 +5,8 @@ namespace Characters.Enemy.States
 {
     public class EnemyAttackState : AttackState<EnemyController>
     {
+        public override int Id => (int)EnemyStateId.Attack;
+
         public EnemyAttackState(EnemyController controller)
             : base(controller, AnimatorHashProvider.Attack)
         {

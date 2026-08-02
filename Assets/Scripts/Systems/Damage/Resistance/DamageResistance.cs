@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
 
-namespace Systems.Damage
+namespace Systems.Damage.Resistance
 {
     [Serializable]
     public class DamageResistance
     {
+        public static DamageResistance None { get; } = new(false, true, 1f);
+
         [SerializeField] private bool _isInvulnerable;
         [SerializeField] private bool _canBeStunned = true;
         [SerializeField] [Min(0f)] private float _knockbackMultiplier = 1f;

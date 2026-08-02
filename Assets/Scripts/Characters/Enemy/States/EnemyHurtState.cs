@@ -5,6 +5,8 @@ namespace Characters.Enemy.States
 {
     public class EnemyHurtState : HurtState<EnemyController>
     {
+        public override int Id => (int)EnemyStateId.Hurt;
+
         public EnemyHurtState(EnemyController controller)
             : base(controller, AnimatorHashProvider.Hurt, AnimatorParameterType.Bool)
         {
