@@ -13,9 +13,9 @@ namespace Characters.Enemy.States
         {
             base.Enter();
 
-            if (!Controller.IsGrounded || Controller.IsWalled)
+            if (!Controller.Movement.IsGrounded || Controller.Movement.IsWalled)
             {
-                Controller.Flip();
+                Controller.Movement.Flip();
             }
 
             Anim.SetFloat(EnemyAnimatorHashProvider.MoveAnimMultiplier, Controller.MoveAnimMultiplier);
@@ -28,7 +28,7 @@ namespace Characters.Enemy.States
                 return true;
             }
 
-            if (!Controller.IsGrounded || Controller.IsWalled)
+            if (!Controller.Movement.IsGrounded || Controller.Movement.IsWalled)
             {
                 Controller.ChangeState(StateId.Idle);
                 return true;
@@ -41,14 +41,14 @@ namespace Characters.Enemy.States
         {
             base.FixedUpdate();
 
-            Controller.SetVelocityX(Controller.MoveSpeed * Controller.FacingDirection);
+            Controller.Movement.SetVelocityX(Controller.MoveSpeed * Controller.Movement.FacingDirection);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.SetVelocityX(0f);
+            Controller.Movement.SetVelocityX(0f);
         }
     }
 }

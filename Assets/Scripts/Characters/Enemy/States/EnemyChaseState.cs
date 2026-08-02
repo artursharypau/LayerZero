@@ -41,7 +41,7 @@ namespace Characters.Enemy.States
         {
             base.Update();
 
-            Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.VelocityX);
+            Anim.SetFloat(AnimatorHashProvider.VelocityX, Controller.Movement.VelocityX);
         }
 
         public override void FixedUpdate()
@@ -50,12 +50,12 @@ namespace Characters.Enemy.States
 
             if (Controller.TargetDetector.IsBehind)
             {
-                Controller.Flip();
+                Controller.Movement.Flip();
             }
 
-            if (Controller.IsGrounded && !Controller.IsWalled)
+            if (Controller.Movement.IsGrounded && !Controller.Movement.IsWalled)
             {
-                Controller.SetVelocityX(
+                Controller.Movement.SetVelocityX(
                     Controller.MoveSpeed * Controller.ChaseMoveSpeedMultiplier * Controller.TargetDetector.Direction);
             }
         }

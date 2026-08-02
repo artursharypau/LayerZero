@@ -1,37 +1,34 @@
-using LayerZero.Characters.Common.Collisions;
-using LayerZero.Core.Extensions;
+using Characters.Common.Detection;
 using UnityEngine;
 
-namespace LayerZero.Characters.Common.Movement
+namespace Characters.Common.Movement
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public sealed class CharacterMovement2D : MonoBehaviour, IMovement2D
+    public class CharacterMovement2D : MonoBehaviour, IMovable, IPositioned
     {
-        [SerializeField] private GroundWallDetector _groundWallDetector = new();
+        [SerializeField] private GroundWallDetector _groundWallDetector;
 
-        private Rigidbody2D _rigidbody;
+        private Rigidbody2D _rb;
 
         public bool IsGrounded => _groundWallDetector.IsGrounded;
         public bool IsWalled => _groundWallDetector.IsWalled;
-        public bool IsFalling => !IsGrounded && _rigidbody.linearVelocityY < 0f;
-
-        public float VelocityX => _rigidbody.linearVelocityX;
-        public float VelocityY => _rigidbody.linearVelocityY;
-        public float GravityScale => _rigidbody.gravityScale;
+        public bool IsFalling => _rb.linearVelocityY < 0f && !IsGrounded;
+        public float VelocityX => _rb.linearVelocityX;
+        public float VelocityY => _rb.linearVelocityY;
+        public float GravityScale => _rb.gravityScale;
 
         public float FacingDirection { get; private set; } = 1f;
         public Vector2 Position => transform.position;
-        public Vector2 FacingVector => new(FacingDirection, 0f);
 
         private void Awake()
         {
-            _rigidbody = this.GetRequired<Rigidbody2D>();
+            _rb = GetComponent<Rigidbody2D>();
             _groundWallDetector.Initialize(this);
         }
 
-        public void Refresh()
+        public void Tick(float deltaTime)
         {
-            _groundWallDetector.Refresh();
+            _groundWallDetector.Tick(deltaTime);
         }
 
         public void DrawGizmos()
@@ -39,31 +36,17 @@ namespace LayerZero.Characters.Common.Movement
             _groundWallDetector.DrawGizmos();
         }
 
-        public void SetVelocity(float x, float y, bool updateFacing = false)
-        {
-            _rigidbody.linearVelocity = new Vector2(x, y);
-
-            if (updateFacing)
-            {
-                FaceTowards(x);
-            }
-        }
-
         public void SetVelocityX(float x, bool updateFacing = false)
         {
             SetVelocity(x, VelocityY, updateFacing);
         }
 
-        public void FaceTowards(float direction)
+        public void SetVelocity(float x, float y, bool updateFacing = false)
         {
-            if (direction == 0f)
+            _rb.linearVelocity = new Vector2(x, y);
+            if (updateFacing)
             {
-                return;
-            }
-
-            if ((FacingDirection > 0f && direction < 0f) || (FacingDirection < 0f && direction > 0f))
-            {
-                Flip();
+                TryFaceTowards(x);
             }
         }
 
@@ -72,12 +55,20 @@ namespace LayerZero.Characters.Common.Movement
             transform.Rotate(0f, 180f, 0f);
             FacingDirection = -FacingDirection;
 
-            _groundWallDetector.Refresh();
+            _groundWallDetector.Tick(Time.deltaTime);
         }
 
         public void SetGravityScale(float scale)
         {
-            _rigidbody.gravityScale = scale;
+            _rb.gravityScale = scale;
+        }
+
+        private void TryFaceTowards(float x)
+        {
+            if ((FacingDirection > 0f && x < 0f) || (FacingDirection < 0f && x > 0f))
+            {
+                Flip();
+            }
         }
     }
 }

@@ -25,7 +25,10 @@ namespace Characters.Player.States
             _moveLockTimer.Start(_config.WallJumpMoveLockDuration);
 
             EnableMovement(false);
-            Controller.SetVelocity(_config.WallJumpForce.x * -Controller.FacingDirection, _config.WallJumpForce.y, true);
+            Controller.Movement.SetVelocity(
+                _config.WallJumpForce.x * -Controller.Movement.FacingDirection,
+                _config.WallJumpForce.y,
+                true);
         }
 
         public override bool TryTransition()
@@ -51,13 +54,13 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.IsFalling)
+            if (Controller.Movement.IsFalling)
             {
                 Controller.ChangeState(StateId.Fall);
                 return true;
             }
 
-            if (Controller.IsWalled)
+            if (Controller.Movement.IsWalled)
             {
                 Controller.ChangeState(StateId.WallSlide);
                 return true;

@@ -71,7 +71,7 @@ namespace Characters.Player
         protected override void OnAwakened()
         {
             _inputHandler.Initialize();
-            _abilityContext = new PlayerAbilityContext(this, _inputHandler);
+            _abilityContext = new PlayerAbilityContext(Movement, _inputHandler);
             _abilities = new Dictionary<PlayerAbilityId, IPlayerAbility>
             {
                 { PlayerAbilityId.Jump, new PlayerJumpAbility(_jumpConfig) },

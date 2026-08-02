@@ -46,14 +46,14 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            Controller.SetVelocityX(Controller.MoveSpeed * Controller.InputHandler.Move.x, true);
+            Controller.Movement.SetVelocityX(Controller.MoveSpeed * Controller.InputHandler.Move.x, true);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.SetVelocityX(0f);
+            Controller.Movement.SetVelocityX(0f);
         }
     }
 }

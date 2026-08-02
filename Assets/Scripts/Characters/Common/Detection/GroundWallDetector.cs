@@ -10,7 +10,7 @@ namespace Characters.Common.Detection
     public class GroundWallDetector : ITickable
     {
         [SerializeField] private Transform[] _groundCheckPoints;
-        [SerializeField] private float _groundCheckDistance = 1.35f;
+        [SerializeField] private float _groundCheckDistance = 0.2f;
 
         [SerializeField] private Transform[] _wallCheckPoints;
         [SerializeField] private float _wallCheckDistance = 0.5f;

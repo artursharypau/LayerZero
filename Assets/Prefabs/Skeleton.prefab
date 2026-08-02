@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 2398960693315817658}
   - component: {fileID: 6385280033924527661}
   - component: {fileID: 4817277150691120106}
+  - component: {fileID: 5630542884956237323}
   - component: {fileID: 6929327695061375567}
   - component: {fileID: 7765971437028232559}
   - component: {fileID: 3401725131487728625}
@@ -274,13 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca4449f4f914ff4ba5b0e06b3016b82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Characters.Enemy.Skeleton.SkeletonController
-  _groundWallDetector:
-    _groundCheckPoints:
-    - {fileID: 1189184859021290774}
-    _groundCheckDistance: 1.35
-    _wallCheckPoints:
-    - {fileID: 1613318259418196058}
-    _wallCheckDistance: 1.35
   _idleDuration: 2
   _moveSpeed: 1.5
   _moveAnimMultiplier: 1
@@ -291,6 +285,25 @@ MonoBehaviour:
     _checkCooldown: 0.5
     _checkPoint: {fileID: 1613318259418196058}
     _checkDistance: 13
+--- !u!114 &5630542884956237323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466222321441341585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793ae3f11017749019c9837f34fcf6ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Characters.Common.Movement.CharacterMovement2D
+  _groundWallDetector:
+    _groundCheckPoints:
+    - {fileID: 1189184859021290774}
+    _groundCheckDistance: 0.2
+    _wallCheckPoints:
+    - {fileID: 1613318259418196058}
+    _wallCheckDistance: 1.3
 --- !u!114 &6929327695061375567
 MonoBehaviour:
   m_ObjectHideFlags: 0

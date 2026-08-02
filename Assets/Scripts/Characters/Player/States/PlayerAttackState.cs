@@ -50,7 +50,7 @@ namespace Characters.Player.States
             _velocityTimer.Tick(Time.fixedDeltaTime);
             if (_velocityTimer.IsExpired)
             {
-                Controller.SetVelocityX(0f);
+                Controller.Movement.SetVelocityX(0f);
             }
         }
 
@@ -90,9 +90,9 @@ namespace Characters.Player.States
             Vector2 velocity = Controller.AttackVelocities[_currIndex];
             float velocityX = Controller.InputHandler.Move.x != 0f
                 ? Controller.InputHandler.Move.x * velocity.x
-                : velocity.x * Controller.FacingDirection;
+                : velocity.x * Controller.Movement.FacingDirection;
 
-            Controller.SetVelocity(velocityX, velocity.y);
+            Controller.Movement.SetVelocity(velocityX, velocity.y);
         }
     }
 }
