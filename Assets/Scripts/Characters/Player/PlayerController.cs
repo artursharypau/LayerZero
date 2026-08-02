@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Characters.Player
 {
-    public sealed class PlayerController : CharacterControllerBase<PlayerStateId>
+    public sealed class PlayerController : CharacterController2D<PlayerStateId>
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;

@@ -10,7 +10,7 @@ namespace Characters.Common
 {
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
-    public abstract class CharacterControllerBase : MonoBehaviour
+    public abstract class CharacterController2D : MonoBehaviour
     {
         public Health Health { get; private set; }
         public CharacterMovement2D Movement { get; private set; }
@@ -143,7 +143,7 @@ namespace Characters.Common
         }
     }
 
-    public abstract class CharacterControllerBase<TStateId> : CharacterControllerBase
+    public abstract class CharacterController2D<TStateId> : CharacterController2D
         where TStateId : struct, Enum
     {
         private readonly Dictionary<TStateId, State> _states = new(4);
