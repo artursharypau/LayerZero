@@ -4,6 +4,8 @@ namespace Characters.Enemy.States
 {
     public class EnemyPatrolState : EnemyGroundedState
     {
+        public override int Id => (int)EnemyStateId.Patrol;
+
         public EnemyPatrolState(EnemyController controller)
             : base(controller, EnemyAnimatorHashProvider.Patrol)
         {

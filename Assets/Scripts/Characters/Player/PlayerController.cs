@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Characters.Player
 {
-    public sealed class PlayerController : CharacterController2D<PlayerStateId>
+    public sealed class PlayerController : CharacterController2D
     {
         [Header("Movement details")]
         [SerializeField] private float _moveSpeed = 9f;
@@ -60,6 +60,11 @@ namespace Characters.Player
 
         public IPlayerInput Input => _inputHandler;
 
+        public void ChangeState(PlayerStateId id)
+        {
+            ChangeState((int)id);
+        }
+
         public bool CanUseAbility(PlayerAbilityId id)
         {
             return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
@@ -103,16 +108,16 @@ namespace Characters.Player
             };
             _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
 
-            RegisterState(PlayerStateId.Idle, new PlayerIdleState(this));
-            RegisterState(PlayerStateId.Move, new PlayerMoveState(this));
-            RegisterState(PlayerStateId.Dash, new PlayerDashState(this, _dashConfig));
-            RegisterState(PlayerStateId.Jump, new PlayerJumpState(this, _jumpConfig));
-            RegisterState(PlayerStateId.Fall, new PlayerFallState(this));
-            RegisterState(PlayerStateId.WallSlide, new PlayerWallSlideState(this));
-            RegisterState(PlayerStateId.WallJump, new PlayerWallJumpState(this, _jumpConfig));
-            RegisterState(PlayerStateId.Attack, new PlayerAttackState(this));
-            RegisterState(PlayerStateId.JumpAttack, new PlayerJumpAttackState(this));
-            RegisterState(PlayerStateId.Hurt, new PlayerHurtState(this));
+            RegisterState(new PlayerIdleState(this));
+            RegisterState(new PlayerMoveState(this));
+            RegisterState(new PlayerDashState(this, _dashConfig));
+            RegisterState(new PlayerJumpState(this, _jumpConfig));
+            RegisterState(new PlayerFallState(this));
+            RegisterState(new PlayerWallSlideState(this));
+            RegisterState(new PlayerWallJumpState(this, _jumpConfig));
+            RegisterState(new PlayerAttackState(this));
+            RegisterState(new PlayerJumpAttackState(this));
+            RegisterState(new PlayerHurtState(this));
         }
 
         protected override void OnEnabled()
@@ -122,7 +127,7 @@ namespace Characters.Player
 
         protected override void OnStarted()
         {
-            StartStateMachine(PlayerStateId.Idle);
+            StartStateMachine((int)PlayerStateId.Idle);
             RefillChargeableAbility(PlayerAbilityId.Jump);
         }
 

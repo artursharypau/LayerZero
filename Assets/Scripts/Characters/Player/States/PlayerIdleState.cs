@@ -4,6 +4,8 @@ namespace Characters.Player.States
 {
     public class PlayerIdleState : PlayerGroundedState
     {
+        public override int Id => (int)PlayerStateId.Idle;
+
         public PlayerIdleState(PlayerController controller)
             : base(controller, AnimatorHashProvider.Idle)
         {

@@ -1,5 +1,6 @@
 using System;
 using Systems.Combat;
+using Systems.Damage.Resistance;
 using UnityEngine;
 
 namespace Systems.Damage
@@ -7,10 +8,9 @@ namespace Systems.Damage
     [RequireComponent(typeof(Health))]
     public class DamageReceiver : MonoBehaviour, IDamageReceiver
     {
-        [SerializeField] private DamageResistance _damageResistance = new();
-
         private CombatSystem _combatSystem;
         private IDamageable _damageable;
+        private IDamageResistanceProvider _resistanceProvider;
 
         public event Action<DamageInfo> Damaged;
         public event Action<DamageImpactInfo> DamageImpactReceived;
@@ -19,6 +19,7 @@ namespace Systems.Damage
         {
             _combatSystem = GetComponent<CombatSystem>();
             _damageable = GetComponent<IDamageable>();
+            _resistanceProvider = GetComponent<IDamageResistanceProvider>();
         }
 
         private void OnEnable()
@@ -33,7 +34,13 @@ namespace Systems.Damage
 
         private void OnDamaged(DamageInfo damageInfo)
         {
-            DamageImpactInfo resolvedDamageImpact = ResolveImpact(damageInfo.Impact);
+            DamageResistance resistance = GetActiveResistance();
+            if (resistance.IsInvulnerable)
+            {
+                return;
+            }
+
+            DamageImpactInfo resolvedDamageImpact = ResolveImpact(damageInfo.Impact, resistance);
             DamageInfo resolvedDamage = new(damageInfo.Amount, damageInfo.Source, damageInfo.AttackerTransform, resolvedDamageImpact);
 
             _damageable.TakeDamage(resolvedDamage.Amount);
@@ -45,25 +52,22 @@ namespace Systems.Damage
             }
         }
 
-        private DamageImpactInfo ResolveImpact(DamageImpactInfo incoming)
+        private static DamageImpactInfo ResolveImpact(DamageImpactInfo incoming, DamageResistance resistance)
         {
-            if (!incoming.HasImpact || IsInvulnerable())
+            if (!incoming.HasImpact)
             {
                 return DamageImpactInfo.None;
             }
 
-            float knockbackMultiplier = _damageResistance.KnockbackMultiplier;
-            bool canBeStunned = _damageResistance.CanBeStunned;
-
-            Vector2 knockback = incoming.Knockback * knockbackMultiplier;
-            float stunDuration = canBeStunned ? incoming.StunDuration : 0f;
+            Vector2 knockback = incoming.Knockback * resistance.KnockbackMultiplier;
+            float stunDuration = resistance.CanBeStunned ? incoming.StunDuration : 0f;
 
             return new DamageImpactInfo(knockback, stunDuration);
         }
 
-        private bool IsInvulnerable()
+        private DamageResistance GetActiveResistance()
         {
-            return _damageResistance.IsInvulnerable;
+            return _resistanceProvider?.GetActive() ?? DamageResistance.None;
         }
     }
 }

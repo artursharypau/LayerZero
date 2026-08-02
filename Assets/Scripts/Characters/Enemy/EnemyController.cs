@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Characters.Enemy
 {
     [RequireComponent(typeof(CombatSystem))]
-    public abstract class EnemyController : CharacterController2D<EnemyStateId>
+    public abstract class EnemyController : CharacterController2D
     {
         [Header("Movement details")]
         [SerializeField] private float _idleDuration = 2f;
@@ -32,15 +32,9 @@ namespace Characters.Enemy
         public EnemyTargetDetector TargetDetector => _targetDetector;
         public DamageDefinition AttackDefinition => _attackDefinition;
 
-        protected override void OnAwakened()
+        public void ChangeState(EnemyStateId id)
         {
-            RegisterState(EnemyStateId.Idle, new EnemyIdleState(this));
-            RegisterState(EnemyStateId.Patrol, new EnemyPatrolState(this));
-            RegisterState(EnemyStateId.Chase, new EnemyChaseState(this));
-            RegisterState(EnemyStateId.Attack, new EnemyAttackState(this));
-            RegisterState(EnemyStateId.Hurt, new EnemyHurtState(this));
-
-            _targetDetector.Initialize(Movement);
+            ChangeState((int)id);
         }
 
         public bool ShouldAttack()
@@ -48,9 +42,20 @@ namespace Characters.Enemy
             return Combat.IsInRange(TargetDetector.Target);
         }
 
+        protected override void OnAwakened()
+        {
+            RegisterState(new EnemyIdleState(this));
+            RegisterState(new EnemyPatrolState(this));
+            RegisterState(new EnemyChaseState(this));
+            RegisterState(new EnemyAttackState(this));
+            RegisterState(new EnemyHurtState(this));
+
+            _targetDetector.Initialize(Movement);
+        }
+
         protected override void OnStarted()
         {
-            StartStateMachine(EnemyStateId.Idle);
+            StartStateMachine((int)EnemyStateId.Idle);
         }
 
         protected override void OnFixedUpdated()

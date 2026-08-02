@@ -2,6 +2,8 @@ namespace Core.StateMachine
 {
     public abstract class State
     {
+        public abstract int Id { get; }
+
         public virtual void Enter()
         {
         }

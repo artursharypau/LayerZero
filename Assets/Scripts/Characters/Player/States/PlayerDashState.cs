@@ -14,6 +14,8 @@ namespace Characters.Player.States
         private float _velocityX;
         private float _initialGravityScale;
 
+        public override int Id => (int)PlayerStateId.Dash;
+
         public PlayerDashState(PlayerController controller, PlayerDashAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.Dash)
         {

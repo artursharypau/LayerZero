@@ -8,6 +8,8 @@ namespace Characters.Player.States
     {
         private bool _isGroundTouched;
 
+        public override int Id => (int)PlayerStateId.JumpAttack;
+
         public PlayerJumpAttackState(PlayerController controller)
             : base(controller, PlayerAnimatorHashProvider.JumpAttack, AnimatorParameterType.Bool)
         {

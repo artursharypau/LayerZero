@@ -17,6 +17,8 @@ namespace Characters.Player.States
         private float _finishedTime;
         private bool _nextAttackQueued;
 
+        public override int Id => (int)PlayerStateId.Attack;
+
         public PlayerAttackState(PlayerController controller)
             : base(controller, AnimatorHashProvider.Attack)
         {

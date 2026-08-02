@@ -8,6 +8,8 @@ namespace Characters.Player.States
     {
         private readonly PlayerJumpAbilityConfig _config;
 
+        public override int Id => (int)PlayerStateId.Jump;
+
         public PlayerJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
             : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {

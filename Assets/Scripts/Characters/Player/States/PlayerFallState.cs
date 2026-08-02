@@ -5,6 +5,8 @@ namespace Characters.Player.States
 {
     public class PlayerFallState : PlayerInAirState
     {
+        public override int Id => (int)PlayerStateId.Fall;
+
         public PlayerFallState(PlayerController controller)
             : base(controller, PlayerAnimatorHashProvider.JumpFall)
         {

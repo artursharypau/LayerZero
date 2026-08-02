@@ -7,6 +7,8 @@ namespace Characters.Enemy.States
     {
         private float _initialMoveAnimMultiplier;
 
+        public override int Id => (int)EnemyStateId.Chase;
+
         public EnemyChaseState(EnemyController controller)
             : base(controller, EnemyAnimatorHashProvider.Chase)
         {
