@@ -14,13 +14,13 @@ namespace Characters.Enemy.States
 
         protected override void OnHurtFinished()
         {
-            if (Controller.TargetDetector.Target)
+            if (Controller.TargetDetector.HasTarget)
             {
                 Controller.ChangeState(EnemyStateId.Chase);
                 return;
             }
 
-            Controller.ChangeState(EnemyStateId.Idle);
+            Controller.ChangeState(EnemyStateId.Patrol);
         }
     }
 }
