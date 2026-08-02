@@ -37,6 +37,11 @@ namespace Characters.Enemy
             ChangeState((int)id);
         }
 
+        public void ChangeState<TArg>(EnemyStateId id, TArg arg)
+        {
+            ChangeState((int)id, arg);
+        }
+
         protected override void OnAwakened()
         {
             RegisterState(new EnemyIdleState(this));
@@ -70,7 +75,7 @@ namespace Characters.Enemy
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            ChangeState(EnemyStateId.Hurt);
+            ChangeState(EnemyStateId.Hurt, damageImpact);
         }
     }
 }

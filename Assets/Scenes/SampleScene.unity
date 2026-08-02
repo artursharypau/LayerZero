@@ -11657,6 +11657,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 4817277150691120106, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
+      propertyPath: _attackDefinition._knockback.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4817277150691120106, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
+      propertyPath: _attackDefinition._stunDuration
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11677,6 +11685,54 @@ PrefabInstance:
     - target: {fileID: 2514101050448271214, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _jumpAttackDefinition._knockback.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _jumpAttackDefinition._knockback.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _jumpAttackDefinition._stunDuration
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[0]._knockback.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[0]._knockback.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[1]._knockback.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[1]._knockback.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[2]._knockback.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[2]._knockback.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[0]._stunDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[1]._stunDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209180982273092038, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _attackDefinitions.Array.data[2]._stunDuration
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 9126213500252039777, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_LocalPosition.x

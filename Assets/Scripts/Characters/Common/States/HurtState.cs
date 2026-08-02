@@ -30,6 +30,8 @@ namespace Characters.Common.States
             base.Enter();
 
             DamageImpactInfo damageImpact = _damageImpact;
+            _damageImpact = DamageImpactInfo.None;
+
             Controller.Movement.SetVelocity(damageImpact.Knockback.x, damageImpact.Knockback.y);
 
             float duration = damageImpact.StunDuration;
