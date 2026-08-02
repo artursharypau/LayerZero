@@ -1,4 +1,4 @@
-using Characters.Common;
+using Characters.Common.Movement;
 using Characters.Player.Input;
 
 namespace Characters.Player.Abilities

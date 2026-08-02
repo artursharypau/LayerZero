@@ -1,5 +1,4 @@
 using Characters.Common.Animation;
-using Characters.Common.States;
 using Characters.Player.Input;
 
 namespace Characters.Player.States
@@ -26,7 +25,7 @@ namespace Characters.Player.States
 
             if (_movementEnabled && Controller.InputHandler.WasPerformed(PlayerInputAction.Attack))
             {
-                Controller.ChangeState(StateId.JumpAttack);
+                Controller.ChangeState(PlayerStateId.JumpAttack);
                 return true;
             }
 

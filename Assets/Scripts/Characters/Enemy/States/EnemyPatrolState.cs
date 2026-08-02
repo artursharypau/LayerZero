@@ -1,5 +1,3 @@
-using Characters.Common.States;
-
 namespace Characters.Enemy.States
 {
     public class EnemyPatrolState : EnemyGroundedState
@@ -30,7 +28,7 @@ namespace Characters.Enemy.States
 
             if (!Controller.Movement.IsGrounded || Controller.Movement.IsWalled)
             {
-                Controller.ChangeState(StateId.Idle);
+                Controller.ChangeState(EnemyStateId.Idle);
                 return true;
             }
 

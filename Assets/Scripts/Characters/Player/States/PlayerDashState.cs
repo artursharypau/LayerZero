@@ -1,4 +1,3 @@
-using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
 using Core.Utils;
@@ -43,7 +42,7 @@ namespace Characters.Player.States
 
             if (Controller.Movement.IsWalled)
             {
-                Controller.ChangeState(Controller.Movement.IsGrounded ? StateId.Idle : StateId.WallSlide);
+                Controller.ChangeState(Controller.Movement.IsGrounded ? PlayerStateId.Idle : PlayerStateId.WallSlide);
                 return true;
             }
 
@@ -51,15 +50,15 @@ namespace Characters.Player.States
             {
                 if (Controller.Movement.IsWalled)
                 {
-                    Controller.ChangeState(StateId.WallSlide);
+                    Controller.ChangeState(PlayerStateId.WallSlide);
                 }
                 else if (Controller.Movement.IsFalling)
                 {
-                    Controller.ChangeState(StateId.Fall);
+                    Controller.ChangeState(PlayerStateId.Fall);
                 }
                 else if (Controller.Movement.IsGrounded)
                 {
-                    Controller.ChangeState(StateId.Idle);
+                    Controller.ChangeState(PlayerStateId.Idle);
                 }
 
                 return true;

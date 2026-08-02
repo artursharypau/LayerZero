@@ -1,4 +1,3 @@
-using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
 using Core.Utils;
@@ -40,7 +39,7 @@ namespace Characters.Player.States
 
             if (Controller.CanUseAbility(PlayerAbilityId.Jump))
             {
-                Controller.ChangeState(StateId.Jump);
+                Controller.ChangeState(PlayerStateId.Jump);
                 return true;
             }
 
@@ -56,13 +55,13 @@ namespace Characters.Player.States
 
             if (Controller.Movement.IsFalling)
             {
-                Controller.ChangeState(StateId.Fall);
+                Controller.ChangeState(PlayerStateId.Fall);
                 return true;
             }
 
             if (Controller.Movement.IsWalled)
             {
-                Controller.ChangeState(StateId.WallSlide);
+                Controller.ChangeState(PlayerStateId.WallSlide);
                 return true;
             }
 

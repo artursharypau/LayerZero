@@ -1,4 +1,3 @@
-using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Abilities.Config;
 
@@ -30,7 +29,7 @@ namespace Characters.Player.States
 
             if (Controller.Movement.VelocityY <= 0f)
             {
-                Controller.ChangeState(StateId.Fall);
+                Controller.ChangeState(PlayerStateId.Fall);
                 return true;
             }
 

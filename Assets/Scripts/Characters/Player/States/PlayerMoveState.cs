@@ -1,5 +1,4 @@
 using Characters.Common.Animation;
-using Characters.Common.States;
 
 namespace Characters.Player.States
 {
@@ -19,7 +18,7 @@ namespace Characters.Player.States
 
             if (Controller.InputHandler.Move.x == 0f)
             {
-                Controller.ChangeState(StateId.Idle);
+                Controller.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 
@@ -35,7 +34,7 @@ namespace Characters.Player.States
 
             if (IsRunningIntoWall())
             {
-                Controller.ChangeState(StateId.Idle);
+                Controller.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 

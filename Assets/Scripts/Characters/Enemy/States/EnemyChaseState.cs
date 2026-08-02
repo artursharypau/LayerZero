@@ -1,5 +1,4 @@
 using Characters.Common.Animation;
-using Characters.Common.States;
 
 namespace Characters.Enemy.States
 {
@@ -30,7 +29,7 @@ namespace Characters.Enemy.States
 
             if (Controller.ShouldAttack())
             {
-                Controller.ChangeState(StateId.Attack);
+                Controller.ChangeState(EnemyStateId.Attack);
                 return true;
             }
 
@@ -71,7 +70,7 @@ namespace Characters.Enemy.States
         private void OnTargetLost()
         {
             Controller.TargetDetector.TargetLost -= OnTargetLost;
-            Controller.ChangeState(StateId.Idle);
+            Controller.ChangeState(EnemyStateId.Idle);
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Characters.Common
+namespace Characters.Common.Movement
 {
     public interface IPositioned
     {

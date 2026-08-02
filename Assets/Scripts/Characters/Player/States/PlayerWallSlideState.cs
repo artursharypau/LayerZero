@@ -1,4 +1,3 @@
-using Characters.Common.States;
 using Characters.Player.Abilities;
 using Characters.Player.Input;
 using UnityEngine;
@@ -29,7 +28,7 @@ namespace Characters.Player.States
 
             if (Controller.InputHandler.WasPerformed(PlayerInputAction.Jump))
             {
-                Controller.ChangeState(StateId.WallJump);
+                Controller.ChangeState(PlayerStateId.WallJump);
                 return true;
             }
 
@@ -50,13 +49,13 @@ namespace Characters.Player.States
                     Controller.Movement.Flip();
                 }
 
-                Controller.ChangeState(StateId.Idle);
+                Controller.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 
             if (!Controller.Movement.IsWalled && Controller.Movement.IsFalling)
             {
-                Controller.ChangeState(StateId.Fall);
+                Controller.ChangeState(PlayerStateId.Fall);
                 return true;
             }
 
