@@ -30,6 +30,21 @@ namespace Core.StateMachine
             Pending = newState;
         }
 
+        public void ChangeState<TArg>(State newState, TArg arg)
+        {
+            if (newState == null)
+            {
+                return;
+            }
+
+            if (newState is IStateArg<TArg> stateArg)
+            {
+                stateArg.Prepare(arg);
+            }
+
+            ChangeState(newState);
+        }
+
         public void Update()
         {
             ApplyPendingTransition();

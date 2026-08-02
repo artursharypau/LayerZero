@@ -1,31 +1,39 @@
 using Characters.Common.Animation;
+using Core.StateMachine;
 using Core.Utils;
 using Systems.Damage;
 using UnityEngine;
 
 namespace Characters.Common.States
 {
-    public abstract class HurtState<TController> : AnimatedState<TController>
+    public abstract class HurtState<TController> : AnimatedState<TController>, IStateArg<DamageImpactInfo>
         where TController : CharacterController2D
     {
-        private const float MinKnockbackLockDuration = 0.12f;
+        private const float MinKnockbackLockDuration = 0.1f;
 
         private readonly CountdownTimer _timer = new();
+
+        private DamageImpactInfo _damageImpact;
 
         protected HurtState(TController controller, int animHash, AnimatorParameterType type = AnimatorParameterType.None)
             : base(controller, animHash, type)
         {
         }
 
+        public void Prepare(DamageImpactInfo arg)
+        {
+            _damageImpact = arg;
+        }
+
         public override void Enter()
         {
             base.Enter();
 
-            DamageImpactInfo impact = DamageImpactInfo.None;
-            Controller.Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
+            DamageImpactInfo damageImpact = _damageImpact;
+            Controller.Movement.SetVelocity(damageImpact.Knockback.x, damageImpact.Knockback.y);
 
-            float duration = impact.StunDuration;
-            if (duration <= 0f && impact.Knockback != Vector2.zero)
+            float duration = damageImpact.StunDuration;
+            if (duration <= 0f && damageImpact.Knockback != Vector2.zero)
             {
                 duration = MinKnockbackLockDuration;
             }
@@ -33,9 +41,9 @@ namespace Characters.Common.States
             _timer.Start(duration);
         }
 
-        public override bool TryFixedTransition()
+        public override bool TryTransition()
         {
-            if (base.TryFixedTransition())
+            if (base.TryTransition())
             {
                 return true;
             }
@@ -49,11 +57,11 @@ namespace Characters.Common.States
             return false;
         }
 
-        public override void FixedUpdate()
+        public override void Update()
         {
-            base.FixedUpdate();
+            base.Update();
 
-            _timer.Tick(Time.fixedDeltaTime);
+            _timer.Tick(Time.deltaTime);
         }
 
         protected abstract void OnHurtFinished();

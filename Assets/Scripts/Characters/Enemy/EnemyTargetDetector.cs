@@ -36,6 +36,7 @@ namespace Characters.Enemy
         public event Action TargetLost;
 
         public Transform Target { get; private set; }
+        public bool HasTarget => Target;
         public bool IsBehind => Target && !Mathf.Approximately(Direction, _positioned.FacingDirection);
 
         public float Direction

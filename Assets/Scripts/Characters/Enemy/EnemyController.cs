@@ -70,7 +70,7 @@ namespace Characters.Enemy
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            // ChangeState(EnemyStateId.Hurt);
+            ChangeState(EnemyStateId.Hurt);
         }
     }
 }
