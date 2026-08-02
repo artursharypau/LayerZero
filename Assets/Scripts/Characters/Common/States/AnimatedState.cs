@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Characters.Common.States
 {
     public abstract class AnimatedState<TController> : State
-        where TController : CharacterControllerBase
+        where TController : CharacterController2D
     {
         private readonly int _parameterHash;
         private readonly AnimatorParameterType _parameterType;

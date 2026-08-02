@@ -3,7 +3,7 @@ using Characters.Common.Animation;
 namespace Characters.Common.States
 {
     public abstract class AttackState<TController> : AnimatedState<TController>
-        where TController : CharacterControllerBase
+        where TController : CharacterController2D
     {
         protected AttackState(TController controller, int animHash, AnimatorParameterType type = AnimatorParameterType.Trigger)
             : base(controller, animHash, type)

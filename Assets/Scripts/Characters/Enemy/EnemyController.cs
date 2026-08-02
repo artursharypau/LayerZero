@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Characters.Enemy
 {
-    public abstract class EnemyController : CharacterControllerBase<EnemyStateId>
+    public abstract class EnemyController : CharacterController2D<EnemyStateId>
     {
         [Header("Movement details")]
         [SerializeField] private float _idleDuration = 2f;
