@@ -9,8 +9,8 @@ namespace Characters.Player.States
 {
     public class PlayerAttackState : AttackState<PlayerController>
     {
-        private const int StartIndex = 0;
-
+        private readonly int _startIndex;
+        private readonly int _lastIndex;
         private readonly CountdownTimer _velocityTimer;
 
         private int _currIndex;
@@ -20,10 +20,10 @@ namespace Characters.Player.States
         public PlayerAttackState(PlayerController controller)
             : base(controller, AnimatorHashProvider.Attack)
         {
+            _startIndex = 0;
+            _lastIndex = Controller.AttacksCount - 1;
             _velocityTimer = new CountdownTimer();
         }
-
-        private int LastIndex => Controller.AttackVelocities.Length - 1;
 
         public override void Enter()
         {
@@ -33,6 +33,8 @@ namespace Characters.Player.States
 
             SetIndex();
             ApplyVelocity();
+
+            Controller.Combat.SetActiveAttackDefinition(Controller.AttackDefinitions[_currIndex]);
         }
 
         public override void Update()
@@ -61,7 +63,7 @@ namespace Characters.Player.States
             ++_currIndex;
             _finishedTime = Time.time;
 
-            if (!_nextAttackQueued || _currIndex > LastIndex)
+            if (!_nextAttackQueued || _currIndex > _lastIndex)
             {
                 Controller.ChangeState(Controller.Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
             }
@@ -74,13 +76,13 @@ namespace Characters.Player.States
         private void SetIndex()
         {
             bool comboExpired = Time.time - _finishedTime > Controller.AttackResetTime;
-            if (comboExpired || _currIndex > LastIndex)
+            if (comboExpired || _currIndex > _lastIndex)
             {
-                _currIndex = StartIndex;
+                _currIndex = _startIndex;
             }
             else
             {
-                _currIndex = _currIndex > LastIndex ? StartIndex : _currIndex;
+                _currIndex = _currIndex > _lastIndex ? _startIndex : _currIndex;
             }
 
             Anim.SetInteger(PlayerAnimatorHashProvider.AttackIndex, _currIndex);

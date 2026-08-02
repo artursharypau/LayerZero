@@ -13,6 +13,18 @@ namespace Systems.Damage
         [SerializeField] private Vector2 _knockback;
         [SerializeField] [Min(0f)] private float _stunDuration;
 
+        public DamageDefinition()
+        {
+        }
+
+        public DamageDefinition(int amount, DamageSource source, Vector2 knockback = default, float stunDuration = 0f)
+        {
+            _amount = amount;
+            _source = source;
+            _knockback = knockback;
+            _stunDuration = stunDuration;
+        }
+
         public int Amount => _amount;
         public DamageSource Source => _source;
         public Vector2 Knockback => _knockback;

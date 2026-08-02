@@ -12,12 +12,12 @@ namespace Systems.Combat
         [SerializeField] private Transform _targetCheckPoint;
         [SerializeField] [Min(0f)] private float _targetCheckRadius = 1f;
         [SerializeField] private LayerMask _targetLayerMask;
-        [SerializeField] private DamageDefinition _damageDefinition;
 
         private IAttackAnimatorEvents _animTriggers;
 
         private ContactFilter2D _filter;
         private List<Collider2D> _targetsBuffer;
+        private DamageDefinition _activeAttackDefinition;
 
         private void Awake()
         {
@@ -44,6 +44,11 @@ namespace Systems.Combat
             Gizmos.DrawWireSphere(_targetCheckPoint.position, _targetCheckRadius);
         }
 
+        public void SetActiveAttackDefinition(DamageDefinition damageDefinition)
+        {
+            _activeAttackDefinition = damageDefinition;
+        }
+
         public bool IsInRange(Transform target)
         {
             if (!target)
@@ -65,13 +70,19 @@ namespace Systems.Combat
 
         private void OnAttackHit()
         {
+            if (_activeAttackDefinition == null)
+            {
+                Debug.unityLogger.LogError($"{nameof(CombatSystem)}.{nameof(OnAttackHit)}", $"No active attack is set on '{name}'");
+                return;
+            }
+
             int count = UpdateTargets();
-            if (count == 0)
+            if (count <= 0)
             {
                 return;
             }
 
-            DamageInfo damageInfo = DamageInfo.FromDefinition(_damageDefinition, transform);
+            DamageInfo damageInfo = DamageInfo.FromDefinition(_activeAttackDefinition, transform);
             for (int i = 0; i < count; i++)
             {
                 if (_targetsBuffer[i].TryGetComponent(out IDamageable damageable))

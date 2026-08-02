@@ -10,6 +10,13 @@ namespace Characters.Enemy.States
         {
         }
 
+        public override void Enter()
+        {
+            base.Enter();
+
+            Controller.Combat.SetActiveAttackDefinition(Controller.AttackDefinition);
+        }
+
         protected override void OnAttackFinished()
         {
             Controller.ChangeState(EnemyStateId.Chase);

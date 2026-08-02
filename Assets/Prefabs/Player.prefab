@@ -132,13 +132,32 @@ MonoBehaviour:
     Duration: 0.2
     Cooldown: 2
     SpeedMultiplier: 3
+  _attacksCount: 3
   _attackVelocities:
   - {x: 3, y: 1.5}
   - {x: 1, y: 2.5}
   - {x: 4, y: 5}
   _attackVelocityDuration: 0.1
   _attackResetTime: 1
+  _attackDamages:
+  - _amount: 15
+    _source: 1
+    _knockback: {x: 4, y: 0}
+    _stunDuration: 0
+  - _amount: 15
+    _source: 1
+    _knockback: {x: 4, y: 0}
+    _stunDuration: 0
+  - _amount: 25
+    _source: 1
+    _knockback: {x: 7, y: 3}
+    _stunDuration: 0
   _jumpAttackVelocity: {x: 3, y: -5}
+  _jumpAttackDamage:
+    _amount: 40
+    _source: 1
+    _knockback: {x: 3, y: 0}
+    _stunDuration: 0.2
   _inputHandler:
     _jumpBufferDuration: 0.2
     _dashBufferDuration: 0.1
@@ -193,11 +212,6 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  _damageDefinition:
-    _amount: 30
-    _source: 1
-    _knockback: {x: 0, y: 0}
-    _stunDuration: 0
 --- !u!114 &1558889594841445991
 MonoBehaviour:
   m_ObjectHideFlags: 0

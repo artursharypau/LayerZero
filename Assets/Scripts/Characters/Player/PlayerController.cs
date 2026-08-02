@@ -7,6 +7,7 @@ using Characters.Player.Abilities.Config;
 using Characters.Player.Abilities.Tickable;
 using Characters.Player.Input;
 using Characters.Player.States;
+using Systems.Damage;
 using UnityEngine;
 
 namespace Characters.Player
@@ -21,10 +22,23 @@ namespace Characters.Player
         [SerializeField] private PlayerDashAbilityConfig _dashConfig;
 
         [Header("Attack details")]
-        [SerializeField] private Vector2[] _attackVelocities = { new(3f, 1.5f), new(1f, 2.5f), new(4f, 5f) };
+        [SerializeField] private int _attacksCount = 3;
+        [SerializeField] private Vector2[] _attackVelocities =
+        {
+            new(3f, 1.5f),
+            new(1f, 2.5f),
+            new(4f, 5f)
+        };
         [SerializeField] private float _attackVelocityDuration = 0.1f;
         [SerializeField] private float _attackResetTime = 1f;
+        [SerializeField] private DamageDefinition[] _attackDefinitions =
+        {
+            new(15, DamageSource.Player, new Vector2(4f, 0f)),
+            new(15, DamageSource.Player, new Vector2(4f, 0f)),
+            new(25, DamageSource.Player, new Vector2(7f, 3f))
+        };
         [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
+        [SerializeField] private DamageDefinition _jumpAttackDefinition = new(40, DamageSource.Player, new Vector2(3f, 0f), 0.2f);
 
         [SerializeField] private PlayerInputHandler _inputHandler;
 
@@ -36,10 +50,13 @@ namespace Characters.Player
         public float InAirMoveMultiplier => _inAirMoveMultiplier;
         public float WallSlideMultiplier => _wallSlideMultiplier;
 
+        public int AttacksCount => _attacksCount;
         public Vector2[] AttackVelocities => _attackVelocities;
         public float AttackVelocityDuration => _attackVelocityDuration;
         public float AttackResetTime => _attackResetTime;
+        public DamageDefinition[] AttackDefinitions => _attackDefinitions;
         public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
+        public DamageDefinition JumpAttackDefinition => _jumpAttackDefinition;
 
         public IPlayerInput Input => _inputHandler;
 
