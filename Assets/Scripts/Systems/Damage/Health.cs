@@ -5,9 +5,8 @@ namespace Systems.Damage
 {
     public class Health : MonoBehaviour, IDamageable
     {
-        [SerializeField] [Min(1)] private int _max = 1;
+        [SerializeField] [Min(1)] private int _max = 100;
 
-        public event Action<DamageInfo> Damaged;
         public event Action Died;
 
         public int CurrentHealth { get; private set; }
@@ -19,15 +18,14 @@ namespace Systems.Damage
             CurrentHealth = _max;
         }
 
-        public void TakeDamage(DamageInfo damageInfo)
+        public void TakeDamage(int amount)
         {
-            if (IsDead || damageInfo.Amount <= 0)
+            if (IsDead || amount <= 0)
             {
                 return;
             }
 
-            CurrentHealth = Mathf.Max(0, CurrentHealth - damageInfo.Amount);
-            Damaged?.Invoke(damageInfo);
+            CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
 
             if (IsDead)
             {

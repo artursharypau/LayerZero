@@ -112,6 +112,7 @@ namespace Characters.Player
             RegisterState(PlayerStateId.WallJump, new PlayerWallJumpState(this, _jumpConfig));
             RegisterState(PlayerStateId.Attack, new PlayerAttackState(this));
             RegisterState(PlayerStateId.JumpAttack, new PlayerJumpAttackState(this));
+            RegisterState(PlayerStateId.Hurt, new PlayerHurtState(this));
         }
 
         protected override void OnEnabled()
@@ -143,6 +144,11 @@ namespace Characters.Player
         protected override void OnDestroyed()
         {
             _inputHandler.Dispose();
+        }
+
+        protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
+        {
+            ChangeState(PlayerStateId.Hurt);
         }
 
         private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)

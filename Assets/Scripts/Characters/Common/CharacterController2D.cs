@@ -10,9 +10,11 @@ namespace Characters.Common
 {
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(DamageReceiver))]
     public abstract class CharacterController2D : MonoBehaviour
     {
         public Health Health { get; private set; }
+        public DamageReceiver DamageReceiver { get; private set; }
         public CharacterMovement2D Movement { get; private set; }
         public CombatSystem Combat { get; private set; }
 
@@ -24,6 +26,7 @@ namespace Characters.Common
         private void Awake()
         {
             Health = GetComponent<Health>();
+            DamageReceiver = GetComponent<DamageReceiver>();
             Movement = GetComponent<CharacterMovement2D>();
             Combat = GetComponent<CombatSystem>();
 
@@ -37,8 +40,8 @@ namespace Characters.Common
 
         private void OnEnable()
         {
-            Health.Damaged += HandleDamaged;
             Health.Died += HandleDied;
+            DamageReceiver.DamageImpactReceived += HandleDamageImpactReceived;
 
             OnEnabled();
         }
@@ -65,7 +68,8 @@ namespace Characters.Common
 
         private void OnDisable()
         {
-            Health.Damaged -= HandleDamaged;
+            DamageReceiver.Damaged -= HandleDamaged;
+            DamageReceiver.DamageImpactReceived -= HandleDamageImpactReceived;
             Health.Died -= HandleDied;
 
             OnDisabled();
@@ -133,10 +137,11 @@ namespace Characters.Common
         private void HandleDamaged(DamageInfo damageInfo)
         {
             OnDamaged(damageInfo);
-            if (damageInfo.Impact.HasImpact)
-            {
-                OnDamageImpactReceived(damageInfo.Impact);
-            }
+        }
+
+        private void HandleDamageImpactReceived(DamageImpactInfo damageImpact)
+        {
+            OnDamageImpactReceived(damageImpact);
         }
 
         private void HandleDied()

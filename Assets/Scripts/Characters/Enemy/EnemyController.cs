@@ -38,6 +38,7 @@ namespace Characters.Enemy
             RegisterState(EnemyStateId.Patrol, new EnemyPatrolState(this));
             RegisterState(EnemyStateId.Chase, new EnemyChaseState(this));
             RegisterState(EnemyStateId.Attack, new EnemyAttackState(this));
+            RegisterState(EnemyStateId.Hurt, new EnemyHurtState(this));
 
             _targetDetector.Initialize(Movement);
         }
@@ -65,6 +66,11 @@ namespace Characters.Enemy
         protected override void OnDamaged(DamageInfo damageInfo)
         {
             TargetDetector.DamageAlert(damageInfo);
+        }
+
+        protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
+        {
+            ChangeState(EnemyStateId.Hurt);
         }
     }
 }

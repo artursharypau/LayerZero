@@ -9,7 +9,7 @@ namespace Systems.Damage
         public readonly Transform AttackerTransform;
         public readonly DamageImpactInfo Impact;
 
-        private DamageInfo(int amount, DamageSource source, Transform attackerTransform, DamageImpactInfo impact = default)
+        public DamageInfo(int amount, DamageSource source, Transform attackerTransform, DamageImpactInfo impact = default)
         {
             Amount = amount;
             Source = source;
