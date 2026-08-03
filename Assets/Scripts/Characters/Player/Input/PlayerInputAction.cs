@@ -1,10 +1,10 @@
-namespace Characters.Player.Input
+namespace LayerZero.Characters.Player.Input
 {
     public enum PlayerInputAction
     {
-        None,
-        Jump,
-        Dash,
-        Attack
+        None = 0,
+        Jump = 1,
+        Dash = 2,
+        Attack = 3
     }
 }

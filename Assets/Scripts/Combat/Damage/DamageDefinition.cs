@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage
 {
+    /// <summary>Authoring data for a single hit. Lives in configs, never mutated at runtime.</summary>
     [Serializable]
     public sealed class DamageDefinition
     {
@@ -28,7 +29,9 @@ namespace LayerZero.Combat.Damage
         public int Amount => _amount;
         public DamageSource Source => _source;
 
+        /// <summary>Knockback in the attacker's local space; converted to world space on hit.</summary>
         public Vector2 Knockback => _knockback;
+
         public float StunDuration => _stunDuration;
 
         public bool HasImpact => _knockback != Vector2.zero || _stunDuration > 0f;

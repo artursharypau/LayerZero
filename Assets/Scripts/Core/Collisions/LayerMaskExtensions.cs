@@ -1,0 +1,22 @@
+using UnityEngine;
+
+namespace LayerZero.Core.Collisions
+{
+    public static class LayerMaskExtensions
+    {
+        public static bool Contains(this LayerMask mask, int layer)
+        {
+            return (mask.value & (1 << layer)) != 0;
+        }
+
+        public static bool Contains(this LayerMask mask, GameObject gameObject)
+        {
+            return gameObject && mask.Contains(gameObject.layer);
+        }
+
+        public static bool Contains(this LayerMask mask, Component component)
+        {
+            return component && mask.Contains(component.gameObject.layer);
+        }
+    }
+}

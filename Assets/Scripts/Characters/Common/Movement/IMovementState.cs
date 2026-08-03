@@ -1,6 +1,7 @@
-namespace Characters.Common.Movement
+namespace LayerZero.Characters.Common.Movement
 {
-    public interface IMovementState
+    /// <summary>Read-only view of movement. Given to systems that observe but must not steer.</summary>
+    public interface IMovementState : IPositioned
     {
         bool IsGrounded { get; }
         bool IsWalled { get; }

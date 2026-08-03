@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage.Vfx
 {
+    /// <summary>Swaps the sprite material for a short flash whenever the owner takes damage.</summary>
     [RequireComponent(typeof(DamageReceiver))]
     public sealed class DamageFlashVfx : MonoBehaviour
     {
@@ -12,14 +13,15 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private SpriteRenderer _renderer;
         private IDamageReceiver _damageReceiver;
+        private CountdownTimer _timer;
         private Material _defaultMaterial;
-        private Countdown _timer;
         private bool _isFlashing;
 
         private void Awake()
         {
             _renderer = this.GetRequiredInChildren<SpriteRenderer>();
             _damageReceiver = this.GetRequired<IDamageReceiver>();
+            _timer = new CountdownTimer();
 
             if (_renderer)
             {
@@ -47,7 +49,13 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private void Update()
         {
-            if (_isFlashing && _timer.IsExpired)
+            if (!_isFlashing)
+            {
+                return;
+            }
+
+            _timer.Tick(Time.deltaTime);
+            if (_timer.IsExpired)
             {
                 StopFlash();
             }

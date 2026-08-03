@@ -34,5 +34,5 @@ MonoBehaviour:
     _damage:
       _amount: 10
       _source: 2
-      _knockback: {x: 4, y: 6}
-      _stunDuration: 0.3
+      _knockback: {x: 4, y: 2}
+      _stunDuration: 0

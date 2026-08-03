@@ -1,21 +1,70 @@
+using System;
+using LayerZero.Combat.Attacks;
 using UnityEngine;
 
 namespace LayerZero.Characters.Common.Animation
 {
+    /// <summary>
+    /// The only thing that talks to <see cref="Animator" />. States describe intent
+    /// ("enter this parameter", "publish this value") and never poke the animator directly.
+    /// </summary>
     public sealed class CharacterAnimator
     {
         private readonly Animator _animator;
+        private readonly IAttackAnimatorEvents _events;
 
-        public CharacterAnimator(Animator animator, IAnimatorEvents events)
+        public CharacterAnimator(Animator animator, IAttackAnimatorEvents events)
         {
             _animator = animator;
-            Events = events;
+            _events = events;
         }
 
-        public IAnimatorEvents Events { get; }
+        public bool IsValid => _animator;
 
-        public void Enter(in AnimatorParameter parameter)
+        public event Action AttackHit
         {
+            add
+            {
+                if (_events != null)
+                {
+                    _events.AttackHit += value;
+                }
+            }
+            remove
+            {
+                if (_events != null)
+                {
+                    _events.AttackHit -= value;
+                }
+            }
+        }
+
+        public event Action AttackFinished
+        {
+            add
+            {
+                if (_events != null)
+                {
+                    _events.AttackFinished += value;
+                }
+            }
+            remove
+            {
+                if (_events != null)
+                {
+                    _events.AttackFinished -= value;
+                }
+            }
+        }
+
+        /// <summary>Raises the parameter that represents a state being active.</summary>
+        public void Begin(in AnimatorParameter parameter)
+        {
+            if (!_animator)
+            {
+                return;
+            }
+
             switch (parameter.Kind)
             {
                 case AnimatorParameterKind.Bool:
@@ -27,8 +76,14 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        public void Exit(in AnimatorParameter parameter)
+        /// <summary>Clears the parameter raised by <see cref="Begin" />.</summary>
+        public void End(in AnimatorParameter parameter)
         {
+            if (!_animator)
+            {
+                return;
+            }
+
             switch (parameter.Kind)
             {
                 case AnimatorParameterKind.Bool:
@@ -40,17 +95,12 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        public void Trigger(in AnimatorParameter parameter)
+        public void Fire(in AnimatorParameter parameter)
         {
             if (_animator && parameter.Kind == AnimatorParameterKind.Trigger)
             {
                 _animator.SetTrigger(parameter.Hash);
             }
-        }
-
-        public float GetFloat(in AnimatorParameter parameter)
-        {
-            return _animator ? _animator.GetFloat(parameter.Hash) : 0f;
         }
 
         public void SetFloat(in AnimatorParameter parameter, float value)
@@ -59,6 +109,11 @@ namespace LayerZero.Characters.Common.Animation
             {
                 _animator.SetFloat(parameter.Hash, value);
             }
+        }
+
+        public float GetFloat(in AnimatorParameter parameter)
+        {
+            return _animator ? _animator.GetFloat(parameter.Hash) : 0f;
         }
 
         public void SetInt(in AnimatorParameter parameter, int value)

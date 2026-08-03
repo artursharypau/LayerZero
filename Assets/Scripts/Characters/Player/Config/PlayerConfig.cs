@@ -2,21 +2,26 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.Config
 {
+    /// <summary>
+    /// All player tuning in one asset. The prefab holds references and scene wiring only,
+    /// so balance can be edited, versioned and swapped (difficulty, demo build) without
+    /// touching the prefab.
+    /// </summary>
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "LayerZero/Characters/Player Config")]
     public sealed class PlayerConfig : ScriptableObject
     {
-        [SerializeField] private PlayerMovementConfig _movement = new();
-        [SerializeField] private PlayerInputConfig _input = new();
-        [SerializeField] private JumpAbilityConfig _jump = new();
-        [SerializeField] private DashAbilityConfig _dash = new();
-        [SerializeField] private PlayerAttackConfig _attack = new();
-        [SerializeField] private PlayerJumpAttackConfig _jumpAttack = new();
+        [SerializeField] private PlayerMovementSettings _movement = new();
+        [SerializeField] private PlayerInputSettings _input = new();
+        [SerializeField] private JumpAbilitySettings _jump = new();
+        [SerializeField] private DashAbilitySettings _dash = new();
+        [SerializeField] private PlayerAttackSettings _attack = new();
+        [SerializeField] private PlayerJumpAttackSettings _jumpAttack = new();
 
-        public PlayerMovementConfig Movement => _movement;
-        public PlayerInputConfig Input => _input;
-        public JumpAbilityConfig Jump => _jump;
-        public DashAbilityConfig Dash => _dash;
-        public PlayerAttackConfig Attack => _attack;
-        public PlayerJumpAttackConfig JumpAttack => _jumpAttack;
+        public PlayerMovementSettings Movement => _movement;
+        public PlayerInputSettings Input => _input;
+        public JumpAbilitySettings Jump => _jump;
+        public DashAbilitySettings Dash => _dash;
+        public PlayerAttackSettings Attack => _attack;
+        public PlayerJumpAttackSettings JumpAttack => _jumpAttack;
     }
 }

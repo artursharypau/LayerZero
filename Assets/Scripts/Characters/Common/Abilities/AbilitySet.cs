@@ -4,23 +4,40 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Characters.Common.Abilities
 {
-    public class AbilitySet
+    /// <summary>
+    /// Character module that owns a character's abilities and ticks the ones that need it.
+    /// Keyed by an archetype-specific enum, so each character family declares its own ability set
+    /// without a shared registry to extend.
+    /// </summary>
+    public class AbilitySet<TId> : CharacterModule where TId : struct, Enum
     {
-        private readonly Dictionary<int, IAbility> _abilities = new();
+        private readonly Dictionary<TId, IAbility> _abilities = new();
+        private readonly List<ITickableAbility> _tickable = new();
 
-        public AbilitySet Add(int id, IAbility ability)
+        public AbilitySet<TId> Add(TId id, IAbility ability)
         {
-            _abilities[id] = ability ?? throw new ArgumentNullException(nameof(ability));
+            if (ability == null)
+            {
+                throw new ArgumentNullException(nameof(ability));
+            }
+
+            _abilities[id] = ability;
+
+            if (ability is ITickableAbility tickable)
+            {
+                _tickable.Add(tickable);
+            }
 
             return this;
         }
 
-        public bool CanUse(int id)
+        public bool CanUse(TId id)
         {
             return TryGet(id, out IAbility ability) && ability.CanUse();
         }
 
-        public bool TryUse(int id)
+        /// <summary>Uses the ability if it is available. Returns whether it actually fired.</summary>
+        public bool TryUse(TId id)
         {
             if (!TryGet(id, out IAbility ability) || !ability.CanUse())
             {
@@ -31,7 +48,7 @@ namespace LayerZero.Characters.Common.Abilities
             return true;
         }
 
-        public void Refill(int id)
+        public void Refill(TId id)
         {
             if (TryGetChargeable(id, out IChargeableAbility ability))
             {
@@ -39,7 +56,7 @@ namespace LayerZero.Characters.Common.Abilities
             }
         }
 
-        public void RefillTo(int id, int amount)
+        public void RefillTo(TId id, int amount)
         {
             if (TryGetChargeable(id, out IChargeableAbility ability))
             {
@@ -47,7 +64,15 @@ namespace LayerZero.Characters.Common.Abilities
             }
         }
 
-        private bool TryGet(int id, out IAbility ability)
+        public override void Tick(float deltaTime)
+        {
+            for (int i = 0; i < _tickable.Count; i++)
+            {
+                _tickable[i].Tick(deltaTime);
+            }
+        }
+
+        private bool TryGet(TId id, out IAbility ability)
         {
             if (_abilities.TryGetValue(id, out ability))
             {
@@ -58,7 +83,7 @@ namespace LayerZero.Characters.Common.Abilities
             return false;
         }
 
-        private bool TryGetChargeable(int id, out IChargeableAbility chargeable)
+        private bool TryGetChargeable(TId id, out IChargeableAbility chargeable)
         {
             if (TryGet(id, out IAbility ability) && ability is IChargeableAbility found)
             {

@@ -1,13 +1,11 @@
-using Characters.Common.Animation;
+using LayerZero.Characters.Common.Animation;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerMoveState : PlayerGroundedState
+    public sealed class PlayerMoveState : PlayerGroundedState
     {
-        public override int Id => (int)PlayerStateId.Move;
-
-        public PlayerMoveState(PlayerController controller)
-            : base(controller, AnimatorHashProvider.Move)
+        public PlayerMoveState(PlayerController owner)
+            : base(owner, CommonAnimatorParameters.Move)
         {
         }
 
@@ -18,9 +16,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Input.Move.x == 0f)
+            if (Input.Move.x == 0f)
             {
-                Controller.ChangeState(PlayerStateId.Idle);
+                ChangeTo<PlayerIdleState>();
                 return true;
             }
 
@@ -34,9 +32,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (IsRunningIntoWall())
+            if (IsPushingIntoWall())
             {
-                Controller.ChangeState(PlayerStateId.Idle);
+                ChangeTo<PlayerIdleState>();
                 return true;
             }
 
@@ -47,14 +45,14 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            Controller.Movement.SetVelocityX(Controller.MoveSpeed * Controller.Input.Move.x, true);
+            Movement.SetVelocityX(Config.Movement.MoveSpeed * Input.Move.x, true);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.Movement.SetVelocityX(0f);
+            Movement.SetVelocityX(0f);
         }
     }
 }

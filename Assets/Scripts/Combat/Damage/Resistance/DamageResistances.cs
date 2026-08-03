@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace LayerZero.Combat.Damage.Resistance
 {
+    /// <summary>
+    /// Default handle-based implementation. Invulnerability is cached so the common
+    /// "am I invulnerable right now" check does not walk the collection.
+    /// </summary>
     public sealed class DamageResistances : IDamageResistances
     {
         private readonly Dictionary<int, DamageResistance> _active = new();
@@ -26,7 +30,7 @@ namespace LayerZero.Combat.Damage.Resistance
 
         public void Remove(ResistanceHandle handle)
         {
-            if (!_active.Remove(handle.Id, out DamageResistance resistance))
+            if (!handle.IsValid || !_active.Remove(handle.Id, out DamageResistance resistance))
             {
                 return;
             }

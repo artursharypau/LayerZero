@@ -1,13 +1,11 @@
-using Characters.Common.Animation;
+using LayerZero.Characters.Common.Animation;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerIdleState : PlayerGroundedState
+    public sealed class PlayerIdleState : PlayerGroundedState
     {
-        public override int Id => (int)PlayerStateId.Idle;
-
-        public PlayerIdleState(PlayerController controller)
-            : base(controller, AnimatorHashProvider.Idle)
+        public PlayerIdleState(PlayerController owner)
+            : base(owner, CommonAnimatorParameters.Idle)
         {
         }
 
@@ -15,7 +13,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.Movement.SetVelocityX(0f);
+            Movement.SetVelocityX(0f);
         }
 
         public override bool TryTransition()
@@ -25,9 +23,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Input.Move.x != 0f && !IsRunningIntoWall())
+            if (Input.Move.x != 0f && !IsPushingIntoWall())
             {
-                Controller.ChangeState(PlayerStateId.Move);
+                ChangeTo<PlayerMoveState>();
                 return true;
             }
 

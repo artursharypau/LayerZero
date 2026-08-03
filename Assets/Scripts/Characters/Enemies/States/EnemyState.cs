@@ -5,6 +5,7 @@ using LayerZero.Characters.Enemies.Perception;
 
 namespace LayerZero.Characters.Enemies.States
 {
+    /// <summary>Base for enemy states. Exposes the config and the senses every enemy state reads.</summary>
     public abstract class EnemyState : CharacterState<EnemyController>
     {
         protected EnemyState(EnemyController owner, AnimatorParameter parameter)

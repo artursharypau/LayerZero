@@ -2,26 +2,40 @@ using LayerZero.Characters.Enemies.Animation;
 
 namespace LayerZero.Characters.Enemies.States
 {
+    /// <summary>Walks forward until the ledge or the wall says otherwise, then idles and turns around.</summary>
     public sealed class EnemyPatrolState : EnemyGroundedState
     {
         public EnemyPatrolState(EnemyController owner)
             : base(owner, EnemyAnimatorParameters.Patrol)
         {
-            OnFixed(IsBlocked, EnemyStateId.Idle);
         }
-
-        public override int Id => EnemyStateId.Patrol;
 
         public override void Enter()
         {
             base.Enter();
 
-            if (IsBlocked())
+            if (!Movement.IsGrounded || Movement.IsWalled)
             {
                 Movement.Flip();
             }
 
-            Animator.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
+            Animation.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
+        }
+
+        public override bool TryFixedTransition()
+        {
+            if (base.TryFixedTransition())
+            {
+                return true;
+            }
+
+            if (!Movement.IsGrounded || Movement.IsWalled)
+            {
+                ChangeTo<EnemyIdleState>();
+                return true;
+            }
+
+            return false;
         }
 
         public override void FixedUpdate()
@@ -36,11 +50,6 @@ namespace LayerZero.Characters.Enemies.States
             base.Exit();
 
             Movement.SetVelocityX(0f);
-        }
-
-        private bool IsBlocked()
-        {
-            return !Movement.IsGrounded || Movement.IsWalled;
         }
     }
 }

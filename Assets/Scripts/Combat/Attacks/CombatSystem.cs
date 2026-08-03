@@ -1,16 +1,26 @@
 using System.Collections.Generic;
 using LayerZero.Core.Diagnostics;
-using LayerZero.Core.Extensions;
 using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
+    /// <summary>
+    /// The character's combat facade. Holds one executor per <see cref="AttackKind" />, arms the
+    /// attack a state is about to perform and fires it on the animation's hit event.
+    /// <para>
+    /// States only say "I am attacking with this definition"; nothing in a state knows whether
+    /// that means a hitbox overlap or a projectile.
+    /// </para>
+    /// </summary>
     public sealed class CombatSystem : MonoBehaviour
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
 
-        private IAttackEvents _attackEvents;
+        private IAttackAnimatorEvents _animatorEvents;
         private AttackDefinition _armedAttack;
+
+        /// <summary>Executors discovered on this character, keyed by the attack kind they serve.</summary>
+        public IReadOnlyDictionary<AttackKind, IAttackExecutor> Executors => _executors;
 
         private void Awake()
         {
@@ -25,21 +35,37 @@ namespace LayerZero.Combat.Attacks
                 executor.Initialize(transform);
             }
 
-            _attackEvents = this.GetRequiredInChildren<IAttackEvents>();
+            _animatorEvents = GetComponentInChildren<IAttackAnimatorEvents>(true);
+            if (_animatorEvents == null)
+            {
+                GameLog.Error(this, $"'{name}' has no {nameof(IAttackAnimatorEvents)} in its hierarchy - attacks will never land.");
+            }
         }
 
         private void OnEnable()
         {
-            _attackEvents.AttackHit += OnAttackHit;
+            if (_animatorEvents != null)
+            {
+                _animatorEvents.AttackHit += OnAttackHit;
+            }
         }
 
         private void OnDisable()
         {
-            _attackEvents.AttackHit -= OnAttackHit;
+            if (_animatorEvents != null)
+            {
+                _animatorEvents.AttackHit -= OnAttackHit;
+            }
 
-            Disarm();
+            _armedAttack = null;
         }
 
+        public bool Supports(AttackKind kind)
+        {
+            return _executors.ContainsKey(kind);
+        }
+
+        /// <summary>Arms the attack whose hit event is about to fire. Called from an attack state's Enter().</summary>
         public void Arm(AttackDefinition attack)
         {
             if (attack == null)
@@ -57,11 +83,6 @@ namespace LayerZero.Combat.Attacks
             _armedAttack = attack;
         }
 
-        public void Disarm()
-        {
-            _armedAttack = null;
-        }
-
         public bool IsInRange(AttackKind kind, Transform target)
         {
             return target && _executors.TryGetValue(kind, out IAttackExecutor executor) && executor.IsInRange(target);
@@ -71,6 +92,7 @@ namespace LayerZero.Combat.Attacks
         {
             if (_armedAttack == null)
             {
+                GameLog.Error(this, $"Attack hit event fired on '{name}' with no armed attack.");
                 return;
             }
 

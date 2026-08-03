@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
+    /// <summary>Authoring data for one attack: what it does and how it is delivered.</summary>
     [Serializable]
     public sealed class AttackDefinition
     {

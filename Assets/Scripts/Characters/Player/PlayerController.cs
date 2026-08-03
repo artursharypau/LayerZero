@@ -1,188 +1,64 @@
-using System.Collections.Generic;
-using System.Linq;
-using Characters.Common;
-using Characters.Player.Abilities;
-using Characters.Player.Abilities.Chargeable;
-using Characters.Player.Abilities.Config;
-using Characters.Player.Abilities.Tickable;
-using Characters.Player.Input;
-using Characters.Player.States;
-using Core.StateMachine;
-using Systems.Damage;
+using LayerZero.Characters.Common;
+using LayerZero.Characters.Common.Abilities;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Config;
+using LayerZero.Characters.Player.Input;
+using LayerZero.Characters.Player.States;
+using LayerZero.Combat.Damage;
+using LayerZero.Core.StateMachine;
 using UnityEngine;
 
-namespace Characters.Player
+namespace LayerZero.Characters.Player
 {
-    public sealed class PlayerController : CharacterController2D
+    /// <summary>
+    /// The player's composition root. It declares which modules and states the player has and
+    /// nothing else - no tuning fields, no per-frame logic, no combat rules.
+    /// </summary>
+    public sealed class PlayerController : Character
     {
-        [Header("Movement details")]
-        [SerializeField] private float _moveSpeed = 9f;
-        [SerializeField] [Range(0, 1)] private float _inAirMoveMultiplier = 0.5f;
-        [SerializeField] [Range(0, 1)] private float _wallSlideMultiplier = 0.8f;
-        [SerializeField] private PlayerJumpAbilityConfig _jumpConfig;
-        [SerializeField] private PlayerDashAbilityConfig _dashConfig;
+        [SerializeField] private PlayerConfig _config;
 
-        [Header("Attack details")]
-        [SerializeField] private int _attacksCount = 3;
-        [SerializeField] private Vector2[] _attackVelocities =
+        private PlayerInputModule _input;
+
+        public PlayerConfig Config => _config;
+        public IPlayerInput Input => _input;
+        public AbilitySet<PlayerAbilityId> Abilities { get; private set; }
+
+        protected override void Compose()
         {
-            new(3f, 1.5f),
-            new(1f, 2.5f),
-            new(4f, 5f)
-        };
-        [SerializeField] private float _attackVelocityDuration = 0.1f;
-        [SerializeField] private float _attackResetTime = 1f;
-        [SerializeField] private DamageDefinition[] _attackDefinitions =
-        {
-            new(15, DamageSource.Player, new Vector2(4f, 0f)),
-            new(15, DamageSource.Player, new Vector2(4f, 0f)),
-            new(25, DamageSource.Player, new Vector2(7f, 3f))
-        };
-        [SerializeField] private Vector2 _jumpAttackVelocity = new(3f, -5f);
-        [SerializeField] private DamageDefinition _jumpAttackDefinition = new(40, DamageSource.Player, new Vector2(3f, 0f), 0.2f);
+            _input = AddModule(new PlayerInputModule(_config.Input));
 
-        [SerializeField] private PlayerInputHandler _inputHandler;
+            Abilities = AddModule(new AbilitySet<PlayerAbilityId>()
+                .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
+                .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement)));
 
-        private PlayerAbilityContext _abilityContext;
-        private Dictionary<PlayerAbilityId, IPlayerAbility> _abilities;
-        private IPlayerTickableAbility[] _tickableAbilities;
-
-        public float MoveSpeed => _moveSpeed;
-        public float InAirMoveMultiplier => _inAirMoveMultiplier;
-        public float WallSlideMultiplier => _wallSlideMultiplier;
-
-        public int AttacksCount => _attacksCount;
-        public Vector2[] AttackVelocities => _attackVelocities;
-        public float AttackVelocityDuration => _attackVelocityDuration;
-        public float AttackResetTime => _attackResetTime;
-        public DamageDefinition[] AttackDefinitions => _attackDefinitions;
-        public Vector2 JumpAttackVelocity => _jumpAttackVelocity;
-        public DamageDefinition JumpAttackDefinition => _jumpAttackDefinition;
-
-        public IPlayerInput Input => _inputHandler;
-
-        public void ChangeState(PlayerStateId id, StateChangePriority priority = StateChangePriority.Normal)
-        {
-            ChangeState((int)id, priority);
-        }
-
-        public void ChangeState<TArg>(PlayerStateId id, TArg arg, StateChangePriority priority = StateChangePriority.Normal)
-        {
-            ChangeState((int)id, arg, priority);
-        }
-
-        public bool CanUseAbility(PlayerAbilityId id)
-        {
-            return TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext);
-        }
-
-        public bool TryTriggerAbility(PlayerAbilityId id)
-        {
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability.CanBeUsed(_abilityContext))
-            {
-                ability.Trigger(_abilityContext);
-                return true;
-            }
-
-            return false;
-        }
-
-        public void RefillChargeableAbility(PlayerAbilityId id)
-        {
-            if (TryGetChargeableAbility(id, out IPlayerChargeableAbility ability))
-            {
-                ability.Refill();
-            }
-        }
-
-        public void RefillChargeableAbility(PlayerAbilityId id, int amount)
-        {
-            if (TryGetChargeableAbility(id, out IPlayerChargeableAbility ability))
-            {
-                ability.RefillTo(amount);
-            }
-        }
-
-        protected override void OnAwakened()
-        {
-            _inputHandler.Initialize();
-            _abilityContext = new PlayerAbilityContext(Movement, _inputHandler);
-            _abilities = new Dictionary<PlayerAbilityId, IPlayerAbility>
-            {
-                { PlayerAbilityId.Jump, new PlayerJumpAbility(_jumpConfig) },
-                { PlayerAbilityId.Dash, new PlayerDashAbility(_dashConfig) }
-            };
-            _tickableAbilities = _abilities.Values.OfType<IPlayerTickableAbility>().ToArray();
-
-            RegisterState(new PlayerIdleState(this));
-            RegisterState(new PlayerMoveState(this));
-            RegisterState(new PlayerDashState(this, _dashConfig));
-            RegisterState(new PlayerJumpState(this, _jumpConfig));
-            RegisterState(new PlayerFallState(this));
-            RegisterState(new PlayerWallSlideState(this));
-            RegisterState(new PlayerWallJumpState(this, _jumpConfig));
-            RegisterState(new PlayerAttackState(this));
-            RegisterState(new PlayerJumpAttackState(this));
-            RegisterState(new PlayerHurtState(this));
-        }
-
-        protected override void OnEnabled()
-        {
-            _inputHandler.Enable();
+            States.Register(new PlayerIdleState(this));
+            States.Register(new PlayerMoveState(this));
+            States.Register(new PlayerJumpState(this));
+            States.Register(new PlayerFallState(this));
+            States.Register(new PlayerWallSlideState(this));
+            States.Register(new PlayerWallJumpState(this));
+            States.Register(new PlayerDashState(this));
+            States.Register(new PlayerAttackState(this));
+            States.Register(new PlayerJumpAttackState(this));
+            States.Register(new PlayerHurtState(this));
+            States.Register(new PlayerDeadState(this));
         }
 
         protected override void OnStarted()
         {
-            StartStateMachine((int)PlayerStateId.Idle);
-            RefillChargeableAbility(PlayerAbilityId.Jump);
+            Abilities.Refill(PlayerAbilityId.Jump);
+            States.Start<PlayerIdleState>();
         }
 
-        protected override void OnUpdated()
+        protected override void OnImpactReceived(DamageImpactInfo impact)
         {
-            _inputHandler.Tick(Time.deltaTime);
-
-            foreach (IPlayerTickableAbility ability in _tickableAbilities)
-            {
-                ability.Tick(Time.deltaTime);
-            }
+            States.ChangeState<PlayerHurtState, DamageImpactInfo>(impact, StateTransitionMode.Immediate);
         }
 
-        protected override void OnDisabled()
+        protected override void OnDied()
         {
-            _inputHandler.Disable();
-        }
-
-        protected override void OnDestroyed()
-        {
-            _inputHandler.Dispose();
-        }
-
-        protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
-        {
-            ChangeState(PlayerStateId.Hurt, damageImpact, StateChangePriority.Interrupt);
-        }
-
-        private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)
-        {
-            if (_abilities.TryGetValue(id, out ability))
-            {
-                return true;
-            }
-
-            Debug.unityLogger.LogError($"{nameof(PlayerController)}.{nameof(TryGetAbility)}", $"Ability '{id}' is not registered");
-            return false;
-        }
-
-        private bool TryGetChargeableAbility(PlayerAbilityId id, out IPlayerChargeableAbility chargeableAbility)
-        {
-            if (TryGetAbility(id, out IPlayerAbility ability) && ability is IPlayerChargeableAbility chargeable)
-            {
-                chargeableAbility = chargeable;
-                return true;
-            }
-
-            chargeableAbility = null;
-            return false;
+            States.ChangeState<PlayerDeadState>(StateTransitionMode.Immediate);
         }
     }
 }

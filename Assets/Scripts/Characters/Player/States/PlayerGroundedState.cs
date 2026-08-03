@@ -1,17 +1,15 @@
-using Characters.Common.Animation;
-using Characters.Player.Abilities;
-using Characters.Player.Input;
+using LayerZero.Characters.Common.Animation;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Input;
 using UnityEngine;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
+    /// <summary>Everything that is true while standing on the ground: jump refill, attack, jump, falling off.</summary>
     public abstract class PlayerGroundedState : PlayerState
     {
-        protected PlayerGroundedState(
-            PlayerController controller,
-            int animParameterHash,
-            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(controller, animParameterHash, animParameterType)
+        protected PlayerGroundedState(PlayerController owner, AnimatorParameter parameter)
+            : base(owner, parameter)
         {
         }
 
@@ -19,7 +17,7 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            Controller.RefillChargeableAbility(PlayerAbilityId.Jump);
+            Owner.Abilities.Refill(PlayerAbilityId.Jump);
         }
 
         public override bool TryTransition()
@@ -29,15 +27,15 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Input.WasPerformed(PlayerInputAction.Attack))
+            if (Input.WasPerformed(PlayerInputAction.Attack))
             {
-                Controller.ChangeState(PlayerStateId.Attack);
+                ChangeTo<PlayerAttackState>();
                 return true;
             }
 
-            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
+            if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
             {
-                Controller.ChangeState(PlayerStateId.Jump);
+                ChangeTo<PlayerJumpState>();
                 return true;
             }
 
@@ -51,19 +49,18 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.IsFalling)
+            if (Movement.IsFalling)
             {
-                Controller.ChangeState(PlayerStateId.Fall);
+                ChangeTo<PlayerFallState>();
                 return true;
             }
 
             return false;
         }
 
-        protected bool IsRunningIntoWall()
+        protected bool IsPushingIntoWall()
         {
-            return Controller.Movement.IsWalled
-                && Mathf.Approximately(Controller.Input.Move.x, Controller.Movement.FacingDirection);
+            return Movement.IsWalled && Mathf.Approximately(Input.Move.x, Movement.FacingDirection);
         }
     }
 }

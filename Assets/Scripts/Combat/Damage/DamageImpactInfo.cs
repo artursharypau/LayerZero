@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage
 {
+    /// <summary>Resolved, world-space physical reaction to a hit.</summary>
     public readonly struct DamageImpactInfo
     {
         public static readonly DamageImpactInfo None = default;

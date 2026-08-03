@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.Abilities
 {
+    /// <summary>Bounded counter behind every <see cref="IChargeableAbility" />.</summary>
     public sealed class AbilityCharges
     {
         private readonly int _max;
@@ -14,6 +15,8 @@ namespace LayerZero.Characters.Common.Abilities
             _available = _max;
         }
 
+        public int Available => _available;
+        public int Max => _max;
         public bool HasCharges => _available > 0;
 
         public void Consume()

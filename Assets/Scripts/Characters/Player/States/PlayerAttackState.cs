@@ -1,51 +1,55 @@
-using Characters.Common.Animation;
-using Characters.Common.States;
-using Characters.Player.Animation;
-using Characters.Player.Input;
-using Core.Utils;
+using LayerZero.Characters.Common.Animation;
+using LayerZero.Characters.Common.States;
+using LayerZero.Characters.Player.Animation;
+using LayerZero.Characters.Player.Config;
+using LayerZero.Characters.Player.Input;
+using LayerZero.Combat.Attacks;
+using LayerZero.Core.Timing;
 using UnityEngine;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerAttackState : AttackState<PlayerController>
+    /// <summary>
+    /// Ground combo. The state owns the combo cursor; each swing's lunge and damage come from
+    /// one <see cref="AttackComboStep" />, so combo length is pure data.
+    /// </summary>
+    public sealed class PlayerAttackState : AttackStateBase<PlayerController>
     {
-        private readonly int _startIndex;
-        private readonly int _lastIndex;
-        private readonly CountdownTimer _velocityTimer;
+        private readonly CountdownTimer _lungeTimer = new();
 
-        private int _currIndex;
-        private float _finishedTime;
-        private bool _nextAttackQueued;
+        private int _stepIndex;
+        private float _lastFinishedTime = float.NegativeInfinity;
+        private bool _isNextQueued;
 
-        public override int Id => (int)PlayerStateId.Attack;
-
-        public PlayerAttackState(PlayerController controller)
-            : base(controller, AnimatorHashProvider.Attack)
+        public PlayerAttackState(PlayerController owner)
+            : base(owner, CommonAnimatorParameters.Attack)
         {
-            _startIndex = 0;
-            _lastIndex = Controller.AttacksCount - 1;
-            _velocityTimer = new CountdownTimer();
+        }
+
+        private PlayerAttackSettings Settings => Owner.Config.Attack;
+
+        protected override void OnPrepareAttack()
+        {
+            _isNextQueued = false;
+
+            AdvanceComboCursor();
+            Animation.SetInt(PlayerAnimatorParameters.AttackIndex, _stepIndex);
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _nextAttackQueued = false;
-
-            SetIndex();
-            ApplyVelocity();
-
-            Controller.Combat.SetActiveAttackDefinition(Controller.AttackDefinitions[_currIndex]);
+            ApplyLunge();
         }
 
         public override void Update()
         {
             base.Update();
 
-            if (Controller.Input.WasPerformed(PlayerInputAction.Attack))
+            if (Owner.Input.WasPerformed(PlayerInputAction.Attack))
             {
-                _nextAttackQueued = true;
+                _isNextQueued = true;
             }
         }
 
@@ -53,53 +57,69 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            _velocityTimer.Tick(Time.fixedDeltaTime);
-            if (_velocityTimer.IsExpired)
+            _lungeTimer.Tick(Time.fixedDeltaTime);
+            if (_lungeTimer.IsExpired)
             {
-                Controller.Movement.SetVelocityX(0f);
+                Movement.SetVelocityX(0f);
             }
+        }
+
+        protected override AttackDefinition ResolveAttack()
+        {
+            return Settings.GetStep(_stepIndex)?.Attack;
         }
 
         protected override void OnAttackFinished()
         {
-            ++_currIndex;
-            _finishedTime = Time.time;
+            ++_stepIndex;
+            _lastFinishedTime = Time.time;
 
-            if (!_nextAttackQueued || _currIndex > _lastIndex)
+            if (_isNextQueued && _stepIndex < Settings.ComboLength)
             {
-                Controller.ChangeState(Controller.Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
+                ChangeTo<PlayerAttackState>();
+                return;
             }
-            else
+
+            ChangeToLocomotion();
+        }
+
+        private void AdvanceComboCursor()
+        {
+            bool comboExpired = Time.time - _lastFinishedTime > Settings.ComboResetDelay;
+            if (comboExpired || _stepIndex >= Settings.ComboLength)
             {
-                Controller.ChangeState(PlayerStateId.Attack);
+                _stepIndex = 0;
             }
         }
 
-        private void SetIndex()
+        private void ApplyLunge()
         {
-            bool comboExpired = Time.time - _finishedTime > Controller.AttackResetTime;
-            if (comboExpired || _currIndex > _lastIndex)
+            AttackComboStep step = Settings.GetStep(_stepIndex);
+            if (step == null)
             {
-                _currIndex = _startIndex;
+                return;
+            }
+
+            _lungeTimer.Start(Settings.VelocityDuration);
+
+            // Lunge follows the stick when the player is steering, otherwise the current facing.
+            float velocityX = Owner.Input.Move.x != 0f
+                ? Owner.Input.Move.x * step.Velocity.x
+                : step.Velocity.x * Movement.FacingDirection;
+
+            Movement.SetVelocity(velocityX, step.Velocity.y);
+        }
+
+        private void ChangeToLocomotion()
+        {
+            if (Owner.Input.Move.x != 0f)
+            {
+                ChangeTo<PlayerMoveState>();
             }
             else
             {
-                _currIndex = _currIndex > _lastIndex ? _startIndex : _currIndex;
+                ChangeTo<PlayerIdleState>();
             }
-
-            Anim.SetInteger(PlayerAnimatorHashProvider.AttackIndex, _currIndex);
-        }
-
-        private void ApplyVelocity()
-        {
-            _velocityTimer.Start(Controller.AttackVelocityDuration);
-
-            Vector2 velocity = Controller.AttackVelocities[_currIndex];
-            float velocityX = Controller.Input.Move.x != 0f
-                ? Controller.Input.Move.x * velocity.x
-                : velocity.x * Controller.Movement.FacingDirection;
-
-            Controller.Movement.SetVelocity(velocityX, velocity.y);
         }
     }
 }

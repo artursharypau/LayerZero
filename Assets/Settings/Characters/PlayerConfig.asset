@@ -22,7 +22,6 @@ MonoBehaviour:
   _jump:
     _charges: 2
     _force: 13
-    _fallGravityMultiplier: 1.6
     _wallJumpForce: {x: 6, y: 12}
     _wallJumpMoveLockDuration: 0.2
   _dash:
@@ -37,24 +36,24 @@ MonoBehaviour:
         _damage:
           _amount: 15
           _source: 1
-          _knockback: {x: 1, y: 3}
-          _stunDuration: 0.2
+          _knockback: {x: 4, y: 0}
+          _stunDuration: 0
     - _velocity: {x: 1, y: 2.5}
       _attack:
         _kind: 0
         _damage:
           _amount: 15
           _source: 1
-          _knockback: {x: 2, y: 5}
-          _stunDuration: 0.2
+          _knockback: {x: 4, y: 0}
+          _stunDuration: 0
     - _velocity: {x: 4, y: 5}
       _attack:
         _kind: 0
         _damage:
           _amount: 25
           _source: 1
-          _knockback: {x: 3, y: 7}
-          _stunDuration: 0.3
+          _knockback: {x: 7, y: 3}
+          _stunDuration: 0
     _velocityDuration: 0.1
     _comboResetDelay: 1
   _jumpAttack:
@@ -64,5 +63,5 @@ MonoBehaviour:
       _damage:
         _amount: 40
         _source: 1
-        _knockback: {x: 5, y: 9}
-        _stunDuration: 0.5
+        _knockback: {x: 3, y: 0}
+        _stunDuration: 0.2

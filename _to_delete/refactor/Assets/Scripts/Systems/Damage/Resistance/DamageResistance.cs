@@ -26,7 +26,7 @@ namespace Systems.Damage.Resistance
 
         public static DamageResistance Create()
         {
-            return new DamageResistance();
+            return new DamageResistance { KnockbackReduceMultiplier = 1f };
         }
     }
 }

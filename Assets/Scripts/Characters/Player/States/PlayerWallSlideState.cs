@@ -1,16 +1,14 @@
-using Characters.Player.Abilities;
-using Characters.Player.Animation;
-using Characters.Player.Input;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Animation;
+using LayerZero.Characters.Player.Input;
 using UnityEngine;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerWallSlideState : PlayerInAirState
+    public sealed class PlayerWallSlideState : PlayerInAirState
     {
-        public override int Id => (int)PlayerStateId.WallSlide;
-
-        public PlayerWallSlideState(PlayerController controller)
-            : base(controller, PlayerAnimatorHashProvider.WallSlide)
+        public PlayerWallSlideState(PlayerController owner)
+            : base(owner, PlayerAnimatorParameters.WallSlide)
         {
         }
 
@@ -18,8 +16,10 @@ namespace Characters.Player.States
         {
             base.Enter();
 
-            EnableMovement(false);
-            Controller.RefillChargeableAbility(PlayerAbilityId.Jump, 1);
+            SetMovementEnabled(false);
+
+            // Exactly one charge: the wall jump itself, no free double jump off a wall.
+            Owner.Abilities.RefillTo(PlayerAbilityId.Jump, 1);
         }
 
         public override bool TryTransition()
@@ -29,9 +29,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Input.WasPerformed(PlayerInputAction.Jump))
+            if (Input.WasPerformed(PlayerInputAction.Jump))
             {
-                Controller.ChangeState(PlayerStateId.WallJump);
+                ChangeTo<PlayerWallJumpState>();
                 return true;
             }
 
@@ -45,20 +45,16 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.IsGrounded)
+            if (Movement.IsGrounded)
             {
-                if (!Mathf.Approximately(Controller.Movement.FacingDirection, Controller.Input.Move.x))
-                {
-                    Controller.Movement.Flip();
-                }
-
-                Controller.ChangeState(PlayerStateId.Idle);
+                Movement.FaceTowards(Input.Move.x);
+                ChangeTo<PlayerIdleState>();
                 return true;
             }
 
-            if (!Controller.Movement.IsWalled && Controller.Movement.IsFalling)
+            if (!Movement.IsWalled && Movement.IsFalling)
             {
-                Controller.ChangeState(PlayerStateId.Fall);
+                ChangeTo<PlayerFallState>();
                 return true;
             }
 
@@ -69,16 +65,12 @@ namespace Characters.Player.States
         {
             base.FixedUpdate();
 
-            HandleSliding();
-        }
+            // Holding "down" cancels the slow-down and drops at full speed.
+            float velocityY = Input.Move.y < 0f
+                ? Movement.VelocityY
+                : Movement.VelocityY * Config.Movement.WallSlideMultiplier;
 
-        private void HandleSliding()
-        {
-            float velocityY = Controller.Input.Move.y < 0f
-                ? Controller.Movement.VelocityY
-                : Controller.Movement.VelocityY * Controller.WallSlideMultiplier;
-
-            Controller.Movement.SetVelocity(0f, velocityY);
+            Movement.SetVelocity(0f, velocityY);
         }
     }
 }

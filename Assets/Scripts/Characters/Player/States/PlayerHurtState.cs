@@ -1,26 +1,31 @@
-using Characters.Common.Animation;
-using Characters.Common.States;
+using LayerZero.Characters.Common.Animation;
+using LayerZero.Characters.Common.States;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerHurtState : HurtState<PlayerController>
+    public sealed class PlayerHurtState : HurtStateBase<PlayerController>
     {
-        public override int Id => (int)PlayerStateId.Hurt;
-
-        public PlayerHurtState(PlayerController controller)
-            : base(controller, AnimatorHashProvider.Hurt, AnimatorParameterType.Bool)
+        public PlayerHurtState(PlayerController owner)
+            : base(owner, CommonAnimatorParameters.Hurt)
         {
         }
 
         protected override void OnHurtFinished()
         {
-            if (!Controller.Movement.IsGrounded)
+            if (!Movement.IsGrounded)
             {
-                Controller.ChangeState(PlayerStateId.Fall);
+                ChangeTo<PlayerFallState>();
                 return;
             }
 
-            Controller.ChangeState(Controller.Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle);
+            if (Owner.Input.Move.x != 0f)
+            {
+                ChangeTo<PlayerMoveState>();
+            }
+            else
+            {
+                ChangeTo<PlayerIdleState>();
+            }
         }
     }
 }

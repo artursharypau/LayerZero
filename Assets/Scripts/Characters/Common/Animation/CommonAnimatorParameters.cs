@@ -1,5 +1,6 @@
 namespace LayerZero.Characters.Common.Animation
 {
+    /// <summary>Parameters every character's animator is expected to expose.</summary>
     public static class CommonAnimatorParameters
     {
         public static readonly AnimatorParameter Idle = new("idle", AnimatorParameterKind.Bool);
