@@ -13,10 +13,5 @@ namespace LayerZero.Core.Collisions
         {
             return gameObject && mask.Contains(gameObject.layer);
         }
-
-        public static bool Contains(this LayerMask mask, Component component)
-        {
-            return component && mask.Contains(component.gameObject.layer);
-        }
     }
 }

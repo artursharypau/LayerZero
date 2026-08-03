@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>Pushes away from the wall and locks horizontal control briefly so the jump reads.</summary>
     public sealed class PlayerWallJumpState : PlayerInAirState
     {
         private readonly CountdownTimer _moveLockTimer = new();

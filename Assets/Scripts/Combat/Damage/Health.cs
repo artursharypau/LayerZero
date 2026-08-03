@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage
 {
-    /// <summary>Plain health pool. Deliberately unaware of resistances, sources and reactions.</summary>
     public sealed class Health : MonoBehaviour, IDamageable
     {
         [SerializeField] [Min(1)] private int _max = 100;
@@ -27,28 +26,13 @@ namespace LayerZero.Combat.Damage
                 return;
             }
 
-            SetHealth(CurrentHealth - amount);
+            CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, _max);
+            HealthChanged?.Invoke(CurrentHealth);
 
             if (IsDead)
             {
                 Died?.Invoke();
             }
-        }
-
-        public void Heal(int amount)
-        {
-            if (IsDead || amount <= 0)
-            {
-                return;
-            }
-
-            SetHealth(CurrentHealth + amount);
-        }
-
-        private void SetHealth(int value)
-        {
-            CurrentHealth = Mathf.Clamp(value, 0, _max);
-            HealthChanged?.Invoke(CurrentHealth);
         }
     }
 }

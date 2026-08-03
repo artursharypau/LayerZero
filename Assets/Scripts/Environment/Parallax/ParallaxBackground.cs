@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace LayerZero.Environment.Parallax
 {
-    /// <summary>Drives a stack of <see cref="ParallaxLayer" />s from the main camera's movement.</summary>
     public sealed class ParallaxBackground : MonoBehaviour
     {
         [SerializeField] private ParallaxLayer[] _layers;

@@ -6,10 +6,6 @@ using LayerZero.Characters.Player.Input;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>
-    /// Base for player states. Adds the shortcuts every player state needs and the one
-    /// transition that is allowed from anywhere: the dash.
-    /// </summary>
     public abstract class PlayerState : CharacterState<PlayerController>
     {
         protected PlayerState(PlayerController owner, AnimatorParameter parameter)

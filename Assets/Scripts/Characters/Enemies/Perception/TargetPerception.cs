@@ -9,14 +9,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.Perception
 {
-    /// <summary>
-    /// The enemy's senses, as a module: line-of-sight scanning on an interval, memory of the last
-    /// target, and aggro from being hit. States only read the results.
-    /// <para>
-    /// A different archetype gets different senses by swapping this module or its settings -
-    /// no changes to the shared controller.
-    /// </para>
-    /// </summary>
     public sealed class TargetPerception : CharacterModule
     {
         private readonly PerceptionSettings _settings;
@@ -40,7 +32,6 @@ namespace LayerZero.Characters.Enemies.Perception
         public Transform Target { get; private set; }
         public bool HasTarget => Target;
 
-        /// <summary>-1 / +1 towards the target, 0 when there is none.</summary>
         public float DirectionToTarget
         {
             get
@@ -88,7 +79,6 @@ namespace LayerZero.Characters.Enemies.Perception
             ClearTarget();
         }
 
-        /// <summary>Being hit from outside the field of view still pulls aggro.</summary>
         public void NotifyDamaged(DamageInfo damageInfo)
         {
             if (damageInfo.Source == DamageSource.Player && damageInfo.Attacker)

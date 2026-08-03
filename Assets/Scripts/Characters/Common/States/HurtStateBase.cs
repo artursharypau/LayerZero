@@ -6,14 +6,9 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.States
 {
-    /// <summary>
-    /// Shared stun/knockback reaction. Receives the impact as a payload, applies it once and
-    /// hands control back to the character when the lock expires.
-    /// </summary>
     public abstract class HurtStateBase<TCharacter> : CharacterState<TCharacter>, IStatePayload<DamageImpactInfo>
         where TCharacter : Character
     {
-        /// <summary>Knockback with no explicit stun still needs a short lock, or it is cancelled instantly.</summary>
         private const float MinKnockbackLockDuration = 0.1f;
 
         private readonly CountdownTimer _timer = new();

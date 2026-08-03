@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
-    /// <summary>Overlap-based melee hitbox.</summary>
     public sealed class MeleeAttackExecutor : MonoBehaviour, IAttackExecutor
     {
         private const int TargetsBufferCapacity = 8;

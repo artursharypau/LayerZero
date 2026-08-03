@@ -10,10 +10,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player
 {
-    /// <summary>
-    /// The player's composition root. It declares which modules and states the player has and
-    /// nothing else - no tuning fields, no per-frame logic, no combat rules.
-    /// </summary>
     public sealed class PlayerController : Character
     {
         [SerializeField] private PlayerConfig _config;
@@ -28,37 +24,38 @@ namespace LayerZero.Characters.Player
         {
             _input = AddModule(new PlayerInputModule(_config.Input));
 
-            Abilities = AddModule(new AbilitySet<PlayerAbilityId>()
-                .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
-                .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement)));
+            Abilities = AddModule(
+                new AbilitySet<PlayerAbilityId>()
+                    .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
+                    .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement)));
 
-            States.Register(new PlayerIdleState(this));
-            States.Register(new PlayerMoveState(this));
-            States.Register(new PlayerJumpState(this));
-            States.Register(new PlayerFallState(this));
-            States.Register(new PlayerWallSlideState(this));
-            States.Register(new PlayerWallJumpState(this));
-            States.Register(new PlayerDashState(this));
-            States.Register(new PlayerAttackState(this));
-            States.Register(new PlayerJumpAttackState(this));
-            States.Register(new PlayerHurtState(this));
-            States.Register(new PlayerDeadState(this));
+            StateMachine.Register(new PlayerIdleState(this));
+            StateMachine.Register(new PlayerMoveState(this));
+            StateMachine.Register(new PlayerJumpState(this));
+            StateMachine.Register(new PlayerFallState(this));
+            StateMachine.Register(new PlayerWallSlideState(this));
+            StateMachine.Register(new PlayerWallJumpState(this));
+            StateMachine.Register(new PlayerDashState(this));
+            StateMachine.Register(new PlayerAttackState(this));
+            StateMachine.Register(new PlayerJumpAttackState(this));
+            StateMachine.Register(new PlayerHurtState(this));
+            StateMachine.Register(new PlayerDeadState(this));
         }
 
         protected override void OnStarted()
         {
             Abilities.Refill(PlayerAbilityId.Jump);
-            States.Start<PlayerIdleState>();
+            StateMachine.Start<PlayerIdleState>();
         }
 
         protected override void OnImpactReceived(DamageImpactInfo impact)
         {
-            States.ChangeState<PlayerHurtState, DamageImpactInfo>(impact, StateTransitionMode.Immediate);
+            StateMachine.ChangeState<PlayerHurtState, DamageImpactInfo>(impact, StateTransitionMode.Immediate);
         }
 
         protected override void OnDied()
         {
-            States.ChangeState<PlayerDeadState>(StateTransitionMode.Immediate);
+            StateMachine.ChangeState<PlayerDeadState>(StateTransitionMode.Immediate);
         }
     }
 }

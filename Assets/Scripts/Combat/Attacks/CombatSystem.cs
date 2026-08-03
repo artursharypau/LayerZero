@@ -4,14 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
-    /// <summary>
-    /// The character's combat facade. Holds one executor per <see cref="AttackKind" />, arms the
-    /// attack a state is about to perform and fires it on the animation's hit event.
-    /// <para>
-    /// States only say "I am attacking with this definition"; nothing in a state knows whether
-    /// that means a hitbox overlap or a projectile.
-    /// </para>
-    /// </summary>
     public sealed class CombatSystem : MonoBehaviour
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
@@ -19,7 +11,6 @@ namespace LayerZero.Combat.Attacks
         private IAttackAnimatorEvents _animatorEvents;
         private AttackDefinition _armedAttack;
 
-        /// <summary>Executors discovered on this character, keyed by the attack kind they serve.</summary>
         public IReadOnlyDictionary<AttackKind, IAttackExecutor> Executors => _executors;
 
         private void Awake()
@@ -65,7 +56,6 @@ namespace LayerZero.Combat.Attacks
             return _executors.ContainsKey(kind);
         }
 
-        /// <summary>Arms the attack whose hit event is about to fire. Called from an attack state's Enter().</summary>
         public void Arm(AttackDefinition attack)
         {
             if (attack == null)

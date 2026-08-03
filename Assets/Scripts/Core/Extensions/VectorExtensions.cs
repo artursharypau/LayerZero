@@ -14,7 +14,6 @@ namespace LayerZero.Core.Extensions
             return new Vector2(value.x, y);
         }
 
-        /// <summary>Mirrors the x component along a facing direction (-1 / +1).</summary>
         public static Vector2 AlongFacing(this Vector2 value, float facingDirection)
         {
             return new Vector2(value.x * facingDirection, value.y);

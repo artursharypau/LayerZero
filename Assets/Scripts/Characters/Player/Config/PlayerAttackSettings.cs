@@ -13,7 +13,6 @@ namespace LayerZero.Characters.Player.Config
         public int ComboLength => _combo?.Length ?? 0;
         public float VelocityDuration => _velocityDuration;
 
-        /// <summary>How long after a swing the combo still continues instead of restarting.</summary>
         public float ComboResetDelay => _comboResetDelay;
 
         public AttackComboStep GetStep(int index)

@@ -6,10 +6,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
-    /// <summary>
-    /// Pooled projectile. Carries the authoring damage and resolves it at impact using its own
-    /// orientation, so knockback follows the flight direction rather than the shooter's facing.
-    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public sealed class Projectile : MonoBehaviour
     {

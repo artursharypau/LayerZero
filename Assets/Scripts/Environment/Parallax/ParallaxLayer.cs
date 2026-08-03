@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace LayerZero.Environment.Parallax
 {
-    /// <summary>
-    /// One depth slice of the background: scrolls at its own rate and recycles its sprites
-    /// so a finite strip covers an infinite level.
-    /// </summary>
     [Serializable]
     public sealed class ParallaxLayer
     {
@@ -14,8 +10,8 @@ namespace LayerZero.Environment.Parallax
 
         [SerializeField] private Transform _root;
 
-        [Tooltip("0 = pinned to the camera, 1 = moves with the world.")]
-        [SerializeField] [Range(0f, 1f)] private float _multiplier = 0.5f;
+        [Tooltip("0 = pinned to the camera, 1 = moves with the world.")] [SerializeField] [Range(0f, 1f)]
+        private float _multiplier = 0.5f;
 
         private Transform[] _sprites;
         private float _spriteWidth;

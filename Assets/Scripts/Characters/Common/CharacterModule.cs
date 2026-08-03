@@ -1,14 +1,5 @@
 namespace LayerZero.Characters.Common
 {
-    /// <summary>
-    /// A self-contained slice of character behaviour that is not a state: input, abilities,
-    /// perception, stamina, buffs...
-    /// <para>
-    /// Modules are how a controller stays thin - it only declares which modules a character has,
-    /// it does not implement them. A new enemy archetype adds a module instead of adding fields
-    /// and Update() branches to a shared controller.
-    /// </para>
-    /// </summary>
     public abstract class CharacterModule
     {
         protected Character Owner { get; private set; }

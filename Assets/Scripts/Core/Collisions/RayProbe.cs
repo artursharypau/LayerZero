@@ -3,20 +3,14 @@ using UnityEngine;
 
 namespace LayerZero.Core.Collisions
 {
-    /// <summary>
-    /// A set of raycast origins sampled in the same direction - the reusable building block
-    /// behind ground / wall / ledge checks. Serialize one per check on the character prefab.
-    /// </summary>
     [Serializable]
     public sealed class RayProbe
     {
         [SerializeField] private Transform[] _origins = Array.Empty<Transform>();
         [SerializeField] [Min(0f)] private float _distance = 0.2f;
 
-        public float Distance => _distance;
-        public bool IsConfigured => _origins is { Length: > 0 };
+        private bool IsConfigured => _origins != null && _origins.Length > 0;
 
-        /// <summary>True only when every origin hits something on <paramref name="mask" />.</summary>
         public bool AllHit(Vector2 direction, LayerMask mask)
         {
             if (!IsConfigured)
@@ -35,7 +29,6 @@ namespace LayerZero.Core.Collisions
             return true;
         }
 
-        /// <summary>True when at least one origin hits something on <paramref name="mask" />.</summary>
         public bool AnyHit(Vector2 direction, LayerMask mask)
         {
             if (!IsConfigured)

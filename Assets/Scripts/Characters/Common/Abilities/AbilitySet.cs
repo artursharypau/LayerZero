@@ -4,24 +4,15 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Characters.Common.Abilities
 {
-    /// <summary>
-    /// Character module that owns a character's abilities and ticks the ones that need it.
-    /// Keyed by an archetype-specific enum, so each character family declares its own ability set
-    /// without a shared registry to extend.
-    /// </summary>
-    public class AbilitySet<TId> : CharacterModule where TId : struct, Enum
+    public class AbilitySet<TId> : CharacterModule
+        where TId : struct, Enum
     {
         private readonly Dictionary<TId, IAbility> _abilities = new();
         private readonly List<ITickableAbility> _tickable = new();
 
         public AbilitySet<TId> Add(TId id, IAbility ability)
         {
-            if (ability == null)
-            {
-                throw new ArgumentNullException(nameof(ability));
-            }
-
-            _abilities[id] = ability;
+            _abilities[id] = ability ?? throw new ArgumentNullException(nameof(ability));
 
             if (ability is ITickableAbility tickable)
             {
@@ -36,7 +27,6 @@ namespace LayerZero.Characters.Common.Abilities
             return TryGet(id, out IAbility ability) && ability.CanUse();
         }
 
-        /// <summary>Uses the ability if it is available. Returns whether it actually fired.</summary>
         public bool TryUse(TId id)
         {
             if (!TryGet(id, out IAbility ability) || !ability.CanUse())

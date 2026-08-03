@@ -6,10 +6,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>
-    /// Gravity-free burst forward with invulnerability frames.
-    /// The i-frames are released by handle, so an overlapping resistance never cancels the wrong one.
-    /// </summary>
     public sealed class PlayerDashState : PlayerState
     {
         private readonly CountdownTimer _timer = new();
@@ -31,7 +27,6 @@ namespace LayerZero.Characters.Player.States
 
             if (!Owner.Abilities.TryUse(PlayerAbilityId.Dash))
             {
-                // Entered without the ability being available - bail out instead of hanging in the state.
                 ChangeTo<PlayerIdleState>();
                 return;
             }
@@ -39,7 +34,7 @@ namespace LayerZero.Characters.Player.States
             _timer.Start(Config.Dash.Duration);
             _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
 
-            _invulnerability = Owner.Resistances.Apply(DamageResistance.Create().WithInvulnerability());
+            _invulnerability = Owner.DamageResistances.Apply(DamageResistance.Create().WithInvulnerability());
 
             Movement.SetGravityScale(0f);
         }
@@ -89,7 +84,7 @@ namespace LayerZero.Characters.Player.States
             Movement.SetGravityScale(_defaultGravityScale);
             Movement.SetVelocityX(0f);
 
-            Owner.Resistances.Remove(_invulnerability);
+            Owner.DamageResistances.Remove(_invulnerability);
             _invulnerability = ResistanceHandle.None;
         }
     }

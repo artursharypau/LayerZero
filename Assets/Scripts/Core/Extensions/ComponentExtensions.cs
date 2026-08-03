@@ -5,27 +5,25 @@ namespace LayerZero.Core.Extensions
 {
     public static class ComponentExtensions
     {
-        /// <summary>
-        /// <see cref="Component.GetComponent{T}" /> that reports a readable error instead of
-        /// letting a null reference surface somewhere else a few frames later.
-        /// </summary>
-        public static T GetRequired<T>(this Component self) where T : class
+        public static TComponent GetRequired<TComponent>(this Component self)
+            where TComponent : class
         {
-            T component = self.GetComponent<T>();
+            TComponent component = self.GetComponent<TComponent>();
             if (component == null)
             {
-                GameLog.Error(self, $"'{self.name}' is missing a required component of type '{typeof(T).Name}'.");
+                GameLog.Error(self, $"'{self.name}' is missing a required component of type '{typeof(TComponent).Name}'.");
             }
 
             return component;
         }
 
-        public static T GetRequiredInChildren<T>(this Component self) where T : class
+        public static TComponent GetRequiredInChildren<TComponent>(this Component self)
+            where TComponent : class
         {
-            T component = self.GetComponentInChildren<T>(true);
+            TComponent component = self.GetComponentInChildren<TComponent>(true);
             if (component == null)
             {
-                GameLog.Error(self, $"'{self.name}' is missing a required child component of type '{typeof(T).Name}'.");
+                GameLog.Error(self, $"'{self.name}' is missing a required child component of type '{typeof(TComponent).Name}'.");
             }
 
             return component;

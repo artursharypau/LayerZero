@@ -2,10 +2,6 @@ using UnityEngine;
 
 namespace LayerZero.Core.Collisions
 {
-    /// <summary>
-    /// Project layer registry. One place that knows the layer names, so no gameplay code
-    /// ever calls <c>LayerMask.GetMask("...")</c> with a magic string.
-    /// </summary>
     public static class GameLayers
     {
         public const string GroundName = "Ground";

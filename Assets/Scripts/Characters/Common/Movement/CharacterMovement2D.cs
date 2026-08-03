@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.Movement
 {
-    /// <summary>
-    /// Rigidbody wrapper shared by every character. Owns velocity, facing and contact
-    /// detection; contains no decisions - those belong to states.
-    /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class CharacterMovement2D : MonoBehaviour, IMovable
     {
@@ -32,7 +28,6 @@ namespace LayerZero.Characters.Common.Movement
             _groundWallDetector.Initialize(this);
         }
 
-        /// <summary>Re-samples ground/wall contacts. Driven once per physics step by the character.</summary>
         public void Refresh()
         {
             _groundWallDetector.Refresh();
@@ -68,7 +63,6 @@ namespace LayerZero.Characters.Common.Movement
             transform.Rotate(0f, 180f, 0f);
             FacingDirection = -FacingDirection;
 
-            // Wall contacts are direction dependent, so they are stale the moment we turn.
             _groundWallDetector.Refresh();
         }
 

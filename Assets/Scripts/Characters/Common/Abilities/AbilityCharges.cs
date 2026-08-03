@@ -2,39 +2,36 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.Abilities
 {
-    /// <summary>Bounded counter behind every <see cref="IChargeableAbility" />.</summary>
     public sealed class AbilityCharges
     {
-        private readonly int _max;
-
-        private int _available;
-
         public AbilityCharges(int max)
         {
-            _max = Mathf.Max(0, max);
-            _available = _max;
+            Max = Mathf.Max(0, max);
+            Available = Max;
         }
 
-        public int Available => _available;
-        public int Max => _max;
-        public bool HasCharges => _available > 0;
+        public int Available { get; private set; }
+
+        public int Max { get; }
+
+        public bool HasCharges => Available > 0;
 
         public void Consume()
         {
-            if (_available > 0)
+            if (Available > 0)
             {
-                --_available;
+                --Available;
             }
         }
 
         public void Refill()
         {
-            _available = _max;
+            Available = Max;
         }
 
         public void RefillTo(int amount)
         {
-            _available = Mathf.Clamp(amount, 0, _max);
+            Available = Mathf.Clamp(amount, 0, Max);
         }
     }
 }

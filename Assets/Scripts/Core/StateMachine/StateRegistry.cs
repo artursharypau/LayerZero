@@ -3,23 +3,11 @@ using System.Collections.Generic;
 
 namespace LayerZero.Core.StateMachine
 {
-    /// <summary>
-    /// Resolves states by type.
-    /// <para>
-    /// A state is indexed twice: under its own concrete type and, as an alias, under every
-    /// non-abstract-root ancestor type. That is what makes characters extensible: a shared
-    /// state can request <c>ChangeState&lt;EnemyChaseState&gt;()</c> while a concrete enemy
-    /// registered <c>ArcherChaseState : EnemyChaseState</c> and gets its own behaviour.
-    /// </para>
-    /// <para>Exact registrations always win over aliases; ambiguous aliases fail loudly.</para>
-    /// </summary>
     public sealed class StateRegistry
     {
         private readonly Dictionary<Type, StateBase> _exact = new();
         private readonly Dictionary<Type, StateBase> _aliases = new();
         private readonly HashSet<Type> _ambiguousAliases = new();
-
-        public IReadOnlyCollection<StateBase> All => _exact.Values;
 
         public void Add(StateBase state)
         {

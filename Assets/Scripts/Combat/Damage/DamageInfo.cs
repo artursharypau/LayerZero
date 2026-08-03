@@ -2,13 +2,11 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage
 {
-    /// <summary>A hit in flight: authoring data resolved against a concrete attacker and impact space.</summary>
     public readonly struct DamageInfo
     {
         public readonly int Amount;
         public readonly DamageSource Source;
 
-        /// <summary>Who is responsible for the hit (used for aggro), not necessarily what touched the victim.</summary>
         public readonly Transform Attacker;
 
         public readonly DamageImpactInfo Impact;
@@ -31,10 +29,6 @@ namespace LayerZero.Combat.Damage
             return FromDefinition(definition, attacker, attacker);
         }
 
-        /// <param name="impactSpace">
-        /// Transform whose orientation defines the knockback direction. Differs from
-        /// <paramref name="attacker" /> for projectiles, where knockback follows the flight direction.
-        /// </param>
         public static DamageInfo FromDefinition(DamageDefinition definition, Transform attacker, Transform impactSpace)
         {
             DamageImpactInfo impact = DamageImpactInfo.None;

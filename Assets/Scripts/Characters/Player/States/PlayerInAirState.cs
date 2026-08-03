@@ -3,23 +3,20 @@ using LayerZero.Characters.Player.Input;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>Shared airborne behaviour: reduced air control and the dive attack.</summary>
     public abstract class PlayerInAirState : PlayerState
     {
-        private bool _isMovementEnabled = true;
-
         protected PlayerInAirState(PlayerController owner, AnimatorParameter parameter)
             : base(owner, parameter)
         {
         }
 
-        protected bool IsMovementEnabled => _isMovementEnabled;
+        protected bool IsMovementEnabled { get; private set; } = true;
 
         public override void Enter()
         {
             base.Enter();
 
-            _isMovementEnabled = true;
+            IsMovementEnabled = true;
         }
 
         public override bool TryTransition()
@@ -29,7 +26,7 @@ namespace LayerZero.Characters.Player.States
                 return true;
             }
 
-            if (_isMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack))
+            if (IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack))
             {
                 ChangeTo<PlayerJumpAttackState>();
                 return true;
@@ -49,7 +46,7 @@ namespace LayerZero.Characters.Player.States
         {
             base.FixedUpdate();
 
-            if (_isMovementEnabled && Input.Move.x != 0f)
+            if (IsMovementEnabled && Input.Move.x != 0f)
             {
                 Movement.SetVelocityX(
                     Config.Movement.MoveSpeed * Config.Movement.InAirMoveMultiplier * Input.Move.x,
@@ -59,7 +56,7 @@ namespace LayerZero.Characters.Player.States
 
         protected void SetMovementEnabled(bool enabled)
         {
-            _isMovementEnabled = enabled;
+            IsMovementEnabled = enabled;
         }
     }
 }

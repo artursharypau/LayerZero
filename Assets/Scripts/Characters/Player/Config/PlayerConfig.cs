@@ -2,11 +2,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.Config
 {
-    /// <summary>
-    /// All player tuning in one asset. The prefab holds references and scene wiring only,
-    /// so balance can be edited, versioned and swapped (difficulty, demo build) without
-    /// touching the prefab.
-    /// </summary>
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "LayerZero/Characters/Player Config")]
     public sealed class PlayerConfig : ScriptableObject
     {
