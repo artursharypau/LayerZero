@@ -145,14 +145,14 @@ namespace Characters.Common
             _stateMachineHolder.Start(initialId);
         }
 
-        protected void ChangeState(int id)
+        protected void ChangeState(int id, StateChangePriority priority = StateChangePriority.Normal)
         {
-            _stateMachineHolder.ChangeState(id);
+            _stateMachineHolder.ChangeState(id, priority);
         }
 
-        protected void ChangeState<TArg>(int id, TArg arg)
+        protected void ChangeState<TArg>(int id, TArg arg, StateChangePriority priority = StateChangePriority.Normal)
         {
-            _stateMachineHolder.ChangeState(id, arg);
+            _stateMachineHolder.ChangeState(id, arg, priority);
         }
 
         private void HandleDamaged(DamageInfo damageInfo)

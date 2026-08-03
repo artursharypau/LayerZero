@@ -42,9 +42,18 @@ namespace Characters.Common.States
 
         public override void Exit()
         {
-            if (_parameterType == AnimatorParameterType.Bool)
+            switch (_parameterType)
             {
-                Anim.SetBool(_parameterHash, false);
+                case AnimatorParameterType.None:
+                    break;
+                case AnimatorParameterType.Bool:
+                    Anim.SetBool(_parameterHash, false);
+                    break;
+                case AnimatorParameterType.Trigger:
+                    Anim.ResetTrigger(_parameterHash);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

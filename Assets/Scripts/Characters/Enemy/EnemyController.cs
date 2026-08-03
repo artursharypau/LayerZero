@@ -1,5 +1,6 @@
 using Characters.Common;
 using Characters.Enemy.States;
+using Core.StateMachine;
 using Systems.Combat;
 using Systems.Damage;
 using UnityEngine;
@@ -32,14 +33,14 @@ namespace Characters.Enemy
         public EnemyTargetDetector TargetDetector => _targetDetector;
         public DamageDefinition AttackDefinition => _attackDefinition;
 
-        public void ChangeState(EnemyStateId id)
+        public void ChangeState(EnemyStateId id, StateChangePriority priority = StateChangePriority.Normal)
         {
-            ChangeState((int)id);
+            ChangeState((int)id, priority);
         }
 
-        public void ChangeState<TArg>(EnemyStateId id, TArg arg)
+        public void ChangeState<TArg>(EnemyStateId id, TArg arg, StateChangePriority priority = StateChangePriority.Normal)
         {
-            ChangeState((int)id, arg);
+            ChangeState((int)id, arg, priority);
         }
 
         protected override void OnAwakened()
@@ -75,7 +76,7 @@ namespace Characters.Enemy
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            ChangeState(EnemyStateId.Hurt, damageImpact);
+            ChangeState(EnemyStateId.Hurt, damageImpact, StateChangePriority.Interrupt);
         }
     }
 }

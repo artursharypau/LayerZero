@@ -20,14 +20,24 @@ namespace Core.StateMachine
             Current.Enter();
         }
 
-        public void ChangeState(State newState)
+        public void ChangeState(State newState, StateChangePriority priority = StateChangePriority.Normal)
         {
             if (newState == null)
             {
                 return;
             }
 
-            Pending = newState;
+            if (priority == StateChangePriority.Interrupt)
+            {
+                Pending = null;
+                Current?.Exit();
+                Current = newState;
+                Current.Enter();
+            }
+            else
+            {
+                Pending = newState;
+            }
         }
 
         public void Update()
@@ -47,8 +57,6 @@ namespace Core.StateMachine
 
         public void FixedUpdate()
         {
-            ApplyPendingTransition();
-
             if (Current == null)
             {
                 return;
