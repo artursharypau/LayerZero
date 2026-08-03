@@ -1,7 +1,6 @@
 using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
 using LayerZero.Characters.Player.Input;
-using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
@@ -18,7 +17,6 @@ namespace LayerZero.Characters.Player.States
 
             SetMovementEnabled(false);
 
-            // Exactly one charge: the wall jump itself, no free double jump off a wall.
             Owner.Abilities.RefillTo(PlayerAbilityId.Jump, 1);
         }
 
@@ -65,7 +63,6 @@ namespace LayerZero.Characters.Player.States
         {
             base.FixedUpdate();
 
-            // Holding "down" cancels the slow-down and drops at full speed.
             float velocityY = Input.Move.y < 0f
                 ? Movement.VelocityY
                 : Movement.VelocityY * Config.Movement.WallSlideMultiplier;

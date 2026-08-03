@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.Animation
 {
-    /// <summary>
-    /// The only thing that talks to <see cref="Animator" />. States describe intent
-    /// ("enter this parameter", "publish this value") and never poke the animator directly.
-    /// </summary>
     public sealed class CharacterAnimator
     {
         private readonly Animator _animator;
@@ -57,7 +53,6 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        /// <summary>Raises the parameter that represents a state being active.</summary>
         public void Begin(in AnimatorParameter parameter)
         {
             if (!_animator)
@@ -76,7 +71,6 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        /// <summary>Clears the parameter raised by <see cref="Begin" />.</summary>
         public void End(in AnimatorParameter parameter)
         {
             if (!_animator)

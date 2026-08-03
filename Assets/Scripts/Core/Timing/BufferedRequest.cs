@@ -1,9 +1,5 @@
 namespace LayerZero.Core.Timing
 {
-    /// <summary>
-    /// A one-shot request that stays pending for a short window after being raised.
-    /// Used for input buffering ("player pressed jump slightly before landing").
-    /// </summary>
     public sealed class BufferedRequest : ITickable
     {
         private readonly float _lifetime;

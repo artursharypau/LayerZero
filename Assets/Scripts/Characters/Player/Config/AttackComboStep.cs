@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.Config
 {
-    /// <summary>
-    /// One swing of a combo. Keeping the lunge velocity and the damage together removes the
-    /// parallel-array coupling the combo used to have.
-    /// </summary>
     [Serializable]
     public sealed class AttackComboStep
     {

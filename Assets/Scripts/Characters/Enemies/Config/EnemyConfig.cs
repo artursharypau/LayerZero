@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.Config
 {
-    /// <summary>
-    /// Tuning shared by every enemy archetype. New archetypes derive from this asset type and
-    /// add their own section (see <see cref="RangedEnemyConfig" />) instead of growing this one.
-    /// </summary>
     [CreateAssetMenu(fileName = "EnemyConfig", menuName = "LayerZero/Characters/Enemy Config")]
     public class EnemyConfig : ScriptableObject
     {

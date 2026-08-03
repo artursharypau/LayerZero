@@ -2,11 +2,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage.Resistance
 {
-    /// <summary>
-    /// A temporary modifier over incoming damage (i-frames during a dash, super armour
-    /// during a heavy attack, a knockback-reducing buff). Built fluently, then applied
-    /// to <see cref="IDamageResistances" /> and removed by handle.
-    /// </summary>
     public readonly struct DamageResistance
     {
         public static readonly DamageResistance Default = new(false, false, 1f);

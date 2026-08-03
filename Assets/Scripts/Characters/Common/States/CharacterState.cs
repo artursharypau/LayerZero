@@ -4,10 +4,6 @@ using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Characters.Common.States
 {
-    /// <summary>
-    /// Base for every character state. Binds the state to its owner, exposes the handful of
-    /// things states actually need, and turns the state's animator parameter on and off.
-    /// </summary>
     public abstract class CharacterState<TCharacter> : StateBase
         where TCharacter : Character
     {
@@ -38,17 +34,16 @@ namespace LayerZero.Characters.Common.States
             Animation.End(_parameter);
         }
 
-        /// <summary>Shorthand for the owner's state machine - states talk to each other by type.</summary>
         protected void ChangeTo<TState>(StateTransitionMode mode = StateTransitionMode.Deferred)
             where TState : StateBase
         {
-            Owner.States.ChangeState<TState>(mode);
+            Owner.StateMachine.ChangeState<TState>(mode);
         }
 
         protected void ChangeTo<TState, TPayload>(TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
             where TState : StateBase
         {
-            Owner.States.ChangeState<TState, TPayload>(payload, mode);
+            Owner.StateMachine.ChangeState<TState, TPayload>(payload, mode);
         }
     }
 }

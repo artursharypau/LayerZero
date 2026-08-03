@@ -9,10 +9,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>
-    /// Ground combo. The state owns the combo cursor; each swing's lunge and damage come from
-    /// one <see cref="AttackComboStep" />, so combo length is pure data.
-    /// </summary>
     public sealed class PlayerAttackState : AttackStateBase<PlayerController>
     {
         private readonly CountdownTimer _lungeTimer = new();
@@ -102,7 +98,6 @@ namespace LayerZero.Characters.Player.States
 
             _lungeTimer.Start(Settings.VelocityDuration);
 
-            // Lunge follows the stick when the player is steering, otherwise the current facing.
             float velocityX = Owner.Input.Move.x != 0f
                 ? Owner.Input.Move.x * step.Velocity.x
                 : step.Velocity.x * Movement.FacingDirection;

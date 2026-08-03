@@ -2,10 +2,6 @@ using System;
 
 namespace LayerZero.Combat.Damage.Resistance
 {
-    /// <summary>
-    /// Opaque ticket returned when a resistance is applied. Removing by handle (instead of by
-    /// list index) is what keeps overlapping resistances from cancelling the wrong one.
-    /// </summary>
     public readonly struct ResistanceHandle : IEquatable<ResistanceHandle>
     {
         public static readonly ResistanceHandle None = default;

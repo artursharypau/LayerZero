@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Common.Movement
 {
-    /// <summary>
-    /// Samples the two contacts every 2D platformer character needs: ground below and wall ahead.
-    /// Built from reusable <see cref="RayProbe" />s, refreshed once per physics step.
-    /// </summary>
     [Serializable]
     public sealed class GroundWallDetector
     {

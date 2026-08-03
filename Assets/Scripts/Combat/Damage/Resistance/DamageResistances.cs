@@ -2,10 +2,6 @@ using System.Collections.Generic;
 
 namespace LayerZero.Combat.Damage.Resistance
 {
-    /// <summary>
-    /// Default handle-based implementation. Invulnerability is cached so the common
-    /// "am I invulnerable right now" check does not walk the collection.
-    /// </summary>
     public sealed class DamageResistances : IDamageResistances
     {
         private readonly Dictionary<int, DamageResistance> _active = new();

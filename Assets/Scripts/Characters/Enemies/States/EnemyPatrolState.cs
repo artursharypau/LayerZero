@@ -2,7 +2,6 @@ using LayerZero.Characters.Enemies.Animation;
 
 namespace LayerZero.Characters.Enemies.States
 {
-    /// <summary>Walks forward until the ledge or the wall says otherwise, then idles and turns around.</summary>
     public sealed class EnemyPatrolState : EnemyGroundedState
     {
         public EnemyPatrolState(EnemyController owner)

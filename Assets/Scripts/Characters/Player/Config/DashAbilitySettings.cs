@@ -14,7 +14,6 @@ namespace LayerZero.Characters.Player.Config
         public float Cooldown => _cooldown;
         public float SpeedMultiplier => _speedMultiplier;
 
-        /// <summary>Cooldown is counted from the start of the dash, not from its end.</summary>
         public float TotalCooldown => _duration + _cooldown;
     }
 }

@@ -6,7 +6,6 @@ using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Player.Abilities
 {
-    /// <summary>Cooldown-based dash. Unavailable while hugging a wall.</summary>
     public sealed class DashAbility : ITickableAbility
     {
         private readonly DashAbilitySettings _settings;
@@ -20,8 +19,6 @@ namespace LayerZero.Characters.Player.Abilities
             _input = input;
             _movement = movement;
         }
-
-        public float CooldownProgress => _cooldown.NormalizedProgress;
 
         public bool CanUse()
         {

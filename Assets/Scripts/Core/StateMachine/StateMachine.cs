@@ -3,38 +3,27 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Core.StateMachine
 {
-    /// <summary>
-    /// Type-keyed state machine: owns the registry, the current state and the pending transition.
-    /// Pure C#, no Unity lifecycle - the owner decides when to pump <see cref="Update" /> / <see cref="FixedUpdate" />.
-    /// </summary>
     public sealed class StateMachine
     {
         private const int TransitionGuardThreshold = 8;
 
         private readonly StateRegistry _registry = new();
 
-        private StateBase _pending;
         private bool _isFlushing;
 
+        public StateBase Pending { get; private set; }
         public StateBase Current { get; private set; }
-        public bool IsRunning => Current != null;
 
-        public TState Register<TState>(TState state) where TState : StateBase
+        public void Register<TState>(TState state) where TState : StateBase
         {
             _registry.Add(state);
-            return state;
         }
 
         public void Start<TState>() where TState : StateBase
         {
-            _pending = null;
+            Pending = null;
             Current = _registry.Resolve(typeof(TState));
             Current.Enter();
-        }
-
-        public bool IsIn<TState>() where TState : StateBase
-        {
-            return Current is TState;
         }
 
         public void ChangeState<TState>(StateTransitionMode mode = StateTransitionMode.Deferred)
@@ -89,7 +78,7 @@ namespace LayerZero.Core.StateMachine
 
         private void Schedule(StateBase state, StateTransitionMode mode)
         {
-            _pending = state;
+            Pending = state;
 
             if (mode == StateTransitionMode.Immediate)
             {
@@ -99,8 +88,6 @@ namespace LayerZero.Core.StateMachine
 
         private void FlushPending()
         {
-            // Re-entrancy guard: an immediate transition requested from inside Enter()/Exit()
-            // is picked up by the loop that is already running instead of nesting into it.
             if (_isFlushing)
             {
                 return;
@@ -111,21 +98,21 @@ namespace LayerZero.Core.StateMachine
 
             // Enter() may itself request another transition, so keep draining the queue:
             // Current must never end up being a state that already asked to be replaced.
-            while (_pending != null)
+            while (Pending != null)
             {
                 if (guard++ >= TransitionGuardThreshold)
                 {
                     GameLog.Warning(
                         this,
-                        $"Transition guard ({TransitionGuardThreshold}) hit while leaving '{Current?.GetType().Name}'. " +
-                        "Likely a transition loop - check TryTransition()/Enter().");
+                        $"Transition guard ({TransitionGuardThreshold}) hit while leaving '{Current?.GetType().Name}'. "
+                        + "Likely a transition loop - check TryTransition()/Enter().");
 
-                    _pending = null;
+                    Pending = null;
                     break;
                 }
 
-                StateBase next = _pending;
-                _pending = null;
+                StateBase next = Pending;
+                Pending = null;
 
                 Current?.Exit();
                 Current = next;

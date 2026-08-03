@@ -4,7 +4,6 @@ using LayerZero.Combat.Attacks;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>Diving attack: commits to a downward arc and resolves on landing.</summary>
     public sealed class PlayerJumpAttackState : AttackStateBase<PlayerController>
     {
         private bool _hasLanded;

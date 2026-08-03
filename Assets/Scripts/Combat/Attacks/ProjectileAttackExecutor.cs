@@ -5,10 +5,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
 {
-    /// <summary>
-    /// Ranged delivery: spawns a pooled <see cref="Projectile" /> from a muzzle transform.
-    /// This is all an archer-type enemy needs on top of the shared enemy behaviour.
-    /// </summary>
     public sealed class ProjectileAttackExecutor : MonoBehaviour, IAttackExecutor
     {
         [SerializeField] private Projectile _projectilePrefab;

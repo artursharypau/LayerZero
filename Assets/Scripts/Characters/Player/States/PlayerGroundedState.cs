@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
-    /// <summary>Everything that is true while standing on the ground: jump refill, attack, jump, falling off.</summary>
     public abstract class PlayerGroundedState : PlayerState
     {
         protected PlayerGroundedState(PlayerController owner, AnimatorParameter parameter)

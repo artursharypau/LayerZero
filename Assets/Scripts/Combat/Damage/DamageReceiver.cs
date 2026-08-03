@@ -5,10 +5,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage
 {
-    /// <summary>
-    /// The only component attackers talk to. Resolves resistances, forwards the amount to the
-    /// health pool and publishes the result so reactions (states, VFX, UI) can subscribe.
-    /// </summary>
     public sealed class DamageReceiver : MonoBehaviour, IDamageReceiver
     {
         private IDamageable _damageable;
@@ -45,7 +41,6 @@ namespace LayerZero.Combat.Damage
             _damageable.TakeDamage(resolved.Amount);
             Damaged?.Invoke(resolved);
 
-            // A dead character must not be pushed into a hurt reaction - death wins.
             if (impact.HasImpact && !_damageable.IsDead)
             {
                 ImpactReceived?.Invoke(impact);

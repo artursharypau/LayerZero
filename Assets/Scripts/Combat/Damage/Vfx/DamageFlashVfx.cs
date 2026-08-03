@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Damage.Vfx
 {
-    /// <summary>Swaps the sprite material for a short flash whenever the owner takes damage.</summary>
     [RequireComponent(typeof(DamageReceiver))]
     public sealed class DamageFlashVfx : MonoBehaviour
     {

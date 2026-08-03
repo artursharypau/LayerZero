@@ -7,10 +7,6 @@ using UnityEngine.InputSystem;
 
 namespace LayerZero.Characters.Player.Input
 {
-    /// <summary>
-    /// Owns the generated input asset and the input buffers, and exposes them as
-    /// <see cref="IPlayerInput" />. The only file in the project that knows the Input System exists.
-    /// </summary>
     public sealed class PlayerInputModule : CharacterModule, IPlayerInput
     {
         private readonly PlayerInputSettings _settings;

@@ -4,7 +4,6 @@ using LayerZero.Characters.Player.Input;
 
 namespace LayerZero.Characters.Player.Abilities
 {
-    /// <summary>Charge-based jump: owns the charge pool, the states own the impulse.</summary>
     public sealed class JumpAbility : IChargeableAbility
     {
         private readonly AbilityCharges _charges;

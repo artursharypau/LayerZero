@@ -3,14 +3,6 @@ using LayerZero.Characters.Enemies.Animation;
 
 namespace LayerZero.Characters.Enemies.States
 {
-    /// <summary>
-    /// Closes on the target and hands over to the attack state once the combat system reports
-    /// the target is reachable.
-    /// <para>
-    /// Both hooks - <see cref="GetMoveDirection" /> and <see cref="CanEngage" /> - exist so a
-    /// ranged archetype can reuse the whole loop and only change how it positions itself.
-    /// </para>
-    /// </summary>
     public class EnemyChaseState : EnemyState
     {
         private float _defaultAnimationMultiplier;
@@ -79,13 +71,11 @@ namespace LayerZero.Characters.Enemies.States
             Animation.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
         }
 
-        /// <summary>Which way to move this step. Melee walks straight at the target.</summary>
         protected virtual float GetMoveDirection()
         {
             return Perception.DirectionToTarget;
         }
 
-        /// <summary>Whether the enemy may start its attack right now.</summary>
         protected virtual bool CanEngage()
         {
             return Owner.Combat && Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target);
