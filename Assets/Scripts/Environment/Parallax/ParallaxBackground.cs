@@ -1,13 +1,14 @@
 using UnityEngine;
 
-namespace Environment.Parallax
+namespace LayerZero.Environment.Parallax
 {
-    public class ParallaxBackground : MonoBehaviour
+    /// <summary>Drives a stack of <see cref="ParallaxLayer" />s from the main camera's movement.</summary>
+    public sealed class ParallaxBackground : MonoBehaviour
     {
         [SerializeField] private ParallaxLayer[] _layers;
 
         private Camera _camera;
-        private float _previousCameraPositionX;
+        private float _previousCameraX;
 
         private void Awake()
         {
@@ -21,23 +22,31 @@ namespace Environment.Parallax
 
         private void Start()
         {
-            _previousCameraPositionX = _camera.transform.position.x;
+            if (_camera)
+            {
+                _previousCameraX = _camera.transform.position.x;
+            }
         }
 
         private void LateUpdate()
         {
-            float currentCameraPositionX = _camera.transform.position.x;
-            float distance = currentCameraPositionX - _previousCameraPositionX;
-            _previousCameraPositionX = currentCameraPositionX;
+            if (!_camera)
+            {
+                return;
+            }
 
-            float cameraHalfWidth = _camera.orthographicSize * _camera.aspect;
-            float cameraLeftEdge = currentCameraPositionX - cameraHalfWidth;
-            float cameraRightEdge = currentCameraPositionX + cameraHalfWidth;
+            float cameraX = _camera.transform.position.x;
+            float distance = cameraX - _previousCameraX;
+            _previousCameraX = cameraX;
+
+            float halfWidth = _camera.orthographicSize * _camera.aspect;
+            float leftEdge = cameraX - halfWidth;
+            float rightEdge = cameraX + halfWidth;
 
             foreach (ParallaxLayer layer in _layers)
             {
                 layer.Move(distance);
-                layer.LoopBackground(distance, cameraLeftEdge, cameraRightEdge);
+                layer.Recycle(distance, leftEdge, rightEdge);
             }
         }
     }

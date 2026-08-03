@@ -1,14 +1,12 @@
-using Characters.Player.Abilities;
-using Characters.Player.Animation;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Animation;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerFallState : PlayerInAirState
+    public sealed class PlayerFallState : PlayerInAirState
     {
-        public override int Id => (int)PlayerStateId.Fall;
-
-        public PlayerFallState(PlayerController controller)
-            : base(controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerFallState(PlayerController owner)
+            : base(owner, PlayerAnimatorParameters.JumpFall)
         {
         }
 
@@ -19,9 +17,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
+            if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
             {
-                Controller.ChangeState(PlayerStateId.Jump);
+                ChangeTo<PlayerJumpState>();
                 return true;
             }
 
@@ -35,15 +33,15 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.IsGrounded)
+            if (Movement.IsGrounded)
             {
-                Controller.ChangeState(PlayerStateId.Idle);
+                ChangeTo<PlayerIdleState>();
                 return true;
             }
 
-            if (Controller.Movement.IsWalled)
+            if (Movement.IsWalled)
             {
-                Controller.ChangeState(PlayerStateId.WallSlide);
+                ChangeTo<PlayerWallSlideState>();
                 return true;
             }
 

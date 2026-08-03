@@ -1,66 +1,88 @@
 using System;
 using UnityEngine;
 
-namespace Environment.Parallax
+namespace LayerZero.Environment.Parallax
 {
+    /// <summary>
+    /// One depth slice of the background: scrolls at its own rate and recycles its sprites
+    /// so a finite strip covers an infinite level.
+    /// </summary>
     [Serializable]
-    public class ParallaxLayer
+    public sealed class ParallaxLayer
     {
         private const float DistanceThreshold = 0.1f;
 
         [SerializeField] private Transform _root;
-        [SerializeField] private float _multiplier;
 
+        [Tooltip("0 = pinned to the camera, 1 = moves with the world.")]
+        [SerializeField] [Range(0f, 1f)] private float _multiplier = 0.5f;
+
+        private Transform[] _sprites;
         private float _spriteWidth;
-        private Transform[] _spritesTransforms;
-
         private int _leftIndex;
         private int _rightIndex;
 
+        public bool IsValid => _sprites is { Length: > 0 };
+
         public void Initialize()
         {
-            SpriteRenderer[] spriteRenderers = _root.GetComponentsInChildren<SpriteRenderer>();
-            Array.Sort(spriteRenderers, (a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
-
-            _spriteWidth = spriteRenderers[0].bounds.size.x;
-            _spritesTransforms = new Transform[spriteRenderers.Length];
-
-            for (int i = 0; i < _spritesTransforms.Length; i++)
+            if (!_root)
             {
-                _spritesTransforms[i] = spriteRenderers[i].transform;
+                return;
+            }
+
+            SpriteRenderer[] renderers = _root.GetComponentsInChildren<SpriteRenderer>();
+            if (renderers.Length == 0)
+            {
+                return;
+            }
+
+            Array.Sort(renderers, (a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
+
+            _spriteWidth = renderers[0].bounds.size.x;
+            _sprites = new Transform[renderers.Length];
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                _sprites[i] = renderers[i].transform;
             }
 
             _leftIndex = 0;
-            _rightIndex = _spritesTransforms.Length - 1;
+            _rightIndex = _sprites.Length - 1;
         }
 
         public void Move(float distance)
         {
-            if (Mathf.Abs(distance) > Mathf.Epsilon)
+            if (_root && Mathf.Abs(distance) > Mathf.Epsilon)
             {
                 _root.position += Vector3.right * (distance * _multiplier);
             }
         }
 
-        public void LoopBackground(float distance, float cameraLeftEdge, float cameraRightEdge)
+        public void Recycle(float distance, float cameraLeftEdge, float cameraRightEdge)
         {
-            float spriteHalfWidth = _spriteWidth / 2;
-            float leftSpriteRightEdge = _spritesTransforms[_leftIndex].position.x + spriteHalfWidth;
-            float rightSpriteLeftEdge = _spritesTransforms[_rightIndex].position.x - spriteHalfWidth;
+            if (!IsValid)
+            {
+                return;
+            }
+
+            float halfWidth = _spriteWidth * 0.5f;
+            float leftSpriteRightEdge = _sprites[_leftIndex].position.x + halfWidth;
+            float rightSpriteLeftEdge = _sprites[_rightIndex].position.x - halfWidth;
 
             if (distance > DistanceThreshold && cameraLeftEdge > leftSpriteRightEdge)
             {
-                _spritesTransforms[_leftIndex].position = _spritesTransforms[_rightIndex].position + Vector3.right * _spriteWidth;
+                _sprites[_leftIndex].position = _sprites[_rightIndex].position + Vector3.right * _spriteWidth;
 
                 _rightIndex = _leftIndex;
-                _leftIndex = (_leftIndex + 1) % _spritesTransforms.Length;
+                _leftIndex = (_leftIndex + 1) % _sprites.Length;
             }
             else if (distance < -DistanceThreshold && cameraRightEdge < rightSpriteLeftEdge)
             {
-                _spritesTransforms[_rightIndex].position = _spritesTransforms[_leftIndex].position + Vector3.left * _spriteWidth;
+                _sprites[_rightIndex].position = _sprites[_leftIndex].position + Vector3.left * _spriteWidth;
 
                 _leftIndex = _rightIndex;
-                _rightIndex = (_rightIndex - 1 + _spritesTransforms.Length) % _spritesTransforms.Length;
+                _rightIndex = (_rightIndex - 1 + _sprites.Length) % _sprites.Length;
             }
         }
     }

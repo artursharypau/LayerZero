@@ -1,9 +1,9 @@
-namespace Characters.Player.Abilities
+namespace LayerZero.Characters.Player.Abilities
 {
     public enum PlayerAbilityId
     {
-        None,
-        Jump,
-        Dash
+        None = 0,
+        Jump = 1,
+        Dash = 2
     }
 }

@@ -1,19 +1,25 @@
-using Characters.Common.Animation;
-using Characters.Player.Input;
+using LayerZero.Characters.Common.Animation;
+using LayerZero.Characters.Player.Input;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
+    /// <summary>Shared airborne behaviour: reduced air control and the dive attack.</summary>
     public abstract class PlayerInAirState : PlayerState
     {
-        private bool _movementEnabled;
+        private bool _isMovementEnabled = true;
 
-        protected PlayerInAirState(
-            PlayerController controller,
-            int animParameterHash,
-            AnimatorParameterType animParameterType = AnimatorParameterType.Bool)
-            : base(controller, animParameterHash, animParameterType)
+        protected PlayerInAirState(PlayerController owner, AnimatorParameter parameter)
+            : base(owner, parameter)
         {
-            _movementEnabled = true;
+        }
+
+        protected bool IsMovementEnabled => _isMovementEnabled;
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            _isMovementEnabled = true;
         }
 
         public override bool TryTransition()
@@ -23,9 +29,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (_movementEnabled && Controller.Input.WasPerformed(PlayerInputAction.Attack))
+            if (_isMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack))
             {
-                Controller.ChangeState(PlayerStateId.JumpAttack);
+                ChangeTo<PlayerJumpAttackState>();
                 return true;
             }
 
@@ -36,29 +42,24 @@ namespace Characters.Player.States
         {
             base.Update();
 
-            Anim.SetFloat(AnimatorHashProvider.VelocityY, Controller.Movement.VelocityY);
+            Animation.SetFloat(CommonAnimatorParameters.VelocityY, Movement.VelocityY);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            HandleMove();
-        }
-
-        protected void EnableMovement(bool enable)
-        {
-            _movementEnabled = enable;
-        }
-
-        private void HandleMove()
-        {
-            if (_movementEnabled && Controller.Input.Move.x != 0f)
+            if (_isMovementEnabled && Input.Move.x != 0f)
             {
-                Controller.Movement.SetVelocityX(
-                    Controller.MoveSpeed * Controller.InAirMoveMultiplier * Controller.Input.Move.x,
+                Movement.SetVelocityX(
+                    Config.Movement.MoveSpeed * Config.Movement.InAirMoveMultiplier * Input.Move.x,
                     true);
             }
+        }
+
+        protected void SetMovementEnabled(bool enabled)
+        {
+            _isMovementEnabled = enabled;
         }
     }
 }

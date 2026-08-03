@@ -1,19 +1,17 @@
-using Characters.Player.Abilities;
-using Characters.Player.Abilities.Config;
-using Characters.Player.Animation;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Animation;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerJumpState : PlayerInAirState
+    /// <summary>
+    /// Rising part of a jump. Re-checks the jump ability every physics step so a buffered
+    /// second jump turns into a double jump without leaving the state.
+    /// </summary>
+    public sealed class PlayerJumpState : PlayerInAirState
     {
-        private readonly PlayerJumpAbilityConfig _config;
-
-        public override int Id => (int)PlayerStateId.Jump;
-
-        public PlayerJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
-            : base(controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerJumpState(PlayerController owner)
+            : base(owner, PlayerAnimatorParameters.JumpFall)
         {
-            _config = config;
         }
 
         public override void Enter()
@@ -30,9 +28,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.VelocityY <= 0f)
+            if (Movement.VelocityY <= 0f)
             {
-                Controller.ChangeState(PlayerStateId.Fall);
+                ChangeTo<PlayerFallState>();
                 return true;
             }
 
@@ -48,9 +46,9 @@ namespace Characters.Player.States
 
         private void TryJump()
         {
-            if (Controller.TryTriggerAbility(PlayerAbilityId.Jump))
+            if (Owner.Abilities.TryUse(PlayerAbilityId.Jump))
             {
-                Controller.Movement.SetVelocity(Controller.MoveSpeed * Controller.Input.Move.x, _config.Force, true);
+                Movement.SetVelocity(Config.Movement.MoveSpeed * Input.Move.x, Config.Jump.Force, true);
             }
         }
     }

@@ -1,0 +1,16 @@
+{
+    "name": "LayerZero.Combat",
+    "rootNamespace": "LayerZero.Combat",
+    "references": [
+        "LayerZero.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

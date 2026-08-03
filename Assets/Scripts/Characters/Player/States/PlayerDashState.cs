@@ -1,45 +1,47 @@
-using Characters.Player.Abilities;
-using Characters.Player.Abilities.Config;
-using Characters.Player.Animation;
-using Core.Utils;
-using Systems.Damage.Resistance;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Animation;
+using LayerZero.Combat.Damage.Resistance;
+using LayerZero.Core.Timing;
 using UnityEngine;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerDashState : PlayerState
+    /// <summary>
+    /// Gravity-free burst forward with invulnerability frames.
+    /// The i-frames are released by handle, so an overlapping resistance never cancels the wrong one.
+    /// </summary>
+    public sealed class PlayerDashState : PlayerState
     {
-        private readonly PlayerDashAbilityConfig _config;
-        private readonly CountdownTimer _timer;
+        private readonly CountdownTimer _timer = new();
 
-        private float _velocityX;
-        private float _initialGravityScale;
+        private ResistanceHandle _invulnerability = ResistanceHandle.None;
+        private float _speed;
+        private float _defaultGravityScale;
 
-        private int _appliedResistanceIndex;
-
-        public override int Id => (int)PlayerStateId.Dash;
-
-        public PlayerDashState(PlayerController controller, PlayerDashAbilityConfig config)
-            : base(controller, PlayerAnimatorHashProvider.Dash)
+        public PlayerDashState(PlayerController owner)
+            : base(owner, PlayerAnimatorParameters.Dash)
         {
-            _config = config;
-            _timer = new CountdownTimer();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _initialGravityScale = Controller.Movement.GravityScale;
+            _defaultGravityScale = Movement.GravityScale;
 
-            if (Controller.TryTriggerAbility(PlayerAbilityId.Dash))
+            if (!Owner.Abilities.TryUse(PlayerAbilityId.Dash))
             {
-                _timer.Start(_config.Duration);
-                _velocityX = Controller.MoveSpeed * _config.SpeedMultiplier;
-
-                DamageResistance resistance = DamageResistance.Create().WithInvulnerability();
-                _appliedResistanceIndex = Controller.DamageResistanceApplier.Apply(resistance);
+                // Entered without the ability being available - bail out instead of hanging in the state.
+                ChangeTo<PlayerIdleState>();
+                return;
             }
+
+            _timer.Start(Config.Dash.Duration);
+            _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
+
+            _invulnerability = Owner.Resistances.Apply(DamageResistance.Create().WithInvulnerability());
+
+            Movement.SetGravityScale(0f);
         }
 
         public override bool TryFixedTransition()
@@ -49,25 +51,21 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.IsWalled)
+            if (Movement.IsWalled)
             {
-                Controller.ChangeState(Controller.Movement.IsGrounded ? PlayerStateId.Idle : PlayerStateId.WallSlide);
+                ChangeTo<PlayerWallSlideState>();
                 return true;
             }
 
             if (_timer.IsExpired)
             {
-                if (Controller.Movement.IsWalled)
+                if (Movement.IsGrounded)
                 {
-                    Controller.ChangeState(PlayerStateId.WallSlide);
-                }
-                else if (Controller.Movement.IsGrounded)
-                {
-                    Controller.ChangeState(PlayerStateId.Idle);
+                    ChangeTo<PlayerIdleState>();
                 }
                 else
                 {
-                    Controller.ChangeState(PlayerStateId.Fall);
+                    ChangeTo<PlayerFallState>();
                 }
 
                 return true;
@@ -81,30 +79,18 @@ namespace Characters.Player.States
             base.FixedUpdate();
 
             _timer.Tick(Time.fixedDeltaTime);
-            if (_timer.IsExpired)
-            {
-                Controller.Movement.SetGravityScale(_initialGravityScale);
-                Controller.Movement.SetVelocity(0f, Controller.Movement.VelocityY);
-            }
-            else
-            {
-                Controller.Movement.SetGravityScale(0f);
-                Controller.Movement.SetVelocity(_velocityX * Controller.Movement.FacingDirection, 0f);
-            }
+            Movement.SetVelocity(_speed * Movement.FacingDirection, 0f);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Controller.Movement.SetGravityScale(_initialGravityScale);
-            Controller.Movement.SetVelocity(0f, Controller.Movement.VelocityY);
+            Movement.SetGravityScale(_defaultGravityScale);
+            Movement.SetVelocityX(0f);
 
-            if (_appliedResistanceIndex != -1)
-            {
-                Controller.DamageResistanceApplier.Remove(_appliedResistanceIndex);
-                _appliedResistanceIndex = -1;
-            }
+            Owner.Resistances.Remove(_invulnerability);
+            _invulnerability = ResistanceHandle.None;
         }
     }
 }

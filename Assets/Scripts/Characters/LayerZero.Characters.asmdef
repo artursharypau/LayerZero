@@ -1,0 +1,19 @@
+{
+    "name": "LayerZero.Characters",
+    "rootNamespace": "LayerZero.Characters",
+    "references": [
+        "LayerZero.Core",
+        "LayerZero.Combat",
+        "LayerZero.GeneratedInput",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

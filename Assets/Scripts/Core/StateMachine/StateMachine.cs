@@ -1,48 +1,65 @@
-using UnityEngine;
+using System;
+using LayerZero.Core.Diagnostics;
 
-namespace Core.StateMachine
+namespace LayerZero.Core.StateMachine
 {
-    public class StateMachine
+    /// <summary>
+    /// Type-keyed state machine: owns the registry, the current state and the pending transition.
+    /// Pure C#, no Unity lifecycle - the owner decides when to pump <see cref="Update" /> / <see cref="FixedUpdate" />.
+    /// </summary>
+    public sealed class StateMachine
     {
-        private const int GuardThreshold = 8;
+        private const int TransitionGuardThreshold = 8;
 
-        public State Pending { get; private set; }
-        public State Current { get; private set; }
+        private readonly StateRegistry _registry = new();
 
-        public void Start(State initialState)
+        private StateBase _pending;
+        private bool _isFlushing;
+
+        public StateBase Current { get; private set; }
+        public bool IsRunning => Current != null;
+
+        public TState Register<TState>(TState state) where TState : StateBase
         {
-            if (initialState == null)
-            {
-                return;
-            }
+            _registry.Add(state);
+            return state;
+        }
 
-            Current = initialState;
+        public void Start<TState>() where TState : StateBase
+        {
+            _pending = null;
+            Current = _registry.Resolve(typeof(TState));
             Current.Enter();
         }
 
-        public void ChangeState(State newState, StateChangePriority priority = StateChangePriority.Normal)
+        public bool IsIn<TState>() where TState : StateBase
         {
-            if (newState == null)
+            return Current is TState;
+        }
+
+        public void ChangeState<TState>(StateTransitionMode mode = StateTransitionMode.Deferred)
+            where TState : StateBase
+        {
+            Schedule(_registry.Resolve(typeof(TState)), mode);
+        }
+
+        public void ChangeState<TState, TPayload>(TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
+            where TState : StateBase
+        {
+            StateBase state = _registry.Resolve(typeof(TState));
+            if (state is not IStatePayload<TPayload> sink)
             {
-                return;
+                throw new InvalidOperationException(
+                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'.");
             }
 
-            if (priority == StateChangePriority.Interrupt)
-            {
-                Pending = null;
-                Current?.Exit();
-                Current = newState;
-                Current.Enter();
-            }
-            else
-            {
-                Pending = newState;
-            }
+            sink.SetPayload(payload);
+            Schedule(state, mode);
         }
 
         public void Update()
         {
-            ApplyPendingTransition();
+            FlushPending();
 
             if (Current == null)
             {
@@ -57,6 +74,8 @@ namespace Core.StateMachine
 
         public void FixedUpdate()
         {
+            FlushPending();
+
             if (Current == null)
             {
                 return;
@@ -68,28 +87,52 @@ namespace Core.StateMachine
             }
         }
 
-        private void ApplyPendingTransition()
+        private void Schedule(StateBase state, StateTransitionMode mode)
         {
+            _pending = state;
+
+            if (mode == StateTransitionMode.Immediate)
+            {
+                FlushPending();
+            }
+        }
+
+        private void FlushPending()
+        {
+            // Re-entrancy guard: an immediate transition requested from inside Enter()/Exit()
+            // is picked up by the loop that is already running instead of nesting into it.
+            if (_isFlushing)
+            {
+                return;
+            }
+
+            _isFlushing = true;
             int guard = 0;
 
-            // Loop instead of a single check: Enter() below can itself call ChangeState(), which sets Pending again.
-            // We must keep draining it so Current never ends up being a state that already requested its own replacement.
-            while (Pending != null)
+            // Enter() may itself request another transition, so keep draining the queue:
+            // Current must never end up being a state that already asked to be replaced.
+            while (_pending != null)
             {
-                if (guard++ >= GuardThreshold)
+                if (guard++ >= TransitionGuardThreshold)
                 {
-                    Debug.unityLogger.LogWarning(
-                        $"{nameof(StateMachine)}.{nameof(ApplyPendingTransition)}",
-                        $"Guard threshold ({GuardThreshold}) reached while transitioning away from '{Current?.GetType().Name}'. Possible state transition loop — check TryTransition()/Enter() logic.");
+                    GameLog.Warning(
+                        this,
+                        $"Transition guard ({TransitionGuardThreshold}) hit while leaving '{Current?.GetType().Name}'. " +
+                        "Likely a transition loop - check TryTransition()/Enter().");
 
+                    _pending = null;
                     break;
                 }
 
+                StateBase next = _pending;
+                _pending = null;
+
                 Current?.Exit();
-                Current = Pending;
-                Pending = null;
+                Current = next;
                 Current.Enter();
             }
+
+            _isFlushing = false;
         }
     }
 }

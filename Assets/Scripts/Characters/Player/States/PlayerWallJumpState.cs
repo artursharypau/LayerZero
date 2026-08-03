@@ -1,36 +1,29 @@
-using Characters.Player.Abilities;
-using Characters.Player.Abilities.Config;
-using Characters.Player.Animation;
-using Core.Utils;
+using LayerZero.Characters.Player.Abilities;
+using LayerZero.Characters.Player.Animation;
+using LayerZero.Core.Timing;
 using UnityEngine;
 
-namespace Characters.Player.States
+namespace LayerZero.Characters.Player.States
 {
-    public class PlayerWallJumpState : PlayerInAirState
+    /// <summary>Pushes away from the wall and locks horizontal control briefly so the jump reads.</summary>
+    public sealed class PlayerWallJumpState : PlayerInAirState
     {
-        private readonly PlayerJumpAbilityConfig _config;
-        private readonly CountdownTimer _moveLockTimer;
+        private readonly CountdownTimer _moveLockTimer = new();
 
-        public override int Id => (int)PlayerStateId.WallJump;
-
-        public PlayerWallJumpState(PlayerController controller, PlayerJumpAbilityConfig config)
-            : base(controller, PlayerAnimatorHashProvider.JumpFall)
+        public PlayerWallJumpState(PlayerController owner)
+            : base(owner, PlayerAnimatorParameters.JumpFall)
         {
-            _config = config;
-            _moveLockTimer = new CountdownTimer();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _moveLockTimer.Start(_config.WallJumpMoveLockDuration);
+            _moveLockTimer.Start(Config.Jump.WallJumpMoveLockDuration);
+            SetMovementEnabled(false);
 
-            EnableMovement(false);
-            Controller.Movement.SetVelocity(
-                _config.WallJumpForce.x * -Controller.Movement.FacingDirection,
-                _config.WallJumpForce.y,
-                true);
+            Vector2 force = Config.Jump.WallJumpForce;
+            Movement.SetVelocity(force.x * -Movement.FacingDirection, force.y, true);
         }
 
         public override bool TryTransition()
@@ -40,9 +33,9 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.CanUseAbility(PlayerAbilityId.Jump))
+            if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
             {
-                Controller.ChangeState(PlayerStateId.Jump);
+                ChangeTo<PlayerJumpState>();
                 return true;
             }
 
@@ -56,15 +49,15 @@ namespace Characters.Player.States
                 return true;
             }
 
-            if (Controller.Movement.IsFalling)
+            if (Movement.IsFalling)
             {
-                Controller.ChangeState(PlayerStateId.Fall);
+                ChangeTo<PlayerFallState>();
                 return true;
             }
 
-            if (Controller.Movement.IsWalled)
+            if (Movement.IsWalled)
             {
-                Controller.ChangeState(PlayerStateId.WallSlide);
+                ChangeTo<PlayerWallSlideState>();
                 return true;
             }
 
@@ -78,7 +71,7 @@ namespace Characters.Player.States
             _moveLockTimer.Tick(Time.fixedDeltaTime);
             if (_moveLockTimer.IsExpired)
             {
-                EnableMovement(true);
+                SetMovementEnabled(true);
             }
         }
     }

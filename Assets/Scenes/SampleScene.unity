@@ -10960,7 +10960,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffd5bd58a11f43b4b29918f1309fd4a7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.ParallaxBackground
+  m_EditorClassIdentifier: LayerZero.Environment::LayerZero.Environment.Parallax.ParallaxBackground
   _layers:
   - _root: {fileID: 1214767198}
     _multiplier: 0.9
