@@ -7,6 +7,7 @@ using Characters.Player.Abilities.Config;
 using Characters.Player.Abilities.Tickable;
 using Characters.Player.Input;
 using Characters.Player.States;
+using Core.StateMachine;
 using Systems.Damage;
 using UnityEngine;
 
@@ -60,14 +61,14 @@ namespace Characters.Player
 
         public IPlayerInput Input => _inputHandler;
 
-        public void ChangeState(PlayerStateId id)
+        public void ChangeState(PlayerStateId id, StateChangePriority priority = StateChangePriority.Normal)
         {
-            ChangeState((int)id);
+            ChangeState((int)id, priority);
         }
 
-        public void ChangeState<TArg>(PlayerStateId id, TArg arg)
+        public void ChangeState<TArg>(PlayerStateId id, TArg arg, StateChangePriority priority = StateChangePriority.Normal)
         {
-            ChangeState((int)id, arg);
+            ChangeState((int)id, arg, priority);
         }
 
         public bool CanUseAbility(PlayerAbilityId id)
@@ -158,7 +159,7 @@ namespace Characters.Player
 
         protected override void OnDamageImpactReceived(DamageImpactInfo damageImpact)
         {
-            ChangeState(PlayerStateId.Hurt, damageImpact);
+            ChangeState(PlayerStateId.Hurt, damageImpact, StateChangePriority.Interrupt);
         }
 
         private bool TryGetAbility(PlayerAbilityId id, out IPlayerAbility ability)

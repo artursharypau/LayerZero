@@ -29,13 +29,13 @@ namespace Core.StateMachine
             _stateMachine.FixedUpdate();
         }
 
-        public void ChangeState(int id)
+        public void ChangeState(int id, StateChangePriority priority = StateChangePriority.Normal)
         {
             State state = Resolve(id);
-            _stateMachine.ChangeState(state);
+            _stateMachine.ChangeState(state, priority);
         }
 
-        public void ChangeState<TArg>(int id, TArg arg)
+        public void ChangeState<TArg>(int id, TArg arg, StateChangePriority priority = StateChangePriority.Normal)
         {
             State state = Resolve(id);
             if (state is not IStateArg<TArg> stateArg)
@@ -45,7 +45,7 @@ namespace Core.StateMachine
             }
 
             stateArg.Prepare(arg);
-            _stateMachine.ChangeState(state);
+            _stateMachine.ChangeState(state, priority);
         }
 
         private State Resolve(int id)
