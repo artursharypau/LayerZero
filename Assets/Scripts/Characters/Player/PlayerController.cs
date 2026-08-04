@@ -18,13 +18,13 @@ namespace LayerZero.Characters.Player
 
         public PlayerConfig Config => _config;
         public IPlayerInput Input => _input;
-        public AbilitySet<PlayerAbilityId> Abilities { get; private set; }
+        public AbilitySet Abilities { get; private set; }
 
         protected override void OnInitialized()
         {
             _input = new PlayerInputHandler(_config.Input);
 
-            Abilities = new AbilitySet<PlayerAbilityId>()
+            Abilities = new AbilitySet()
                 .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
                 .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement));
 

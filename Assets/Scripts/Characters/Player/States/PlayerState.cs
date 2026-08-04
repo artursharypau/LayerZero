@@ -25,7 +25,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Owner.Abilities.CanUse(PlayerAbilityId.Dash))
             {
-                ChangeTo(PlayerStateId.Dash);
+                Owner.StateMachine.ChangeState(PlayerStateId.Dash);
                 return true;
             }
 

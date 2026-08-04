@@ -18,7 +18,7 @@ namespace LayerZero.Characters.Enemies.States
 
         protected override void OnAttackFinished()
         {
-            ChangeTo(EnemyStateId.Chase);
+            Owner.StateMachine.ChangeState(EnemyStateId.Chase);
         }
     }
 }

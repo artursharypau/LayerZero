@@ -29,7 +29,7 @@ namespace LayerZero.Characters.Player.States
 
             if (!Owner.Abilities.TryUse(PlayerAbilityId.Dash))
             {
-                ChangeTo(PlayerStateId.Idle);
+                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.IsWalled)
             {
-                ChangeTo(PlayerStateId.WallSlide);
+                Owner.StateMachine.ChangeState(PlayerStateId.WallSlide);
                 return true;
             }
 
@@ -58,11 +58,11 @@ namespace LayerZero.Characters.Player.States
             {
                 if (Movement.IsGrounded)
                 {
-                    ChangeTo(PlayerStateId.Idle);
+                    Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 }
                 else
                 {
-                    ChangeTo(PlayerStateId.Fall);
+                    Owner.StateMachine.ChangeState(PlayerStateId.Fall);
                 }
 
                 return true;

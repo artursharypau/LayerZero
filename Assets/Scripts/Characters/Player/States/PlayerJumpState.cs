@@ -28,7 +28,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.VelocityY <= 0f)
             {
-                ChangeTo(PlayerStateId.Fall);
+                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
                 return true;
             }
 

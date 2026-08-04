@@ -4,13 +4,12 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Characters.Common.Abilities
 {
-    public class AbilitySet<TId>
-        where TId : struct, Enum
+    public class AbilitySet
     {
-        private readonly Dictionary<TId, IAbility> _abilities = new();
+        private readonly Dictionary<int, IAbility> _abilities = new();
         private readonly List<ITickableAbility> _tickable = new();
 
-        public AbilitySet<TId> Add(TId id, IAbility ability)
+        public AbilitySet Add(int id, IAbility ability)
         {
             _abilities[id] = ability ?? throw new ArgumentNullException(nameof(ability));
 
@@ -22,12 +21,12 @@ namespace LayerZero.Characters.Common.Abilities
             return this;
         }
 
-        public bool CanUse(TId id)
+        public bool CanUse(int id)
         {
             return TryGet(id, out IAbility ability) && ability.CanUse();
         }
 
-        public bool TryUse(TId id)
+        public bool TryUse(int id)
         {
             if (!TryGet(id, out IAbility ability) || !ability.CanUse())
             {
@@ -38,7 +37,7 @@ namespace LayerZero.Characters.Common.Abilities
             return true;
         }
 
-        public void Refill(TId id)
+        public void Refill(int id)
         {
             if (TryGetChargeable(id, out IChargeableAbility ability))
             {
@@ -46,7 +45,7 @@ namespace LayerZero.Characters.Common.Abilities
             }
         }
 
-        public void RefillTo(TId id, int amount)
+        public void RefillTo(int id, int amount)
         {
             if (TryGetChargeable(id, out IChargeableAbility ability))
             {
@@ -62,7 +61,7 @@ namespace LayerZero.Characters.Common.Abilities
             }
         }
 
-        private bool TryGet(TId id, out IAbility ability)
+        private bool TryGet(int id, out IAbility ability)
         {
             if (_abilities.TryGetValue(id, out ability))
             {
@@ -73,7 +72,7 @@ namespace LayerZero.Characters.Common.Abilities
             return false;
         }
 
-        private bool TryGetChargeable(TId id, out IChargeableAbility chargeable)
+        private bool TryGetChargeable(int id, out IChargeableAbility chargeable)
         {
             if (TryGet(id, out IAbility ability) && ability is IChargeableAbility found)
             {

@@ -19,11 +19,11 @@ namespace LayerZero.Characters.Enemies.States
         {
             if (Perception.HasTarget)
             {
-                ChangeTo(EnemyStateId.Chase);
+                Owner.StateMachine.ChangeState(EnemyStateId.Chase);
                 return;
             }
 
-            ChangeTo(EnemyStateId.Patrol);
+            Owner.StateMachine.ChangeState(EnemyStateId.Patrol);
         }
     }
 }
