@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.Movement;
 using LayerZero.Combat.Attacks;
@@ -15,8 +14,6 @@ namespace LayerZero.Characters.Common
     [RequireComponent(typeof(DamageReceiver))]
     public abstract class Character : MonoBehaviour
     {
-        private readonly List<CharacterModule> _modules = new();
-
         public StateMachine StateMachine { get; } = new();
 
         public CharacterMovement2D Movement { get; private set; }
@@ -34,16 +31,16 @@ namespace LayerZero.Characters.Common
             Movement = this.GetRequired<CharacterMovement2D>();
             Health = this.GetRequired<IDamageable>();
             DamageReceiver = this.GetRequired<IDamageReceiver>();
-            Combat = GetComponent<CombatSystem>();
+            Combat = this.GetRequired<CombatSystem>();
 
             Animator = new CharacterAnimator(
-                GetComponentInChildren<Animator>(true),
-                GetComponentInChildren<IAttackAnimatorEvents>(true));
+                this.GetRequiredInChildren<Animator>(),
+                this.GetRequiredInChildren<IAttackAnimatorEvents>());
 
             DamageResistances = new DamageResistances();
             DamageReceiver.SetResistances(DamageResistances);
 
-            Compose();
+            OnInitialized();
         }
 
         private void OnEnable()
@@ -52,10 +49,7 @@ namespace LayerZero.Characters.Common
             DamageReceiver.ImpactReceived += HandleImpactReceived;
             DamageReceiver.Damaged += HandleDamaged;
 
-            foreach (CharacterModule module in _modules)
-            {
-                module.Enable();
-            }
+            OnEnabled();
         }
 
         private void Start()
@@ -65,28 +59,17 @@ namespace LayerZero.Characters.Common
 
         private void Update()
         {
-            float deltaTime = Time.deltaTime;
-
-            foreach (CharacterModule module in _modules)
-            {
-                module.Tick(deltaTime);
-            }
-
             StateMachine.Update();
+
+            OnUpdated(Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
-            float deltaTime = Time.fixedDeltaTime;
-
             Movement.Refresh();
-
-            foreach (CharacterModule module in _modules)
-            {
-                module.FixedTick(deltaTime);
-            }
-
             StateMachine.FixedUpdate();
+
+            OnFixedUpdated(Time.fixedDeltaTime);
         }
 
         private void OnDisable()
@@ -95,20 +78,12 @@ namespace LayerZero.Characters.Common
             DamageReceiver.ImpactReceived -= HandleImpactReceived;
             Health.Died -= HandleDied;
 
-            foreach (CharacterModule module in _modules)
-            {
-                module.Disable();
-            }
+            OnDisabled();
         }
 
         private void OnDestroy()
         {
-            foreach (CharacterModule module in _modules)
-            {
-                module.Dispose();
-            }
-
-            _modules.Clear();
+            OnDestroyed();
         }
 
         private void OnDrawGizmos()
@@ -118,21 +93,46 @@ namespace LayerZero.Characters.Common
                 Movement.DrawGizmos();
             }
 
-            foreach (CharacterModule module in _modules)
-            {
-                module.DrawGizmos();
-            }
+            OnGizmosDrawn();
         }
 
-        protected abstract void Compose();
+        protected virtual void OnInitialized()
+        {
+        }
 
-        protected abstract void OnStarted();
+        protected virtual void OnStarted()
+        {
+        }
+
+        protected virtual void OnEnabled()
+        {
+        }
+
+        protected virtual void OnUpdated(float deltaTime)
+        {
+        }
+
+        protected virtual void OnFixedUpdated(float deltaTime)
+        {
+        }
+
+        protected virtual void OnDisabled()
+        {
+        }
+
+        protected virtual void OnDestroyed()
+        {
+        }
+
+        protected virtual void OnGizmosDrawn()
+        {
+        }
 
         protected virtual void OnDamaged(DamageInfo damageInfo)
         {
         }
 
-        protected virtual void OnImpactReceived(DamageImpactInfo impact)
+        protected virtual void OnDamageImpactReceived(DamageImpactInfo impact)
         {
         }
 
@@ -140,15 +140,13 @@ namespace LayerZero.Characters.Common
         {
         }
 
-        protected TModule AddModule<TModule>(TModule module) where TModule : CharacterModule
-        {
-            _modules.Add(module);
-            module.Bind(this);
-            return module;
-        }
-
         private void HandleDamaged(DamageInfo damageInfo)
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             OnDamaged(damageInfo);
         }
 
@@ -159,7 +157,7 @@ namespace LayerZero.Characters.Common
                 return;
             }
 
-            OnImpactReceived(impact);
+            OnDamageImpactReceived(impact);
         }
 
         private void HandleDied()

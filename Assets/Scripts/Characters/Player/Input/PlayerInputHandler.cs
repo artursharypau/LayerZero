@@ -1,5 +1,5 @@
+using System;
 using InputSystem;
-using LayerZero.Characters.Common;
 using LayerZero.Characters.Player.Config;
 using LayerZero.Core.Timing;
 using UnityEngine;
@@ -7,9 +7,8 @@ using UnityEngine.InputSystem;
 
 namespace LayerZero.Characters.Player.Input
 {
-    public sealed class PlayerInputModule : CharacterModule, IPlayerInput
+    public sealed class PlayerInputHandler : IPlayerInput, IDisposable
     {
-        private readonly PlayerInputSettings _settings;
         private readonly BufferedRequest _jump;
         private readonly BufferedRequest _dash;
 
@@ -17,22 +16,18 @@ namespace LayerZero.Characters.Player.Input
         private PlayerInputSet.PlayerActions _actions;
         private bool _isEnabled;
 
-        public PlayerInputModule(PlayerInputSettings settings)
+        public PlayerInputHandler(PlayerInputSettings settings)
         {
-            _settings = settings;
             _jump = new BufferedRequest(settings.JumpBufferDuration);
             _dash = new BufferedRequest(settings.DashBufferDuration);
-        }
 
-        public Vector2 Move { get; private set; }
-
-        protected override void OnInitialize()
-        {
             _inputSet = new PlayerInputSet();
             _actions = _inputSet.Player;
         }
 
-        public override void Enable()
+        public Vector2 Move { get; private set; }
+
+        public void Enable()
         {
             if (_isEnabled)
             {
@@ -48,7 +43,7 @@ namespace LayerZero.Characters.Player.Input
             _actions.Dash.performed += OnDashPerformed;
         }
 
-        public override void Disable()
+        public void Disable()
         {
             if (!_isEnabled)
             {
@@ -66,13 +61,13 @@ namespace LayerZero.Characters.Player.Input
             Move = Vector2.zero;
         }
 
-        public override void Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
             _jump.Tick(deltaTime);
             _dash.Tick(deltaTime);
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             Disable();
             _inputSet?.Dispose();

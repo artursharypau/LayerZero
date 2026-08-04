@@ -4,7 +4,7 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Characters.Common.Abilities
 {
-    public class AbilitySet<TId> : CharacterModule
+    public class AbilitySet<TId>
         where TId : struct, Enum
     {
         private readonly Dictionary<TId, IAbility> _abilities = new();
@@ -54,7 +54,7 @@ namespace LayerZero.Characters.Common.Abilities
             }
         }
 
-        public override void Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
             for (int i = 0; i < _tickable.Count; i++)
             {

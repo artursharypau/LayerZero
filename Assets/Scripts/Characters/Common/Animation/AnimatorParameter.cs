@@ -14,7 +14,5 @@ namespace LayerZero.Characters.Common.Animation
             Hash = Animator.StringToHash(name);
             Kind = kind;
         }
-
-        public bool IsDefined => Kind != AnimatorParameterKind.None;
     }
 }

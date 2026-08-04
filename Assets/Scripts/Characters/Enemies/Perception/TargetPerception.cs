@@ -1,5 +1,4 @@
 using System;
-using LayerZero.Characters.Common;
 using LayerZero.Characters.Common.Movement;
 using LayerZero.Characters.Enemies.Config;
 using LayerZero.Combat.Damage;
@@ -9,21 +8,27 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.Perception
 {
-    public sealed class TargetPerception : CharacterModule
+    public sealed class TargetPerception
     {
         private readonly PerceptionSettings _settings;
         private readonly Transform _sightOrigin;
+        private readonly IPositioned _positioned;
         private readonly CountdownTimer _alertTimer = new();
         private readonly CountdownTimer _scanTimer = new();
 
-        private IPositioned _positioned;
-        private LayerMask _targetMask;
-        private LayerMask _blockerMask;
+        private readonly LayerMask _targetMask;
+        private readonly LayerMask _blockerMask;
 
-        public TargetPerception(PerceptionSettings settings, Transform sightOrigin)
+        public TargetPerception(IPositioned positioned, PerceptionSettings settings, Transform sightOrigin)
         {
+            _positioned = positioned;
             _settings = settings;
             _sightOrigin = sightOrigin;
+
+            _targetMask = _settings.TargetMask.value != 0 ? _settings.TargetMask : GameLayers.Player;
+            _blockerMask = _settings.BlockerMask.value != 0 ? _settings.BlockerMask : GameLayers.Ground;
+
+            _scanTimer.Start(_settings.ScanInterval);
         }
 
         public event Action TargetAcquired;
@@ -33,31 +38,12 @@ namespace LayerZero.Characters.Enemies.Perception
         public bool HasTarget => Target;
 
         public bool IsTargetBehind =>
-            Target && _positioned != null && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
+            Target && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
 
-        public float DirectionToTarget
-        {
-            get
-            {
-                if (!Target || _positioned == null)
-                {
-                    return 0f;
-                }
+        public float DirectionToTarget =>
+            Target ? (Target.position.x > _positioned.Position.x ? 1f : -1f) : 0f;
 
-                return Target.position.x > _positioned.Position.x ? 1f : -1f;
-            }
-        }
-
-        protected override void OnInitialize()
-        {
-            _positioned = Owner.Movement;
-            _targetMask = _settings.TargetMask.value != 0 ? _settings.TargetMask : GameLayers.Player;
-            _blockerMask = _settings.BlockerMask.value != 0 ? _settings.BlockerMask : GameLayers.Ground;
-
-            _scanTimer.Start(_settings.ScanInterval);
-        }
-
-        public override void FixedTick(float deltaTime)
+        public void FixedTick(float deltaTime)
         {
             _alertTimer.Tick(deltaTime);
             _scanTimer.Tick(deltaTime);
@@ -71,7 +57,7 @@ namespace LayerZero.Characters.Enemies.Perception
             Scan();
         }
 
-        public override void Disable()
+        public void Disable()
         {
             ClearTarget();
         }
@@ -84,9 +70,9 @@ namespace LayerZero.Characters.Enemies.Perception
             }
         }
 
-        public override void DrawGizmos()
+        public void DrawGizmos()
         {
-            if (!_sightOrigin || _positioned == null)
+            if (!_sightOrigin)
             {
                 return;
             }
@@ -114,7 +100,7 @@ namespace LayerZero.Characters.Enemies.Perception
 
         private Transform CastForTarget()
         {
-            if (!_sightOrigin || _positioned == null)
+            if (!_sightOrigin)
             {
                 return null;
             }
