@@ -33,7 +33,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (CanEngage())
             {
-                ChangeTo(EnemyStateId.Attack);
+                Owner.StateMachine.ChangeState(EnemyStateId.Attack);
                 return true;
             }
 
@@ -81,7 +81,7 @@ namespace LayerZero.Characters.Enemies.States
         private void OnTargetLost()
         {
             Perception.TargetLost -= OnTargetLost;
-            ChangeTo(EnemyStateId.Idle);
+            Owner.StateMachine.ChangeState(EnemyStateId.Idle);
         }
     }
 }

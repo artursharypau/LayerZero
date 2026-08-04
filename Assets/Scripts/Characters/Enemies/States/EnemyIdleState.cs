@@ -32,7 +32,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (_timer.IsExpired)
             {
-                ChangeTo(EnemyStateId.Patrol);
+                Owner.StateMachine.ChangeState(EnemyStateId.Patrol);
                 return true;
             }
 

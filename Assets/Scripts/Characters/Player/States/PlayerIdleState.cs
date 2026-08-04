@@ -27,7 +27,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Input.Move.x != 0f && !IsPushingIntoWall())
             {
-                ChangeTo(PlayerStateId.Move);
+                Owner.StateMachine.ChangeState(PlayerStateId.Move);
                 return true;
             }
 

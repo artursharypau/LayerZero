@@ -20,7 +20,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Input.Move.x == 0f)
             {
-                ChangeTo(PlayerStateId.Idle);
+                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 
@@ -36,7 +36,7 @@ namespace LayerZero.Characters.Player.States
 
             if (IsPushingIntoWall())
             {
-                ChangeTo(PlayerStateId.Idle);
+                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 

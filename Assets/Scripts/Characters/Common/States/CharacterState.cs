@@ -34,15 +34,5 @@ namespace LayerZero.Characters.Common.States
         {
             Animator.Exit(_parameter);
         }
-
-        protected void ChangeTo(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
-        {
-            Owner.StateMachine.ChangeState(id, mode);
-        }
-
-        protected void ChangeTo<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
-        {
-            Owner.StateMachine.ChangeState(id, payload, mode);
-        }
     }
 }

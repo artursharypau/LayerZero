@@ -31,7 +31,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Input.WasPerformed(PlayerInputAction.Jump))
             {
-                ChangeTo(PlayerStateId.WallJump);
+                Owner.StateMachine.ChangeState(PlayerStateId.WallJump);
                 return true;
             }
 
@@ -48,13 +48,13 @@ namespace LayerZero.Characters.Player.States
             if (Movement.IsGrounded)
             {
                 Movement.FaceTowards(Input.Move.x);
-                ChangeTo(PlayerStateId.Idle);
+                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 return true;
             }
 
             if (!Movement.IsWalled && Movement.IsFalling)
             {
-                ChangeTo(PlayerStateId.Fall);
+                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
                 return true;
             }
 

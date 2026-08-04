@@ -32,7 +32,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (!Movement.IsGrounded || Movement.IsWalled)
             {
-                ChangeTo(EnemyStateId.Idle);
+                Owner.StateMachine.ChangeState(EnemyStateId.Idle);
                 return true;
             }
 

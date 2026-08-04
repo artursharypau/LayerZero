@@ -16,17 +16,17 @@ namespace LayerZero.Characters.Player.States
         {
             if (!Movement.IsGrounded)
             {
-                ChangeTo(PlayerStateId.Fall);
+                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
                 return;
             }
 
             if (Owner.Input.Move.x != 0f)
             {
-                ChangeTo(PlayerStateId.Move);
+                Owner.StateMachine.ChangeState(PlayerStateId.Move);
             }
             else
             {
-                ChangeTo(PlayerStateId.Idle);
+                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
             }
         }
     }
