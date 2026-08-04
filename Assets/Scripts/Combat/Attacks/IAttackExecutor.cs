@@ -8,9 +8,7 @@ namespace LayerZero.Combat.Attacks
         AttackKind Kind { get; }
 
         void Initialize(Transform owner);
-
         bool IsInRange(Transform target);
-
         void Execute(DamageDefinition damage);
     }
 }

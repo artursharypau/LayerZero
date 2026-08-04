@@ -20,7 +20,7 @@ namespace LayerZero.Characters.Common
         public StateMachine StateMachine { get; } = new();
 
         public CharacterMovement2D Movement { get; private set; }
-        public CharacterAnimator Animation { get; private set; }
+        public CharacterAnimator Animator { get; private set; }
         public IDamageable Health { get; private set; }
         public IDamageReceiver DamageReceiver { get; private set; }
         public IDamageResistances DamageResistances { get; private set; }
@@ -36,7 +36,7 @@ namespace LayerZero.Characters.Common
             DamageReceiver = this.GetRequired<IDamageReceiver>();
             Combat = GetComponent<CombatSystem>();
 
-            Animation = new CharacterAnimator(
+            Animator = new CharacterAnimator(
                 GetComponentInChildren<Animator>(true),
                 GetComponentInChildren<IAttackAnimatorEvents>(true));
 
