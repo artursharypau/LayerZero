@@ -13,6 +13,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.JumpAttack;
+
         public override void Enter()
         {
             base.Enter();
@@ -48,11 +50,11 @@ namespace LayerZero.Characters.Player.States
         {
             if (Owner.Input.Move.x != 0f)
             {
-                ChangeTo<PlayerMoveState>();
+                ChangeTo(PlayerStateId.Move);
             }
             else
             {
-                ChangeTo<PlayerIdleState>();
+                ChangeTo(PlayerStateId.Idle);
             }
         }
     }

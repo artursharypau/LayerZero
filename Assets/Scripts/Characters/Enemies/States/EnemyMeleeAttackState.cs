@@ -7,6 +7,8 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
+        public override int Id => EnemyStateId.Attack;
+
         public override void Enter()
         {
             base.Enter();

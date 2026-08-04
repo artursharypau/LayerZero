@@ -11,17 +11,19 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
+        public override int Id => EnemyStateId.Hurt;
+
         private TargetPerception Perception => Owner.Perception;
 
         protected override void OnHurtFinished()
         {
             if (Perception.HasTarget)
             {
-                ChangeTo<EnemyChaseState>();
+                ChangeTo(EnemyStateId.Chase);
                 return;
             }
 
-            ChangeTo<EnemyPatrolState>();
+            ChangeTo(EnemyStateId.Patrol);
         }
     }
 }

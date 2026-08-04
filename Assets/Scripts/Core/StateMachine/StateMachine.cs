@@ -14,35 +14,34 @@ namespace LayerZero.Core.StateMachine
         public StateBase Pending { get; private set; }
         public StateBase Current { get; private set; }
 
-        public void Register<TState>(TState state) where TState : StateBase
+        public void Register(StateBase state)
         {
             _registry.Add(state);
         }
 
-        public void Start<TState>() where TState : StateBase
+        public void Start(int id)
         {
             Pending = null;
-            Current = _registry.Resolve(typeof(TState));
+            Current = _registry.Get(id);
             Current.Enter();
         }
 
-        public void ChangeState<TState>(StateTransitionMode mode = StateTransitionMode.Deferred)
-            where TState : StateBase
+        public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
-            Schedule(_registry.Resolve(typeof(TState)), mode);
+            StateBase newState = _registry.Get(id);
+            Schedule(newState, mode);
         }
 
-        public void ChangeState<TState, TPayload>(TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
-            where TState : StateBase
+        public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
-            StateBase state = _registry.Resolve(typeof(TState));
-            if (state is not IStatePayload<TPayload> sink)
+            StateBase state = _registry.Get(id);
+            if (state is not IStatePayload<TPayload> statePayload)
             {
                 throw new InvalidOperationException(
-                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'.");
+                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'");
             }
 
-            sink.SetPayload(payload);
+            statePayload.SetPayload(payload);
             Schedule(state, mode);
         }
 
@@ -63,8 +62,6 @@ namespace LayerZero.Core.StateMachine
 
         public void FixedUpdate()
         {
-            FlushPending();
-
             if (Current == null)
             {
                 return;
@@ -78,6 +75,13 @@ namespace LayerZero.Core.StateMachine
 
         private void Schedule(StateBase state, StateTransitionMode mode)
         {
+            if (Pending != null && Pending != state)
+            {
+                GameLog.Warning(
+                    this,
+                    $"Transition to '{Pending.GetType().Name}' was replaced by '{state.GetType().Name}' before it took effect.");
+            }
+
             Pending = state;
 
             if (mode == StateTransitionMode.Immediate)
@@ -96,16 +100,11 @@ namespace LayerZero.Core.StateMachine
             _isFlushing = true;
             int guard = 0;
 
-            // Enter() may itself request another transition, so keep draining the queue:
-            // Current must never end up being a state that already asked to be replaced.
             while (Pending != null)
             {
                 if (guard++ >= TransitionGuardThreshold)
                 {
-                    GameLog.Warning(
-                        this,
-                        $"Transition guard ({TransitionGuardThreshold}) hit while leaving '{Current?.GetType().Name}'. "
-                        + "Likely a transition loop - check TryTransition()/Enter().");
+                    GameLog.Warning(this, $"Transition guard ({TransitionGuardThreshold}) hit while leaving '{Current?.GetType().Name}'");
 
                     Pending = null;
                     break;

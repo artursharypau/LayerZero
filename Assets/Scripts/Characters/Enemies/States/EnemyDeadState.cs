@@ -8,5 +8,7 @@ namespace LayerZero.Characters.Enemies.States
             : base(owner)
         {
         }
+
+        public override int Id => EnemyStateId.Dead;
     }
 }

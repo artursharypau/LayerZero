@@ -28,7 +28,7 @@ namespace LayerZero.Characters.Player.States
 
             if (IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack))
             {
-                ChangeTo<PlayerJumpAttackState>();
+                ChangeTo(PlayerStateId.JumpAttack);
                 return true;
             }
 

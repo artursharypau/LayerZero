@@ -26,7 +26,7 @@ namespace LayerZero.Characters.Enemies.States
         private void OnTargetAcquired()
         {
             Perception.TargetAcquired -= OnTargetAcquired;
-            ChangeTo<EnemyChaseState>();
+            ChangeTo(EnemyStateId.Chase);
         }
     }
 }

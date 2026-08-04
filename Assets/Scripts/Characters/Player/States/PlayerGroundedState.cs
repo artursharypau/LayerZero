@@ -28,13 +28,13 @@ namespace LayerZero.Characters.Player.States
 
             if (Input.WasPerformed(PlayerInputAction.Attack))
             {
-                ChangeTo<PlayerAttackState>();
+                ChangeTo(PlayerStateId.Attack);
                 return true;
             }
 
             if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
             {
-                ChangeTo<PlayerJumpState>();
+                ChangeTo(PlayerStateId.Jump);
                 return true;
             }
 
@@ -50,7 +50,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.IsFalling)
             {
-                ChangeTo<PlayerFallState>();
+                ChangeTo(PlayerStateId.Fall);
                 return true;
             }
 

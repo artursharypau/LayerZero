@@ -12,6 +12,8 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
+        public override int Id => EnemyStateId.Chase;
+
         public override void Enter()
         {
             base.Enter();
@@ -31,7 +33,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (CanEngage())
             {
-                ChangeTo<EnemyAttackState>();
+                ChangeTo(EnemyStateId.Attack);
                 return true;
             }
 
@@ -79,7 +81,7 @@ namespace LayerZero.Characters.Enemies.States
         private void OnTargetLost()
         {
             Perception.TargetLost -= OnTargetLost;
-            ChangeTo<EnemyIdleState>();
+            ChangeTo(EnemyStateId.Idle);
         }
     }
 }

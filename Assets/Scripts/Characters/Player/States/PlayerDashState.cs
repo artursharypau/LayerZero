@@ -19,6 +19,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.Dash;
+
         public override void Enter()
         {
             base.Enter();
@@ -27,7 +29,7 @@ namespace LayerZero.Characters.Player.States
 
             if (!Owner.Abilities.TryUse(PlayerAbilityId.Dash))
             {
-                ChangeTo<PlayerIdleState>();
+                ChangeTo(PlayerStateId.Idle);
                 return;
             }
 
@@ -48,7 +50,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.IsWalled)
             {
-                ChangeTo<PlayerWallSlideState>();
+                ChangeTo(PlayerStateId.WallSlide);
                 return true;
             }
 
@@ -56,11 +58,11 @@ namespace LayerZero.Characters.Player.States
             {
                 if (Movement.IsGrounded)
                 {
-                    ChangeTo<PlayerIdleState>();
+                    ChangeTo(PlayerStateId.Idle);
                 }
                 else
                 {
-                    ChangeTo<PlayerFallState>();
+                    ChangeTo(PlayerStateId.Fall);
                 }
 
                 return true;

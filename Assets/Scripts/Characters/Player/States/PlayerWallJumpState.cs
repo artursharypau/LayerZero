@@ -14,6 +14,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.WallJump;
+
         public override void Enter()
         {
             base.Enter();
@@ -34,7 +36,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
             {
-                ChangeTo<PlayerJumpState>();
+                ChangeTo(PlayerStateId.Jump);
                 return true;
             }
 
@@ -50,13 +52,13 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.IsFalling)
             {
-                ChangeTo<PlayerFallState>();
+                ChangeTo(PlayerStateId.Fall);
                 return true;
             }
 
             if (Movement.IsWalled)
             {
-                ChangeTo<PlayerWallSlideState>();
+                ChangeTo(PlayerStateId.WallSlide);
                 return true;
             }
 

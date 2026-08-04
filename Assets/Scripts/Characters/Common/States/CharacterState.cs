@@ -34,16 +34,14 @@ namespace LayerZero.Characters.Common.States
             Animation.End(_parameter);
         }
 
-        protected void ChangeTo<TState>(StateTransitionMode mode = StateTransitionMode.Deferred)
-            where TState : StateBase
+        protected void ChangeTo(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
-            Owner.StateMachine.ChangeState<TState>(mode);
+            Owner.StateMachine.ChangeState(id, mode);
         }
 
-        protected void ChangeTo<TState, TPayload>(TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
-            where TState : StateBase
+        protected void ChangeTo<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
-            Owner.StateMachine.ChangeState<TState, TPayload>(payload, mode);
+            Owner.StateMachine.ChangeState(id, payload, mode);
         }
     }
 }

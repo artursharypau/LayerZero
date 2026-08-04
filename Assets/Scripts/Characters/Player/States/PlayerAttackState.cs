@@ -22,6 +22,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.Attack;
+
         private PlayerAttackSettings Settings => Owner.Config.Attack;
 
         protected override void OnPrepareAttack()
@@ -72,7 +74,7 @@ namespace LayerZero.Characters.Player.States
 
             if (_isNextQueued && _stepIndex < Settings.ComboLength)
             {
-                ChangeTo<PlayerAttackState>();
+                ChangeTo(PlayerStateId.Attack);
                 return;
             }
 
@@ -109,11 +111,11 @@ namespace LayerZero.Characters.Player.States
         {
             if (Owner.Input.Move.x != 0f)
             {
-                ChangeTo<PlayerMoveState>();
+                ChangeTo(PlayerStateId.Move);
             }
             else
             {
-                ChangeTo<PlayerIdleState>();
+                ChangeTo(PlayerStateId.Idle);
             }
         }
     }

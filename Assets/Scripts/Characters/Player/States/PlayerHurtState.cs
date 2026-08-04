@@ -10,21 +10,23 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.Hurt;
+
         protected override void OnHurtFinished()
         {
             if (!Movement.IsGrounded)
             {
-                ChangeTo<PlayerFallState>();
+                ChangeTo(PlayerStateId.Fall);
                 return;
             }
 
             if (Owner.Input.Move.x != 0f)
             {
-                ChangeTo<PlayerMoveState>();
+                ChangeTo(PlayerStateId.Move);
             }
             else
             {
-                ChangeTo<PlayerIdleState>();
+                ChangeTo(PlayerStateId.Idle);
             }
         }
     }
