@@ -45,7 +45,7 @@ namespace LayerZero.Characters.Enemies
         {
             if (_config)
             {
-                StateMachine.Start<EnemyIdleState>();
+                StateMachine.Start(EnemyStateId.Idle);
             }
         }
 
@@ -56,12 +56,12 @@ namespace LayerZero.Characters.Enemies
 
         protected override void OnImpactReceived(DamageImpactInfo impact)
         {
-            StateMachine.ChangeState<EnemyHurtState, DamageImpactInfo>(impact, StateTransitionMode.Immediate);
+            StateMachine.ChangeState(EnemyStateId.Hurt, impact, StateTransitionMode.Immediate);
         }
 
         protected override void OnDied()
         {
-            StateMachine.ChangeState<EnemyDeadState>(StateTransitionMode.Immediate);
+            StateMachine.ChangeState(EnemyStateId.Dead, StateTransitionMode.Immediate);
         }
 
         protected TConfig RequireConfig<TConfig>() where TConfig : EnemyConfig

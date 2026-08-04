@@ -10,6 +10,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.Jump;
+
         public override void Enter()
         {
             base.Enter();
@@ -26,7 +28,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Movement.VelocityY <= 0f)
             {
-                ChangeTo<PlayerFallState>();
+                ChangeTo(PlayerStateId.Fall);
                 return true;
             }
 

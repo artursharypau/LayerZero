@@ -45,17 +45,17 @@ namespace LayerZero.Characters.Player
         protected override void OnStarted()
         {
             Abilities.Refill(PlayerAbilityId.Jump);
-            StateMachine.Start<PlayerIdleState>();
+            StateMachine.Start(PlayerStateId.Idle);
         }
 
         protected override void OnImpactReceived(DamageImpactInfo impact)
         {
-            StateMachine.ChangeState<PlayerHurtState, DamageImpactInfo>(impact, StateTransitionMode.Immediate);
+            StateMachine.ChangeState(PlayerStateId.Hurt, impact, StateTransitionMode.Immediate);
         }
 
         protected override void OnDied()
         {
-            StateMachine.ChangeState<PlayerDeadState>(StateTransitionMode.Immediate);
+            StateMachine.ChangeState(PlayerStateId.Dead, StateTransitionMode.Immediate);
         }
     }
 }

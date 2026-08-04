@@ -9,6 +9,8 @@ namespace LayerZero.Characters.Player.States
         {
         }
 
+        public override int Id => PlayerStateId.Idle;
+
         public override void Enter()
         {
             base.Enter();
@@ -25,7 +27,7 @@ namespace LayerZero.Characters.Player.States
 
             if (Input.Move.x != 0f && !IsPushingIntoWall())
             {
-                ChangeTo<PlayerMoveState>();
+                ChangeTo(PlayerStateId.Move);
                 return true;
             }
 

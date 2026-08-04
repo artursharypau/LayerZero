@@ -13,6 +13,8 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
+        public override int Id => EnemyStateId.Idle;
+
         public override void Enter()
         {
             base.Enter();
@@ -30,7 +32,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (_timer.IsExpired)
             {
-                ChangeTo<EnemyPatrolState>();
+                ChangeTo(EnemyStateId.Patrol);
                 return true;
             }
 

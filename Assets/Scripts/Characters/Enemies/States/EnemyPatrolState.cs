@@ -9,6 +9,8 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
+        public override int Id => EnemyStateId.Patrol;
+
         public override void Enter()
         {
             base.Enter();
@@ -30,7 +32,7 @@ namespace LayerZero.Characters.Enemies.States
 
             if (!Movement.IsGrounded || Movement.IsWalled)
             {
-                ChangeTo<EnemyIdleState>();
+                ChangeTo(EnemyStateId.Idle);
                 return true;
             }
 

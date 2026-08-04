@@ -5,9 +5,7 @@ namespace LayerZero.Core.StateMachine
 {
     public sealed class StateRegistry
     {
-        private readonly Dictionary<Type, StateBase> _exact = new();
-        private readonly Dictionary<Type, StateBase> _aliases = new();
-        private readonly HashSet<Type> _ambiguousAliases = new();
+        private readonly Dictionary<int, StateBase> _states = new(8);
 
         public void Add(StateBase state)
         {
@@ -16,42 +14,17 @@ namespace LayerZero.Core.StateMachine
                 throw new ArgumentNullException(nameof(state));
             }
 
-            Type concrete = state.GetType();
-            if (!_exact.TryAdd(concrete, state))
-            {
-                throw new InvalidOperationException($"State '{concrete.Name}' is already registered.");
-            }
-
-            for (Type ancestor = concrete.BaseType;
-                 ancestor != null && ancestor != typeof(StateBase) && typeof(StateBase).IsAssignableFrom(ancestor);
-                 ancestor = ancestor.BaseType)
-            {
-                if (!_aliases.TryAdd(ancestor, state))
-                {
-                    _ambiguousAliases.Add(ancestor);
-                }
-            }
+            _states[state.Id] = state;
         }
 
-        public StateBase Resolve(Type key)
+        public StateBase Get(int id)
         {
-            if (_exact.TryGetValue(key, out StateBase exact))
+            if (!_states.TryGetValue(id, out StateBase state))
             {
-                return exact;
+                throw new KeyNotFoundException($"No state registered for id {id}.");
             }
 
-            if (_ambiguousAliases.Contains(key))
-            {
-                throw new InvalidOperationException(
-                    $"'{key.Name}' is ambiguous: several registered states derive from it. Request a concrete state type instead.");
-            }
-
-            if (_aliases.TryGetValue(key, out StateBase alias))
-            {
-                return alias;
-            }
-
-            throw new KeyNotFoundException($"No state registered for '{key.Name}'.");
+            return state;
         }
     }
 }
