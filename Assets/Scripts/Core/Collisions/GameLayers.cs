@@ -11,7 +11,5 @@ namespace LayerZero.Core.Collisions
         public static readonly LayerMask Ground = LayerMask.GetMask(GroundName);
         public static readonly LayerMask Player = LayerMask.GetMask(PlayerName);
         public static readonly LayerMask Enemy = LayerMask.GetMask(EnemyName);
-
-        public static LayerMask Characters => Player | Enemy;
     }
 }

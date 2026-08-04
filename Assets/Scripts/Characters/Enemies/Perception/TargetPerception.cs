@@ -32,6 +32,9 @@ namespace LayerZero.Characters.Enemies.Perception
         public Transform Target { get; private set; }
         public bool HasTarget => Target;
 
+        public bool IsTargetBehind =>
+            Target && _positioned != null && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
+
         public float DirectionToTarget
         {
             get
@@ -44,12 +47,6 @@ namespace LayerZero.Characters.Enemies.Perception
                 return Target.position.x > _positioned.Position.x ? 1f : -1f;
             }
         }
-
-        public float HorizontalDistanceToTarget =>
-            Target && _positioned != null ? Mathf.Abs(Target.position.x - _positioned.Position.x) : float.PositiveInfinity;
-
-        public bool IsTargetBehind =>
-            Target && _positioned != null && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
 
         protected override void OnInitialize()
         {

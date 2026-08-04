@@ -51,11 +51,6 @@ namespace LayerZero.Combat.Attacks
             _armedAttack = null;
         }
 
-        public bool Supports(AttackKind kind)
-        {
-            return _executors.ContainsKey(kind);
-        }
-
         public void Arm(AttackDefinition attack)
         {
             if (attack == null)

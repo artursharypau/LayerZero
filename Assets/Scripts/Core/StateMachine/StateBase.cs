@@ -2,6 +2,8 @@ namespace LayerZero.Core.StateMachine
 {
     public abstract class StateBase : IState
     {
+        public int Id { get; }
+
         public virtual void Enter()
         {
         }

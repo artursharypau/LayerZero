@@ -35,7 +35,7 @@ namespace LayerZero.Characters.Player.States
 
             _hasLanded = true;
 
-            Animation.Fire(PlayerAnimatorParameters.JumpAttackLanding);
+            Animation.Fire(PlayerAnimatorParameters.JumpAttackTrigger);
             Movement.SetVelocityX(0f);
         }
 

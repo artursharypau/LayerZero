@@ -60,7 +60,7 @@ namespace LayerZero.Characters.Enemies.States
                 return;
             }
 
-            Movement.SetVelocityX(Config.Movement.MoveSpeed * Config.Chase.SpeedMultiplier * GetMoveDirection());
+            Movement.SetVelocityX(Config.Movement.MoveSpeed * Config.Chase.SpeedMultiplier * Perception.DirectionToTarget);
         }
 
         public override void Exit()
@@ -71,12 +71,7 @@ namespace LayerZero.Characters.Enemies.States
             Animation.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
         }
 
-        protected virtual float GetMoveDirection()
-        {
-            return Perception.DirectionToTarget;
-        }
-
-        protected virtual bool CanEngage()
+        private bool CanEngage()
         {
             return Owner.Combat && Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target);
         }

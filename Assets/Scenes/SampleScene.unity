@@ -11665,6 +11665,10 @@ PrefabInstance:
       propertyPath: _attackDefinition._stunDuration
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 5630542884956237323, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
+      propertyPath: _groundWallDetector._solidMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

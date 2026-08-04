@@ -21,7 +21,7 @@ namespace LayerZero.Characters.Common.States
         }
 
         protected TCharacter Owner { get; }
-        protected CharacterAnimator Animation => Owner.Animation;
+        protected CharacterAnimator Animation => Owner.Animator;
         protected CharacterMovement2D Movement => Owner.Movement;
 
         public override void Enter()
