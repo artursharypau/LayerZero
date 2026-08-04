@@ -12,20 +12,21 @@ namespace LayerZero.Characters.Common
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(DamageReceiver))]
-    [RequireComponent(typeof(CombatSystem))]
     public abstract class Character2D : MonoBehaviour
     {
         public StateMachine StateMachine { get; } = new();
+
         public CharacterMovement2D Movement { get; private set; }
         public CharacterAnimator Animator { get; private set; }
         public IDamageable Health { get; private set; }
         public IDamageReceiver DamageReceiver { get; private set; }
         public IDamageResistances DamageResistances { get; private set; }
+
         public CombatSystem Combat { get; private set; }
 
         public bool IsDead => Health.IsDead;
 
-        protected virtual void Awake()
+        private void Awake()
         {
             Movement = this.GetRequired<CharacterMovement2D>();
             Health = this.GetRequired<IDamageable>();
@@ -38,36 +39,93 @@ namespace LayerZero.Characters.Common
 
             DamageResistances = new DamageResistances();
             DamageReceiver.SetResistances(DamageResistances);
+
+            OnInitialized();
         }
 
-        protected virtual void OnEnable()
+        private void OnEnable()
         {
             Health.Died += HandleDied;
-            DamageReceiver.ImpactReceived += OnDamageImpactReceived;
-            DamageReceiver.Damaged += OnDamaged;
+            DamageReceiver.ImpactReceived += HandleImpactReceived;
+            DamageReceiver.Damaged += HandleDamaged;
+
+            OnEnabled();
         }
 
-        protected virtual void OnDisable()
+        private void Start()
         {
-            DamageReceiver.Damaged -= OnDamaged;
-            DamageReceiver.ImpactReceived -= OnDamageImpactReceived;
-            Health.Died -= HandleDied;
+            OnStarted();
         }
 
-        protected virtual void Update()
+        private void Update()
         {
             StateMachine.Update();
+
+            OnUpdated(Time.deltaTime);
         }
 
-        protected virtual void FixedUpdate()
+        private void FixedUpdate()
         {
             Movement.Refresh();
             StateMachine.FixedUpdate();
+
+            OnFixedUpdated(Time.fixedDeltaTime);
         }
 
-        protected virtual void OnDrawGizmos()
+        private void OnDisable()
         {
-            Movement.DrawGizmos();
+            DamageReceiver.Damaged -= HandleDamaged;
+            DamageReceiver.ImpactReceived -= HandleImpactReceived;
+            Health.Died -= HandleDied;
+
+            OnDisabled();
+        }
+
+        private void OnDestroy()
+        {
+            OnDestroyed();
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (Movement)
+            {
+                Movement.DrawGizmos();
+            }
+
+            OnGizmosDrawn();
+        }
+
+        protected virtual void OnInitialized()
+        {
+        }
+
+        protected virtual void OnStarted()
+        {
+        }
+
+        protected virtual void OnEnabled()
+        {
+        }
+
+        protected virtual void OnUpdated(float deltaTime)
+        {
+        }
+
+        protected virtual void OnFixedUpdated(float deltaTime)
+        {
+        }
+
+        protected virtual void OnDisabled()
+        {
+        }
+
+        protected virtual void OnDestroyed()
+        {
+        }
+
+        protected virtual void OnGizmosDrawn()
+        {
         }
 
         protected virtual void OnDamaged(DamageInfo damageInfo)
@@ -82,10 +140,34 @@ namespace LayerZero.Characters.Common
         {
         }
 
+        private void HandleDamaged(DamageInfo damageInfo)
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            OnDamaged(damageInfo);
+        }
+
+        private void HandleImpactReceived(DamageImpactInfo impact)
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            OnDamageImpactReceived(impact);
+        }
+
         private void HandleDied()
         {
-            Movement.SetVelocity(0f, 0f);
-            Combat.enabled = false;
+            Movement.Stop();
+
+            if (Combat)
+            {
+                Combat.enabled = false;
+            }
 
             OnDied();
         }

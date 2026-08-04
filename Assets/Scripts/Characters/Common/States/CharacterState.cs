@@ -5,13 +5,14 @@ using LayerZero.Core.StateMachine;
 namespace LayerZero.Characters.Common.States
 {
     public abstract class CharacterState<TCharacter> : StateBase
-        where TCharacter : Character
+        where TCharacter : Character2D
     {
         private readonly AnimatorParameter _parameter;
 
         protected CharacterState(TCharacter owner, AnimatorParameter parameter)
         {
             Owner = owner;
+
             _parameter = parameter;
         }
 
@@ -21,17 +22,17 @@ namespace LayerZero.Characters.Common.States
         }
 
         protected TCharacter Owner { get; }
-        protected CharacterAnimator Animation => Owner.Animator;
+        protected CharacterAnimator Animator => Owner.Animator;
         protected CharacterMovement2D Movement => Owner.Movement;
 
         public override void Enter()
         {
-            Animation.Begin(_parameter);
+            Animator.Enter(_parameter);
         }
 
         public override void Exit()
         {
-            Animation.End(_parameter);
+            Animator.Exit(_parameter);
         }
 
         protected void ChangeTo(int id, StateTransitionMode mode = StateTransitionMode.Deferred)

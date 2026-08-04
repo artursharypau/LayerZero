@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player
 {
-    public sealed class PlayerController : Character
+    public sealed class PlayerController : Character2D
     {
         [SerializeField] private PlayerConfig _config;
 
@@ -38,7 +38,6 @@ namespace LayerZero.Characters.Player
             StateMachine.Register(new PlayerAttackState(this));
             StateMachine.Register(new PlayerJumpAttackState(this));
             StateMachine.Register(new PlayerHurtState(this));
-            StateMachine.Register(new PlayerDeadState(this));
         }
 
         protected override void OnStarted()

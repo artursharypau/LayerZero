@@ -5,7 +5,6 @@ namespace LayerZero.Characters.Common.Animation
     public readonly struct AnimatorParameter
     {
         public static readonly AnimatorParameter None = default;
-
         public readonly int Hash;
         public readonly AnimatorParameterKind Kind;
 

@@ -1,5 +1,3 @@
-using System;
-using LayerZero.Combat.Attacks;
 using UnityEngine;
 
 namespace LayerZero.Characters.Common.Animation
@@ -7,59 +5,17 @@ namespace LayerZero.Characters.Common.Animation
     public sealed class CharacterAnimator
     {
         private readonly Animator _animator;
-        private readonly IAttackAnimatorEvents _events;
 
-        public CharacterAnimator(Animator animator, IAttackAnimatorEvents events)
+        public CharacterAnimator(Animator animator, IAnimatorEvents events)
         {
             _animator = animator;
-            _events = events;
+            Events = events;
         }
 
-        public bool IsValid => _animator;
+        public IAnimatorEvents Events { get; }
 
-        public event Action AttackHit
+        public void Enter(in AnimatorParameter parameter)
         {
-            add
-            {
-                if (_events != null)
-                {
-                    _events.AttackHit += value;
-                }
-            }
-            remove
-            {
-                if (_events != null)
-                {
-                    _events.AttackHit -= value;
-                }
-            }
-        }
-
-        public event Action AttackFinished
-        {
-            add
-            {
-                if (_events != null)
-                {
-                    _events.AttackFinished += value;
-                }
-            }
-            remove
-            {
-                if (_events != null)
-                {
-                    _events.AttackFinished -= value;
-                }
-            }
-        }
-
-        public void Begin(in AnimatorParameter parameter)
-        {
-            if (!_animator)
-            {
-                return;
-            }
-
             switch (parameter.Kind)
             {
                 case AnimatorParameterKind.Bool:
@@ -71,13 +27,8 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        public void End(in AnimatorParameter parameter)
+        public void Exit(in AnimatorParameter parameter)
         {
-            if (!_animator)
-            {
-                return;
-            }
-
             switch (parameter.Kind)
             {
                 case AnimatorParameterKind.Bool:
@@ -97,17 +48,17 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
+        public float GetFloat(in AnimatorParameter parameter)
+        {
+            return _animator ? _animator.GetFloat(parameter.Hash) : 0f;
+        }
+
         public void SetFloat(in AnimatorParameter parameter, float value)
         {
             if (_animator)
             {
                 _animator.SetFloat(parameter.Hash, value);
             }
-        }
-
-        public float GetFloat(in AnimatorParameter parameter)
-        {
-            return _animator ? _animator.GetFloat(parameter.Hash) : 0f;
         }
 
         public void SetInt(in AnimatorParameter parameter, int value)

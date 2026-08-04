@@ -20,7 +20,7 @@ namespace LayerZero.Characters.Enemies.States
                 Movement.Flip();
             }
 
-            Animation.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
+            Animator.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
         }
 
         public override bool TryFixedTransition()

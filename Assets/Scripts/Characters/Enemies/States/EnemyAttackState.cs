@@ -11,7 +11,7 @@ namespace LayerZero.Characters.Enemies.States
         {
         }
 
-        protected override AttackDefinition ResolveAttack()
+        protected override AttackDefinition ResolveAttackDefinition()
         {
             return Owner.Config.Attack;
         }

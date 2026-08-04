@@ -37,11 +37,11 @@ namespace LayerZero.Characters.Player.States
 
             _hasLanded = true;
 
-            Animation.Fire(PlayerAnimatorParameters.JumpAttackTrigger);
+            Animator.Fire(PlayerAnimatorParameters.JumpAttackTrigger);
             Movement.SetVelocityX(0f);
         }
 
-        protected override AttackDefinition ResolveAttack()
+        protected override AttackDefinition ResolveAttackDefinition()
         {
             return Owner.Config.JumpAttack.Attack;
         }

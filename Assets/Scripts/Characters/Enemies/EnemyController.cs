@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Enemies
 {
-    public abstract class EnemyController : Character
+    public abstract class EnemyController : Character2D
     {
         [Header("Data")]
         [SerializeField] private EnemyConfig _config;
@@ -34,7 +34,6 @@ namespace LayerZero.Characters.Enemies
             StateMachine.Register(new EnemyIdleState(this));
             StateMachine.Register(new EnemyPatrolState(this));
             StateMachine.Register(new EnemyHurtState(this));
-            StateMachine.Register(new EnemyDeadState(this));
 
             RegisterCombatBehaviour();
         }
