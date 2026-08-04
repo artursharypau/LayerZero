@@ -14,20 +14,19 @@ namespace LayerZero.Characters.Player
     {
         [SerializeField] private PlayerConfig _config;
 
-        private PlayerInputModule _input;
+        private PlayerInputHandler _input;
 
         public PlayerConfig Config => _config;
         public IPlayerInput Input => _input;
         public AbilitySet<PlayerAbilityId> Abilities { get; private set; }
 
-        protected override void Compose()
+        protected override void OnInitialized()
         {
-            _input = AddModule(new PlayerInputModule(_config.Input));
+            _input = new PlayerInputHandler(_config.Input);
 
-            Abilities = AddModule(
-                new AbilitySet<PlayerAbilityId>()
-                    .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
-                    .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement)));
+            Abilities = new AbilitySet<PlayerAbilityId>()
+                .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
+                .Add(PlayerAbilityId.Dash, new DashAbility(_config.Dash, _input, Movement));
 
             StateMachine.Register(new PlayerIdleState(this));
             StateMachine.Register(new PlayerMoveState(this));
@@ -48,7 +47,28 @@ namespace LayerZero.Characters.Player
             StateMachine.Start(PlayerStateId.Idle);
         }
 
-        protected override void OnImpactReceived(DamageImpactInfo impact)
+        protected override void OnEnabled()
+        {
+            _input.Enable();
+        }
+
+        protected override void OnUpdated(float deltaTime)
+        {
+            _input.Tick(deltaTime);
+            Abilities.Tick(deltaTime);
+        }
+
+        protected override void OnDisabled()
+        {
+            _input.Disable();
+        }
+
+        protected override void OnDestroyed()
+        {
+            _input.Dispose();
+        }
+
+        protected override void OnDamageImpactReceived(DamageImpactInfo impact)
         {
             StateMachine.ChangeState(PlayerStateId.Hurt, impact, StateTransitionMode.Immediate);
         }

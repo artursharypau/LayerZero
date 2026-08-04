@@ -21,7 +21,7 @@ namespace LayerZero.Characters.Enemies
         public EnemyConfig Config => _config;
         public TargetPerception Perception { get; private set; }
 
-        protected override void Compose()
+        protected override void OnInitialized()
         {
             if (!_config)
             {
@@ -29,7 +29,7 @@ namespace LayerZero.Characters.Enemies
                 return;
             }
 
-            Perception = AddModule(new TargetPerception(_config.Perception, _sightOrigin));
+            Perception = new TargetPerception(Movement, _config.Perception, _sightOrigin);
 
             StateMachine.Register(new EnemyIdleState(this));
             StateMachine.Register(new EnemyPatrolState(this));
@@ -49,12 +49,27 @@ namespace LayerZero.Characters.Enemies
             }
         }
 
-        protected override void OnDamaged(DamageInfo damageInfo)
+        protected override void OnFixedUpdated(float deltaTime)
         {
-            Perception?.NotifyDamaged(damageInfo);
+            Perception.FixedTick(deltaTime);
         }
 
-        protected override void OnImpactReceived(DamageImpactInfo impact)
+        protected override void OnDisabled()
+        {
+            Perception.Disable();
+        }
+
+        protected override void OnGizmosDrawn()
+        {
+            Perception.DrawGizmos();
+        }
+
+        protected override void OnDamaged(DamageInfo damageInfo)
+        {
+            Perception.NotifyDamaged(damageInfo);
+        }
+
+        protected override void OnDamageImpactReceived(DamageImpactInfo impact)
         {
             StateMachine.ChangeState(EnemyStateId.Hurt, impact, StateTransitionMode.Immediate);
         }
@@ -62,20 +77,6 @@ namespace LayerZero.Characters.Enemies
         protected override void OnDied()
         {
             StateMachine.ChangeState(EnemyStateId.Dead, StateTransitionMode.Immediate);
-        }
-
-        protected TConfig RequireConfig<TConfig>() where TConfig : EnemyConfig
-        {
-            if (_config is TConfig typed)
-            {
-                return typed;
-            }
-
-            GameLog.Error(
-                this,
-                $"'{name}' needs a '{typeof(TConfig).Name}' asset but got '{(_config ? _config.GetType().Name : "none")}'.");
-
-            return null;
         }
     }
 }
