@@ -12,7 +12,7 @@ namespace LayerZero.Characters.Common
     [RequireComponent(typeof(CharacterMovement2D))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(DamageReceiver))]
-    public abstract class Character : MonoBehaviour
+    public abstract class Character2D : MonoBehaviour
     {
         public StateMachine StateMachine { get; } = new();
 
@@ -24,7 +24,7 @@ namespace LayerZero.Characters.Common
 
         public CombatSystem Combat { get; private set; }
 
-        public bool IsDead => Health != null && Health.IsDead;
+        public bool IsDead => Health.IsDead;
 
         private void Awake()
         {
@@ -35,7 +35,7 @@ namespace LayerZero.Characters.Common
 
             Animator = new CharacterAnimator(
                 this.GetRequiredInChildren<Animator>(),
-                this.GetRequiredInChildren<IAttackAnimatorEvents>());
+                this.GetRequiredInChildren<AnimatorEvents>());
 
             DamageResistances = new DamageResistances();
             DamageReceiver.SetResistances(DamageResistances);

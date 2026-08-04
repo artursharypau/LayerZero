@@ -1,10 +1,9 @@
 using System;
-using LayerZero.Combat.Attacks;
 using UnityEngine;
 
 namespace LayerZero.Characters.Common.Animation
 {
-    public sealed class AnimatorEventRelay : MonoBehaviour, IAttackAnimatorEvents
+    public sealed class AnimatorEvents : MonoBehaviour, IAnimatorEvents
     {
         public event Action AttackHit;
         public event Action AttackFinished;

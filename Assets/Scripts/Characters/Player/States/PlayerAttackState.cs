@@ -11,7 +11,7 @@ namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerAttackState : AttackStateBase<PlayerController>
     {
-        private readonly CountdownTimer _lungeTimer = new();
+        private readonly CountdownTimer _movementLockTimer = new();
 
         private int _stepIndex;
         private float _lastFinishedTime = float.NegativeInfinity;
@@ -31,7 +31,7 @@ namespace LayerZero.Characters.Player.States
             _isNextQueued = false;
 
             AdvanceComboCursor();
-            Animation.SetInt(PlayerAnimatorParameters.AttackIndex, _stepIndex);
+            Animator.SetInt(PlayerAnimatorParameters.AttackIndex, _stepIndex);
         }
 
         public override void Enter()
@@ -55,14 +55,14 @@ namespace LayerZero.Characters.Player.States
         {
             base.FixedUpdate();
 
-            _lungeTimer.Tick(Time.fixedDeltaTime);
-            if (_lungeTimer.IsExpired)
+            _movementLockTimer.Tick(Time.fixedDeltaTime);
+            if (_movementLockTimer.IsExpired)
             {
                 Movement.SetVelocityX(0f);
             }
         }
 
-        protected override AttackDefinition ResolveAttack()
+        protected override AttackDefinition ResolveAttackDefinition()
         {
             return Settings.GetStep(_stepIndex)?.Attack;
         }
@@ -98,7 +98,7 @@ namespace LayerZero.Characters.Player.States
                 return;
             }
 
-            _lungeTimer.Start(Settings.VelocityDuration);
+            _movementLockTimer.Start(Settings.VelocityDuration);
 
             float velocityX = Owner.Input.Move.x != 0f
                 ? Owner.Input.Move.x * step.Velocity.x

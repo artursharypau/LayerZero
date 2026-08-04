@@ -7,7 +7,7 @@ using UnityEngine;
 namespace LayerZero.Characters.Common.States
 {
     public abstract class HurtStateBase<TCharacter> : CharacterState<TCharacter>, IStatePayload<DamageImpactInfo>
-        where TCharacter : Character
+        where TCharacter : Character2D
     {
         private const float MinKnockbackLockDuration = 0.1f;
 

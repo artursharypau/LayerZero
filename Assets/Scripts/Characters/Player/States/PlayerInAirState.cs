@@ -39,7 +39,7 @@ namespace LayerZero.Characters.Player.States
         {
             base.Update();
 
-            Animation.SetFloat(CommonAnimatorParameters.VelocityY, Movement.VelocityY);
+            Animator.SetFloat(CommonAnimatorParameters.VelocityY, Movement.VelocityY);
         }
 
         public override void FixedUpdate()

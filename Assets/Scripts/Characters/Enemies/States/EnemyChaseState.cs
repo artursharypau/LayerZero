@@ -18,8 +18,8 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Enter();
 
-            _defaultAnimationMultiplier = Animation.GetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier);
-            Animation.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, Config.Chase.AnimationMultiplier);
+            _defaultAnimationMultiplier = Animator.GetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier);
+            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, Config.Chase.AnimationMultiplier);
 
             Perception.TargetLost += OnTargetLost;
         }
@@ -44,7 +44,7 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Update();
 
-            Animation.SetFloat(CommonAnimatorParameters.VelocityX, Movement.VelocityX);
+            Animator.SetFloat(CommonAnimatorParameters.VelocityX, Movement.VelocityX);
         }
 
         public override void FixedUpdate()
@@ -70,7 +70,7 @@ namespace LayerZero.Characters.Enemies.States
             base.Exit();
 
             Perception.TargetLost -= OnTargetLost;
-            Animation.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
+            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
         }
 
         private bool CanEngage()

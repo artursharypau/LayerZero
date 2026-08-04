@@ -8,7 +8,7 @@ namespace LayerZero.Combat.Attacks
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
 
-        private IAttackAnimatorEvents _animatorEvents;
+        private IAttackEvents _attackEvents;
         private AttackDefinition _armedAttack;
 
         public IReadOnlyDictionary<AttackKind, IAttackExecutor> Executors => _executors;
@@ -26,26 +26,26 @@ namespace LayerZero.Combat.Attacks
                 executor.Initialize(transform);
             }
 
-            _animatorEvents = GetComponentInChildren<IAttackAnimatorEvents>(true);
-            if (_animatorEvents == null)
+            _attackEvents = GetComponentInChildren<IAttackEvents>(true);
+            if (_attackEvents == null)
             {
-                GameLog.Error(this, $"'{name}' has no {nameof(IAttackAnimatorEvents)} in its hierarchy - attacks will never land.");
+                GameLog.Error(this, $"'{name}' has no {nameof(IAttackEvents)} in its hierarchy - attacks will never land.");
             }
         }
 
         private void OnEnable()
         {
-            if (_animatorEvents != null)
+            if (_attackEvents != null)
             {
-                _animatorEvents.AttackHit += OnAttackHit;
+                _attackEvents.AttackHit += OnAttackHit;
             }
         }
 
         private void OnDisable()
         {
-            if (_animatorEvents != null)
+            if (_attackEvents != null)
             {
-                _animatorEvents.AttackHit -= OnAttackHit;
+                _attackEvents.AttackHit -= OnAttackHit;
             }
 
             _armedAttack = null;
