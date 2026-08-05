@@ -1,33 +1,37 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
+using LayerZero.Combat.Damage;
+using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Characters.Player.States
 {
-    public sealed class PlayerHurtState : HurtStateBase<PlayerController>
+    public sealed class PlayerHurtState : PlayerState, IStatePayload<DamageImpactInfo>
     {
+        private readonly StunBehaviour _stun = new();
+
+        private DamageImpactInfo _impact;
+
         public PlayerHurtState(PlayerController owner)
             : base(owner, CommonAnimatorParameters.Hurt)
         {
+            On(() => _stun.IsFinished, ResolveLocomotionState);
         }
 
         public override int Id => PlayerStateId.Hurt;
 
-        protected override void OnHurtFinished()
+        public void SetPayload(DamageImpactInfo payload)
         {
-            if (!Movement.IsGrounded)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                return;
-            }
+            _impact = payload;
+        }
 
-            if (Owner.Input.Move.x != 0f)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Move);
-            }
-            else
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-            }
+        public override void Enter()
+        {
+            base.Enter();
+
+            DamageImpactInfo impact = _impact;
+            _impact = DamageImpactInfo.None;
+
+            _stun.Begin(Movement, impact);
         }
     }
 }

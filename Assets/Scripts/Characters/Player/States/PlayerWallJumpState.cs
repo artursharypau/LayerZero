@@ -7,11 +7,15 @@ namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerWallJumpState : PlayerInAirState
     {
-        private readonly CountdownTimer _moveLockTimer = new();
+        private Countdown _moveLock;
 
         public PlayerWallJumpState(PlayerController owner)
             : base(owner, PlayerAnimatorParameters.JumpFall)
         {
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
+
+            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
+            OnFixed(() => Movement.IsWalled, PlayerStateId.WallSlide);
         }
 
         public override int Id => PlayerStateId.WallJump;
@@ -20,59 +24,20 @@ namespace LayerZero.Characters.Player.States
         {
             base.Enter();
 
-            _moveLockTimer.Start(Config.Jump.WallJumpMoveLockDuration);
-            SetMovementEnabled(false);
+            _moveLock.Start(Config.Jump.WallJumpMoveLockDuration);
+            IsMovementEnabled = false;
 
             Vector2 force = Config.Jump.WallJumpForce;
             Movement.SetVelocity(force.x * -Movement.FacingDirection, force.y, true);
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Jump);
-                return true;
-            }
-
-            return false;
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (Movement.IsFalling)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                return true;
-            }
-
-            if (Movement.IsWalled)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.WallSlide);
-                return true;
-            }
-
-            return false;
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            _moveLockTimer.Tick(Time.fixedDeltaTime);
-            if (_moveLockTimer.IsExpired)
+            if (!IsMovementEnabled && _moveLock.IsExpired)
             {
-                SetMovementEnabled(true);
+                IsMovementEnabled = true;
             }
         }
     }

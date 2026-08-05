@@ -1,16 +1,23 @@
 using LayerZero.Characters.Common.States;
+using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
 using LayerZero.Combat.Attacks;
 
 namespace LayerZero.Characters.Player.States
 {
-    public sealed class PlayerJumpAttackState : AttackStateBase<PlayerController>
+    public sealed class PlayerJumpAttackState : PlayerState
     {
+        private readonly AttackBehaviour _attack;
+
         private bool _hasLanded;
 
         public PlayerJumpAttackState(PlayerController owner)
             : base(owner, PlayerAnimatorParameters.JumpAttack)
         {
+            _attack = new AttackBehaviour(owner, ResolveAttack);
+
+            On(() => _attack.IsFinished, ResolveLocomotionState);
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
         }
 
         public override int Id => PlayerStateId.JumpAttack;
@@ -21,9 +28,9 @@ namespace LayerZero.Characters.Player.States
 
             _hasLanded = false;
 
-            Movement.SetVelocity(
-                Owner.Config.JumpAttack.Velocity.x * Movement.FacingDirection,
-                Owner.Config.JumpAttack.Velocity.y);
+            Movement.SetVelocity(Config.JumpAttack.Velocity.x * Movement.FacingDirection, Config.JumpAttack.Velocity.y);
+
+            _attack.Begin();
         }
 
         public override void FixedUpdate()
@@ -37,25 +44,20 @@ namespace LayerZero.Characters.Player.States
 
             _hasLanded = true;
 
-            Animator.Fire(PlayerAnimatorParameters.JumpAttackTrigger);
+            Animator.Trigger(PlayerAnimatorParameters.JumpAttackTrigger);
             Movement.SetVelocityX(0f);
         }
 
-        protected override AttackDefinition ResolveAttackDefinition()
+        public override void Exit()
         {
-            return Owner.Config.JumpAttack.Attack;
+            base.Exit();
+
+            _attack.End();
         }
 
-        protected override void OnAttackFinished()
+        private AttackDefinition ResolveAttack()
         {
-            if (Owner.Input.Move.x != 0f)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Move);
-            }
-            else
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-            }
+            return Config.JumpAttack.Attack;
         }
     }
 }

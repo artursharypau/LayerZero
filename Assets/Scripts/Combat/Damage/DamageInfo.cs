@@ -6,9 +6,7 @@ namespace LayerZero.Combat.Damage
     {
         public readonly int Amount;
         public readonly DamageSource Source;
-
         public readonly Transform Attacker;
-
         public readonly DamageImpactInfo Impact;
 
         public DamageInfo(int amount, DamageSource source, Transform attacker, DamageImpactInfo impact = default)
@@ -26,16 +24,11 @@ namespace LayerZero.Combat.Damage
 
         public static DamageInfo FromDefinition(DamageDefinition definition, Transform attacker)
         {
-            return FromDefinition(definition, attacker, attacker);
-        }
-
-        public static DamageInfo FromDefinition(DamageDefinition definition, Transform attacker, Transform impactSpace)
-        {
             DamageImpactInfo impact = DamageImpactInfo.None;
 
-            if (definition.HasImpact && impactSpace)
+            if (definition.HasImpact && attacker)
             {
-                Vector2 knockback = impactSpace.TransformDirection(definition.Knockback);
+                Vector2 knockback = attacker.TransformDirection(definition.Knockback);
                 impact = new DamageImpactInfo(knockback, definition.StunDuration);
             }
 

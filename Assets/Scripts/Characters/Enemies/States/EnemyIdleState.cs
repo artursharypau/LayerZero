@@ -1,16 +1,16 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Core.Timing;
-using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.States
 {
     public sealed class EnemyIdleState : EnemyGroundedState
     {
-        private readonly CountdownTimer _timer = new();
+        private Countdown _timer;
 
         public EnemyIdleState(EnemyController owner)
             : base(owner, CommonAnimatorParameters.Idle)
         {
+            On(() => _timer.IsExpired, EnemyStateId.Patrol);
         }
 
         public override int Id => EnemyStateId.Idle;
@@ -21,29 +21,6 @@ namespace LayerZero.Characters.Enemies.States
 
             _timer.Start(Config.Movement.IdleDuration);
             Movement.SetVelocityX(0f);
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (_timer.IsExpired)
-            {
-                Owner.StateMachine.ChangeState(EnemyStateId.Patrol);
-                return true;
-            }
-
-            return false;
-        }
-
-        public override void Update()
-        {
-            base.Update();
-
-            _timer.Tick(Time.deltaTime);
         }
     }
 }

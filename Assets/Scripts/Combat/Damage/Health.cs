@@ -7,8 +7,8 @@ namespace LayerZero.Combat.Damage
     {
         [SerializeField] [Min(1)] private int _max = 100;
 
-        public event Action Died;
         public event Action<int> HealthChanged;
+        public event Action Died;
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth => _max;

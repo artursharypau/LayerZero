@@ -7,26 +7,7 @@ namespace LayerZero.Characters.Enemies.States
         protected EnemyGroundedState(EnemyController owner, AnimatorParameter parameter)
             : base(owner, parameter)
         {
-        }
-
-        public override void Enter()
-        {
-            base.Enter();
-
-            Perception.TargetAcquired += OnTargetAcquired;
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-
-            Perception.TargetAcquired -= OnTargetAcquired;
-        }
-
-        private void OnTargetAcquired()
-        {
-            Perception.TargetAcquired -= OnTargetAcquired;
-            Owner.StateMachine.ChangeState(EnemyStateId.Chase);
+            OnFixed(() => Perception.HasTarget, EnemyStateId.Chase);
         }
     }
 }

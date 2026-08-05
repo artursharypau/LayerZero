@@ -1,10 +1,11 @@
+using LayerZero.Characters.Common.Collisions;
 using LayerZero.Core.Extensions;
 using UnityEngine;
 
 namespace LayerZero.Characters.Common.Movement
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public sealed class CharacterMovement2D : MonoBehaviour, IMovable
+    public sealed class CharacterMovement2D : MonoBehaviour, IMovement2D
     {
         [SerializeField] private GroundWallDetector _groundWallDetector = new();
 
@@ -53,19 +54,6 @@ namespace LayerZero.Characters.Common.Movement
             SetVelocity(x, VelocityY, updateFacing);
         }
 
-        public void Stop()
-        {
-            SetVelocity(0f, 0f);
-        }
-
-        public void Flip()
-        {
-            transform.Rotate(0f, 180f, 0f);
-            FacingDirection = -FacingDirection;
-
-            _groundWallDetector.Refresh();
-        }
-
         public void FaceTowards(float direction)
         {
             if (direction == 0f)
@@ -77,6 +65,14 @@ namespace LayerZero.Characters.Common.Movement
             {
                 Flip();
             }
+        }
+
+        public void Flip()
+        {
+            transform.Rotate(0f, 180f, 0f);
+            FacingDirection = -FacingDirection;
+
+            _groundWallDetector.Refresh();
         }
 
         public void SetGravityScale(float scale)

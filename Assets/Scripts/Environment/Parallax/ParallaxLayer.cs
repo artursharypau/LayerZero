@@ -18,8 +18,6 @@ namespace LayerZero.Environment.Parallax
         private int _leftIndex;
         private int _rightIndex;
 
-        public bool IsValid => _sprites is { Length: > 0 };
-
         public void Initialize()
         {
             if (!_root)
@@ -57,7 +55,7 @@ namespace LayerZero.Environment.Parallax
 
         public void Recycle(float distance, float cameraLeftEdge, float cameraRightEdge)
         {
-            if (!IsValid)
+            if (_sprites?.Length > 0)
             {
                 return;
             }

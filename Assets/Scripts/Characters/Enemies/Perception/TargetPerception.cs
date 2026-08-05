@@ -1,4 +1,3 @@
-using System;
 using LayerZero.Characters.Common.Movement;
 using LayerZero.Characters.Enemies.Config;
 using LayerZero.Combat.Damage;
@@ -10,29 +9,26 @@ namespace LayerZero.Characters.Enemies.Perception
 {
     public sealed class TargetPerception
     {
-        private readonly PerceptionSettings _settings;
+        private readonly PerceptionConfig _config;
         private readonly Transform _sightOrigin;
         private readonly IPositioned _positioned;
-        private readonly CountdownTimer _alertTimer = new();
-        private readonly CountdownTimer _scanTimer = new();
-
         private readonly LayerMask _targetMask;
         private readonly LayerMask _blockerMask;
 
-        public TargetPerception(IPositioned positioned, PerceptionSettings settings, Transform sightOrigin)
+        private Countdown _alertTimer;
+        private Countdown _scanTimer;
+
+        public TargetPerception(IPositioned positioned, PerceptionConfig config, Transform sightOrigin)
         {
             _positioned = positioned;
-            _settings = settings;
+            _config = config;
             _sightOrigin = sightOrigin;
 
-            _targetMask = _settings.TargetMask.value != 0 ? _settings.TargetMask : GameLayers.Player;
-            _blockerMask = _settings.BlockerMask.value != 0 ? _settings.BlockerMask : GameLayers.Ground;
+            _targetMask = _config.TargetMask.Or(GameLayers.Player);
+            _blockerMask = _config.BlockerMask.Or(GameLayers.Ground);
 
-            _scanTimer.Start(_settings.ScanInterval);
+            _scanTimer.Start(_config.ScanInterval);
         }
-
-        public event Action TargetAcquired;
-        public event Action TargetLost;
 
         public Transform Target { get; private set; }
         public bool HasTarget => Target;
@@ -40,26 +36,33 @@ namespace LayerZero.Characters.Enemies.Perception
         public bool IsTargetBehind =>
             Target && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
 
-        public float DirectionToTarget =>
-            Target ? (Target.position.x > _positioned.Position.x ? 1f : -1f) : 0f;
-
-        public void FixedTick(float deltaTime)
+        public float DirectionToTarget
         {
-            _alertTimer.Tick(deltaTime);
-            _scanTimer.Tick(deltaTime);
+            get
+            {
+                if (!Target)
+                {
+                    return 0f;
+                }
 
+                return Target.position.x > _positioned.Position.x ? 1f : -1f;
+            }
+        }
+
+        public void FixedUpdate()
+        {
             if (!_scanTimer.IsExpired)
             {
                 return;
             }
 
-            _scanTimer.Start(_settings.ScanInterval);
+            _scanTimer.Start(_config.ScanInterval);
             Scan();
         }
 
-        public void Disable()
+        public void ForgetTarget()
         {
-            ClearTarget();
+            Target = null;
         }
 
         public void NotifyDamaged(DamageInfo damageInfo)
@@ -80,7 +83,7 @@ namespace LayerZero.Characters.Enemies.Perception
             Gizmos.color = HasTarget ? Color.red : Color.gray;
             Gizmos.DrawLine(
                 _sightOrigin.position,
-                _sightOrigin.position + new Vector3(_settings.SightDistance * _positioned.FacingDirection, 0f));
+                _sightOrigin.position + new Vector3(_config.SightDistance * _positioned.FacingDirection, 0f));
         }
 
         private void Scan()
@@ -94,7 +97,7 @@ namespace LayerZero.Characters.Enemies.Perception
 
             if (_alertTimer.IsExpired)
             {
-                ClearTarget();
+                ForgetTarget();
             }
         }
 
@@ -108,7 +111,7 @@ namespace LayerZero.Characters.Enemies.Perception
             RaycastHit2D hit = Physics2D.Raycast(
                 _sightOrigin.position,
                 _positioned.FacingVector,
-                _settings.SightDistance,
+                _config.SightDistance,
                 _targetMask | _blockerMask);
 
             return hit.collider && _targetMask.Contains(hit.collider.gameObject) ? hit.transform : null;
@@ -116,26 +119,8 @@ namespace LayerZero.Characters.Enemies.Perception
 
         private void SetTarget(Transform target)
         {
-            bool isNew = !Target;
-
             Target = target;
-            _alertTimer.Start(_settings.AlertDuration);
-
-            if (isNew)
-            {
-                TargetAcquired?.Invoke();
-            }
-        }
-
-        private void ClearTarget()
-        {
-            if (!Target)
-            {
-                return;
-            }
-
-            Target = null;
-            TargetLost?.Invoke();
+            _alertTimer.Start(_config.AlertDuration);
         }
     }
 }

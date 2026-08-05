@@ -7,6 +7,7 @@ namespace LayerZero.Characters.Enemies.States
         public EnemyPatrolState(EnemyController owner)
             : base(owner, EnemyAnimatorParameters.Patrol)
         {
+            OnFixed(IsBlocked, EnemyStateId.Idle);
         }
 
         public override int Id => EnemyStateId.Patrol;
@@ -15,28 +16,12 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Enter();
 
-            if (!Movement.IsGrounded || Movement.IsWalled)
+            if (IsBlocked())
             {
                 Movement.Flip();
             }
 
             Animator.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (!Movement.IsGrounded || Movement.IsWalled)
-            {
-                Owner.StateMachine.ChangeState(EnemyStateId.Idle);
-                return true;
-            }
-
-            return false;
         }
 
         public override void FixedUpdate()
@@ -51,6 +36,11 @@ namespace LayerZero.Characters.Enemies.States
             base.Exit();
 
             Movement.SetVelocityX(0f);
+        }
+
+        private bool IsBlocked()
+        {
+            return !Movement.IsGrounded || Movement.IsWalled;
         }
     }
 }

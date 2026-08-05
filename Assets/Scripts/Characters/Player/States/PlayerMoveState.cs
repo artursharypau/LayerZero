@@ -7,41 +7,12 @@ namespace LayerZero.Characters.Player.States
         public PlayerMoveState(PlayerController owner)
             : base(owner, CommonAnimatorParameters.Move)
         {
+            On(() => Input.Move.x == 0f, PlayerStateId.Idle);
+
+            OnFixed(IsPushingIntoWall, PlayerStateId.Idle);
         }
 
         public override int Id => PlayerStateId.Move;
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (Input.Move.x == 0f)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-                return true;
-            }
-
-            return false;
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (IsPushingIntoWall())
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-                return true;
-            }
-
-            return false;
-        }
 
         public override void FixedUpdate()
         {

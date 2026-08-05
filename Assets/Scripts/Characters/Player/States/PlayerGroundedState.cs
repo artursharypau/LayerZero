@@ -10,6 +10,11 @@ namespace LayerZero.Characters.Player.States
         protected PlayerGroundedState(PlayerController owner, AnimatorParameter parameter)
             : base(owner, parameter)
         {
+            On(() => Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.Attack);
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
+
+            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
         }
 
         public override void Enter()
@@ -17,44 +22,6 @@ namespace LayerZero.Characters.Player.States
             base.Enter();
 
             Owner.Abilities.Refill(PlayerAbilityId.Jump);
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (Input.WasPerformed(PlayerInputAction.Attack))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Attack);
-                return true;
-            }
-
-            if (Owner.Abilities.CanUse(PlayerAbilityId.Jump))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Jump);
-                return true;
-            }
-
-            return false;
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (Movement.IsFalling)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                return true;
-            }
-
-            return false;
         }
 
         protected bool IsPushingIntoWall()

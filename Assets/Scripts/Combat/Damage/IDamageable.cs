@@ -4,8 +4,8 @@ namespace LayerZero.Combat.Damage
 {
     public interface IDamageable
     {
-        event Action Died;
         event Action<int> HealthChanged;
+        event Action Died;
 
         int CurrentHealth { get; }
         int MaxHealth { get; }

@@ -8,6 +8,7 @@ namespace LayerZero.Characters.Player.States
         public PlayerJumpState(PlayerController owner)
             : base(owner, PlayerAnimatorParameters.JumpFall)
         {
+            OnFixed(() => Movement.VelocityY <= 0f, PlayerStateId.Fall);
         }
 
         public override int Id => PlayerStateId.Jump;
@@ -17,22 +18,6 @@ namespace LayerZero.Characters.Player.States
             base.Enter();
 
             TryJump();
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (Movement.VelocityY <= 0f)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                return true;
-            }
-
-            return false;
         }
 
         public override void FixedUpdate()
@@ -46,7 +31,7 @@ namespace LayerZero.Characters.Player.States
         {
             if (Owner.Abilities.TryUse(PlayerAbilityId.Jump))
             {
-                Movement.SetVelocity(Config.Movement.MoveSpeed * Input.Move.x, Config.Jump.Force, true);
+                Movement.SetVelocity(Movement.VelocityX, Config.Jump.Force);
             }
         }
     }

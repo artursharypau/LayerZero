@@ -17,11 +17,6 @@ namespace LayerZero.Combat.Damage.Resistance
             KnockbackMultiplier = knockbackMultiplier;
         }
 
-        public static DamageResistance Create()
-        {
-            return Default;
-        }
-
         public DamageResistance WithInvulnerability()
         {
             return new DamageResistance(true, IgnoresStun, KnockbackMultiplier);
