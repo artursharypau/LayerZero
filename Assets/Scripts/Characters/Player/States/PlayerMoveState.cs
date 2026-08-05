@@ -1,0 +1,31 @@
+using LayerZero.Characters.Common.Animation;
+
+namespace LayerZero.Characters.Player.States
+{
+    public sealed class PlayerMoveState : PlayerGroundedState
+    {
+        public PlayerMoveState(PlayerController owner)
+            : base(owner, CommonAnimatorParameters.Move)
+        {
+            On(() => Input.Move.x == 0f, PlayerStateId.Idle);
+
+            OnFixed(IsPushingIntoWall, PlayerStateId.Idle);
+        }
+
+        public override int Id => PlayerStateId.Move;
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            Movement.SetVelocityX(Config.Movement.MoveSpeed * Input.Move.x, true);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            Movement.SetVelocityX(0f);
+        }
+    }
+}
