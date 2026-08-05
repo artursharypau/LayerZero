@@ -30,7 +30,7 @@ namespace LayerZero.Combat.Damage
                 return;
             }
 
-            if (_resistances is { IsInvulnerable: true })
+            if (_resistances?.IsInvulnerable == true)
             {
                 return;
             }

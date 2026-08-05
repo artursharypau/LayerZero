@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Characters.Player.Config
 {
     [Serializable]
-    public sealed class DashAbilitySettings
+    public sealed class DashAbilityConfig
     {
         [SerializeField] [Min(0f)] private float _duration = 0.2f;
         [SerializeField] [Min(0f)] private float _cooldown = 2f;

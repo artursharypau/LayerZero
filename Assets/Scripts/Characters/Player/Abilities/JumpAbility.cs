@@ -9,13 +9,11 @@ namespace LayerZero.Characters.Player.Abilities
         private readonly AbilityCharges _charges;
         private readonly IPlayerInput _input;
 
-        public JumpAbility(JumpAbilitySettings settings, IPlayerInput input)
+        public JumpAbility(JumpAbilityConfig config, IPlayerInput input)
         {
-            _charges = new AbilityCharges(settings.Charges);
+            _charges = new AbilityCharges(config.Charges);
             _input = input;
         }
-
-        public int AvailableCharges => _charges.Available;
 
         public bool CanUse()
         {

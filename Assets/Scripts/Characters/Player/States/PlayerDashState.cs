@@ -2,21 +2,23 @@ using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
 using LayerZero.Combat.Damage.Resistance;
 using LayerZero.Core.Timing;
-using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerDashState : PlayerState
     {
-        private readonly CountdownTimer _timer = new();
-
-        private ResistanceHandle _invulnerability = ResistanceHandle.None;
+        private Countdown _timer;
+        private ResistanceHandle _resistance = ResistanceHandle.None;
         private float _speed;
         private float _defaultGravityScale;
+        private bool _isDashing;
 
         public PlayerDashState(PlayerController owner)
             : base(owner, PlayerAnimatorParameters.Dash)
         {
+            OnFixed(() => !_isDashing, ResolveLocomotionState);
+            OnFixed(() => _timer.IsExpired, ResolveLocomotionState);
+            OnFixed(() => Movement.IsWalled, PlayerStateId.Idle);
         }
 
         public override int Id => PlayerStateId.Dash;
@@ -26,56 +28,25 @@ namespace LayerZero.Characters.Player.States
             base.Enter();
 
             _defaultGravityScale = Movement.GravityScale;
+            _isDashing = Owner.Abilities.TryUse(PlayerAbilityId.Dash);
 
-            if (!Owner.Abilities.TryUse(PlayerAbilityId.Dash))
+            if (!_isDashing)
             {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
                 return;
             }
 
             _timer.Start(Config.Dash.Duration);
             _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
 
-            _invulnerability = Owner.DamageResistances.Apply(DamageResistance.Create().WithInvulnerability());
+            _resistance = Owner.DamageResistances.Apply(DamageResistance.Default.WithInvulnerability());
 
             Movement.SetGravityScale(0f);
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (Movement.IsWalled)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.WallSlide);
-                return true;
-            }
-
-            if (_timer.IsExpired)
-            {
-                if (Movement.IsGrounded)
-                {
-                    Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-                }
-                else
-                {
-                    Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                }
-
-                return true;
-            }
-
-            return false;
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            _timer.Tick(Time.fixedDeltaTime);
             Movement.SetVelocity(_speed * Movement.FacingDirection, 0f);
         }
 
@@ -86,8 +57,8 @@ namespace LayerZero.Characters.Player.States
             Movement.SetGravityScale(_defaultGravityScale);
             Movement.SetVelocityX(0f);
 
-            Owner.DamageResistances.Remove(_invulnerability);
-            _invulnerability = ResistanceHandle.None;
+            Owner.DamageResistances.Remove(_resistance);
+            _resistance = ResistanceHandle.None;
         }
     }
 }

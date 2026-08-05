@@ -6,16 +6,17 @@ using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Player.Abilities
 {
-    public sealed class DashAbility : ITickableAbility
+    public sealed class DashAbility : IAbility
     {
-        private readonly DashAbilitySettings _settings;
+        private readonly DashAbilityConfig _config;
         private readonly IPlayerInput _input;
-        private readonly IMovementState _movement;
-        private readonly CountdownTimer _cooldown = new();
+        private readonly IMovement2D _movement;
 
-        public DashAbility(DashAbilitySettings settings, IPlayerInput input, IMovementState movement)
+        private Countdown _cooldown;
+
+        public DashAbility(DashAbilityConfig config, IPlayerInput input, IMovement2D movement)
         {
-            _settings = settings;
+            _config = config;
             _input = input;
             _movement = movement;
         }
@@ -28,12 +29,7 @@ namespace LayerZero.Characters.Player.Abilities
         public void Use()
         {
             _input.Consume(PlayerInputAction.Dash);
-            _cooldown.Start(_settings.TotalCooldown);
-        }
-
-        public void Tick(float deltaTime)
-        {
-            _cooldown.Tick(deltaTime);
+            _cooldown.Start(_config.TotalCooldown);
         }
     }
 }

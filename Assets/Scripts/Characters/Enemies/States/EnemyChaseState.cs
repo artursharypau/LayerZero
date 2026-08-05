@@ -3,13 +3,15 @@ using LayerZero.Characters.Enemies.Animation;
 
 namespace LayerZero.Characters.Enemies.States
 {
-    public class EnemyChaseState : EnemyState
+    public sealed class EnemyChaseState : EnemyState
     {
         private float _defaultAnimationMultiplier;
 
         public EnemyChaseState(EnemyController owner)
             : base(owner, EnemyAnimatorParameters.Chase)
         {
+            On(() => !Perception.HasTarget, EnemyStateId.Patrol);
+            On(() => Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target), EnemyStateId.Attack);
         }
 
         public override int Id => EnemyStateId.Chase;
@@ -20,24 +22,6 @@ namespace LayerZero.Characters.Enemies.States
 
             _defaultAnimationMultiplier = Animator.GetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier);
             Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, Config.Chase.AnimationMultiplier);
-
-            Perception.TargetLost += OnTargetLost;
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (CanEngage())
-            {
-                Owner.StateMachine.ChangeState(EnemyStateId.Attack);
-                return true;
-            }
-
-            return false;
         }
 
         public override void Update()
@@ -56,32 +40,18 @@ namespace LayerZero.Characters.Enemies.States
                 Movement.Flip();
             }
 
-            if (!Movement.IsGrounded || Movement.IsWalled)
-            {
-                Movement.SetVelocityX(0f);
-                return;
-            }
+            float velocityX = Movement.IsGrounded && !Movement.IsWalled
+                ? Config.Movement.MoveSpeed * Config.Chase.SpeedMultiplier * Perception.DirectionToTarget
+                : 0f;
 
-            Movement.SetVelocityX(Config.Movement.MoveSpeed * Config.Chase.SpeedMultiplier * Perception.DirectionToTarget);
+            Movement.SetVelocityX(velocityX);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            Perception.TargetLost -= OnTargetLost;
             Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
-        }
-
-        private bool CanEngage()
-        {
-            return Owner.Combat && Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target);
-        }
-
-        private void OnTargetLost()
-        {
-            Perception.TargetLost -= OnTargetLost;
-            Owner.StateMachine.ChangeState(EnemyStateId.Idle);
         }
     }
 }

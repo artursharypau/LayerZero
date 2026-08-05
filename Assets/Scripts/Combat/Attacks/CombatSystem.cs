@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LayerZero.Core.Diagnostics;
+using LayerZero.Core.Extensions;
 using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
@@ -10,8 +11,6 @@ namespace LayerZero.Combat.Attacks
 
         private IAttackEvents _attackEvents;
         private AttackDefinition _armedAttack;
-
-        public IReadOnlyDictionary<AttackKind, IAttackExecutor> Executors => _executors;
 
         private void Awake()
         {
@@ -26,29 +25,19 @@ namespace LayerZero.Combat.Attacks
                 executor.Initialize(transform);
             }
 
-            _attackEvents = GetComponentInChildren<IAttackEvents>(true);
-            if (_attackEvents == null)
-            {
-                GameLog.Error(this, $"'{name}' has no {nameof(IAttackEvents)} in its hierarchy - attacks will never land.");
-            }
+            _attackEvents = this.GetRequiredInChildren<IAttackEvents>();
         }
 
         private void OnEnable()
         {
-            if (_attackEvents != null)
-            {
-                _attackEvents.AttackHit += OnAttackHit;
-            }
+            _attackEvents.AttackHit += OnAttackHit;
         }
 
         private void OnDisable()
         {
-            if (_attackEvents != null)
-            {
-                _attackEvents.AttackHit -= OnAttackHit;
-            }
+            _attackEvents.AttackHit -= OnAttackHit;
 
-            _armedAttack = null;
+            Disarm();
         }
 
         public void Arm(AttackDefinition attack)
@@ -68,6 +57,11 @@ namespace LayerZero.Combat.Attacks
             _armedAttack = attack;
         }
 
+        public void Disarm()
+        {
+            _armedAttack = null;
+        }
+
         public bool IsInRange(AttackKind kind, Transform target)
         {
             return target && _executors.TryGetValue(kind, out IAttackExecutor executor) && executor.IsInRange(target);
@@ -77,7 +71,6 @@ namespace LayerZero.Combat.Attacks
         {
             if (_armedAttack == null)
             {
-                GameLog.Error(this, $"Attack hit event fired on '{name}' with no armed attack.");
                 return;
             }
 

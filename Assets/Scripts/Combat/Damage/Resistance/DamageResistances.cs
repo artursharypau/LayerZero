@@ -26,7 +26,7 @@ namespace LayerZero.Combat.Damage.Resistance
 
         public void Remove(ResistanceHandle handle)
         {
-            if (!handle.IsValid || !_active.Remove(handle.Id, out DamageResistance resistance))
+            if (!_active.Remove(handle.Id, out DamageResistance resistance))
             {
                 return;
             }

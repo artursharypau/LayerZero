@@ -16,14 +16,9 @@ namespace LayerZero.Characters.Common.States
             _parameter = parameter;
         }
 
-        protected CharacterState(TCharacter owner)
-            : this(owner, AnimatorParameter.None)
-        {
-        }
-
         protected TCharacter Owner { get; }
         protected CharacterAnimator Animator => Owner.Animator;
-        protected CharacterMovement2D Movement => Owner.Movement;
+        protected IMovement2D Movement => Owner.Movement;
 
         public override void Enter()
         {

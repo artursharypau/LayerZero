@@ -1,8 +1,6 @@
-using System;
-
 namespace LayerZero.Combat.Damage.Resistance
 {
-    public readonly struct ResistanceHandle : IEquatable<ResistanceHandle>
+    public readonly struct ResistanceHandle
     {
         public static readonly ResistanceHandle None = default;
 
@@ -11,23 +9,6 @@ namespace LayerZero.Combat.Damage.Resistance
         internal ResistanceHandle(int id)
         {
             Id = id;
-        }
-
-        public bool IsValid => Id != 0;
-
-        public bool Equals(ResistanceHandle other)
-        {
-            return Id == other.Id;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is ResistanceHandle other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id;
         }
     }
 }

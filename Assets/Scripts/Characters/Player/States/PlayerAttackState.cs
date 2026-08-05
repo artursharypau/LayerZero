@@ -1,5 +1,6 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
+using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
 using LayerZero.Characters.Player.Config;
 using LayerZero.Characters.Player.Input;
@@ -9,35 +10,36 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Player.States
 {
-    public sealed class PlayerAttackState : AttackStateBase<PlayerController>
+    public sealed class PlayerAttackState : PlayerState
     {
-        private readonly CountdownTimer _movementLockTimer = new();
+        private readonly AttackBehaviour _attack;
 
-        private int _stepIndex;
-        private float _lastFinishedTime = float.NegativeInfinity;
-        private bool _isNextQueued;
+        private Countdown _lungeTimer;
+        private int _comboStepIndex;
+        private float _lastFinishedTime = -1f;
+        private bool _isNextAttackQueued;
 
         public PlayerAttackState(PlayerController owner)
             : base(owner, CommonAnimatorParameters.Attack)
         {
+            _attack = new AttackBehaviour(owner, ResolveAttack);
+
+            On(() => _attack.IsFinished, ResolveNextState);
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
         }
 
         public override int Id => PlayerStateId.Attack;
-
-        private PlayerAttackSettings Settings => Owner.Config.Attack;
-
-        protected override void OnPrepareAttack()
-        {
-            _isNextQueued = false;
-
-            AdvanceComboCursor();
-            Animator.SetInt(PlayerAnimatorParameters.AttackIndex, _stepIndex);
-        }
 
         public override void Enter()
         {
             base.Enter();
 
+            _isNextAttackQueued = false;
+
+            TryResetComboStepIndex();
+            Animator.SetInt(PlayerAnimatorParameters.AttackIndex, _comboStepIndex);
+
+            _attack.Begin();
             ApplyLunge();
         }
 
@@ -45,9 +47,9 @@ namespace LayerZero.Characters.Player.States
         {
             base.Update();
 
-            if (Owner.Input.WasPerformed(PlayerInputAction.Attack))
+            if (Input.WasPerformed(PlayerInputAction.Attack))
             {
-                _isNextQueued = true;
+                _isNextAttackQueued = true;
             }
         }
 
@@ -55,68 +57,60 @@ namespace LayerZero.Characters.Player.States
         {
             base.FixedUpdate();
 
-            _movementLockTimer.Tick(Time.fixedDeltaTime);
-            if (_movementLockTimer.IsExpired)
+            if (_lungeTimer.IsExpired)
             {
                 Movement.SetVelocityX(0f);
             }
         }
 
-        protected override AttackDefinition ResolveAttackDefinition()
+        public override void Exit()
         {
-            return Settings.GetStep(_stepIndex)?.Attack;
-        }
+            base.Exit();
 
-        protected override void OnAttackFinished()
-        {
-            ++_stepIndex;
-            _lastFinishedTime = Time.time;
-
-            if (_isNextQueued && _stepIndex < Settings.ComboLength)
+            if (_attack.IsFinished)
             {
-                Owner.StateMachine.ChangeState(PlayerStateId.Attack);
-                return;
+                ++_comboStepIndex;
+                _lastFinishedTime = Time.time;
             }
 
-            ChangeToLocomotion();
+            _attack.End();
         }
 
-        private void AdvanceComboCursor()
+        private AttackDefinition ResolveAttack()
         {
-            bool comboExpired = Time.time - _lastFinishedTime > Settings.ComboResetDelay;
-            if (comboExpired || _stepIndex >= Settings.ComboLength)
+            return Config.Attack.GetComboStep(_comboStepIndex)?.Attack;
+        }
+
+        private int ResolveNextState()
+        {
+            bool hasNext = _isNextAttackQueued && _comboStepIndex + 1 < Config.Attack.ComboLength;
+            return hasNext ? PlayerStateId.Attack : ResolveLocomotionState();
+        }
+
+        private void TryResetComboStepIndex()
+        {
+            bool comboExpired = Time.time - _lastFinishedTime > Config.Attack.ComboResetDelay;
+            if (comboExpired || _comboStepIndex >= Config.Attack.ComboLength)
             {
-                _stepIndex = 0;
+                _comboStepIndex = 0;
             }
         }
 
         private void ApplyLunge()
         {
-            AttackComboStep step = Settings.GetStep(_stepIndex);
+            AttackComboStep step = Config.Attack.GetComboStep(_comboStepIndex);
             if (step == null)
             {
                 return;
             }
 
-            _movementLockTimer.Start(Settings.VelocityDuration);
+            _lungeTimer.Start(Config.Attack.VelocityDuration);
 
-            float velocityX = Owner.Input.Move.x != 0f
-                ? Owner.Input.Move.x * step.Velocity.x
+            float velocityX = Input.Move.x != 0f
+                ? Input.Move.x * step.Velocity.x
                 : step.Velocity.x * Movement.FacingDirection;
 
             Movement.SetVelocity(velocityX, step.Velocity.y);
-        }
-
-        private void ChangeToLocomotion()
-        {
-            if (Owner.Input.Move.x != 0f)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Move);
-            }
-            else
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-            }
         }
     }
 }

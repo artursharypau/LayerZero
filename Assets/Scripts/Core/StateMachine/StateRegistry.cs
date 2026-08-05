@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LayerZero.Core.StateMachine
 {
-    public sealed class StateRegistry
+    internal sealed class StateRegistry
     {
         private readonly Dictionary<int, StateBase> _states = new(8);
 

@@ -29,24 +29,6 @@ namespace LayerZero.Core.Collisions
             return true;
         }
 
-        public bool AnyHit(Vector2 direction, LayerMask mask)
-        {
-            if (!IsConfigured)
-            {
-                return false;
-            }
-
-            foreach (Transform origin in _origins)
-            {
-                if (origin && Physics2D.Raycast(origin.position, direction, _distance, mask))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public void DrawGizmos(Vector2 direction)
         {
             if (!IsConfigured)

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Characters.Player.Config
 {
     [Serializable]
-    public sealed class PlayerInputSettings
+    public sealed class PlayerInputConfig
     {
         [SerializeField] [Min(0f)] private float _jumpBufferDuration = 0.2f;
         [SerializeField] [Min(0f)] private float _dashBufferDuration = 0.1f;

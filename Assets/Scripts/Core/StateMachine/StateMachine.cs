@@ -54,10 +54,13 @@ namespace LayerZero.Core.StateMachine
                 return;
             }
 
-            if (!Current.TryTransition())
+            if (Current.TryGetTransition(out int target))
             {
-                Current.Update();
+                ChangeState(target);
+                return;
             }
+
+            Current.Update();
         }
 
         public void FixedUpdate()
@@ -67,10 +70,13 @@ namespace LayerZero.Core.StateMachine
                 return;
             }
 
-            if (!Current.TryFixedTransition())
+            if (Current.TryGetFixedTransition(out int target))
             {
-                Current.FixedUpdate();
+                ChangeState(target);
+                return;
             }
+
+            Current.FixedUpdate();
         }
 
         private void Schedule(StateBase state, StateTransitionMode mode)

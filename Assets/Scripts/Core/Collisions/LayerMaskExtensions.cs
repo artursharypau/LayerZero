@@ -13,5 +13,10 @@ namespace LayerZero.Core.Collisions
         {
             return gameObject && mask.Contains(gameObject.layer);
         }
+
+        public static LayerMask Or(this LayerMask mask, LayerMask fallback)
+        {
+            return mask.value != 0 ? mask : fallback;
+        }
     }
 }

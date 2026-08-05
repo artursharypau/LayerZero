@@ -14,15 +14,17 @@ namespace LayerZero.Characters.Player
     {
         [SerializeField] private PlayerConfig _config;
 
-        private PlayerInputHandler _input;
+        private PlayerInput _input;
 
         public PlayerConfig Config => _config;
         public IPlayerInput Input => _input;
         public AbilitySet Abilities { get; private set; }
 
-        protected override void OnInitialized()
+        protected override void Awake()
         {
-            _input = new PlayerInputHandler(_config.Input);
+            base.Awake();
+
+            _input = new PlayerInput(_config.Input);
 
             Abilities = new AbilitySet()
                 .Add(PlayerAbilityId.Jump, new JumpAbility(_config.Jump, _input))
@@ -40,29 +42,27 @@ namespace LayerZero.Characters.Player
             StateMachine.Register(new PlayerHurtState(this));
         }
 
-        protected override void OnStarted()
+        private void Start()
         {
             Abilities.Refill(PlayerAbilityId.Jump);
             StateMachine.Start(PlayerStateId.Idle);
         }
 
-        protected override void OnEnabled()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             _input.Enable();
         }
 
-        protected override void OnUpdated(float deltaTime)
+        protected override void OnDisable()
         {
-            _input.Tick(deltaTime);
-            Abilities.Tick(deltaTime);
-        }
+            base.OnDisable();
 
-        protected override void OnDisabled()
-        {
             _input.Disable();
         }
 
-        protected override void OnDestroyed()
+        private void OnDestroy()
         {
             _input.Dispose();
         }

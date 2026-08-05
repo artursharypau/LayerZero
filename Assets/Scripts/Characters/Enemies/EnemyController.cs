@@ -2,6 +2,7 @@ using LayerZero.Characters.Common;
 using LayerZero.Characters.Enemies.Config;
 using LayerZero.Characters.Enemies.Perception;
 using LayerZero.Characters.Enemies.States;
+using LayerZero.Combat.Attacks;
 using LayerZero.Combat.Damage;
 using LayerZero.Core.Diagnostics;
 using LayerZero.Core.StateMachine;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace LayerZero.Characters.Enemies
 {
-    public abstract class EnemyController : Character2D
+    public sealed class EnemyController : Character2D
     {
         [Header("Data")]
         [SerializeField] private EnemyConfig _config;
@@ -21,13 +22,9 @@ namespace LayerZero.Characters.Enemies
         public EnemyConfig Config => _config;
         public TargetPerception Perception { get; private set; }
 
-        protected override void OnInitialized()
+        protected override void Awake()
         {
-            if (!_config)
-            {
-                GameLog.Error(this, $"'{name}' has no {nameof(EnemyConfig)} assigned.");
-                return;
-            }
+            base.Awake();
 
             Perception = new TargetPerception(Movement, _config.Perception, _sightOrigin);
 
@@ -35,31 +32,32 @@ namespace LayerZero.Characters.Enemies
             StateMachine.Register(new EnemyPatrolState(this));
             StateMachine.Register(new EnemyHurtState(this));
 
-            RegisterCombatBehaviour();
+            RegisterCombatStates(_config.Attack.Kind);
         }
 
-        protected abstract void RegisterCombatBehaviour();
-
-        protected override void OnStarted()
+        private void Start()
         {
-            if (_config)
-            {
-                StateMachine.Start(EnemyStateId.Idle);
-            }
+            StateMachine.Start(EnemyStateId.Idle);
         }
 
-        protected override void OnFixedUpdated(float deltaTime)
+        protected override void FixedUpdate()
         {
-            Perception.FixedTick(deltaTime);
+            base.FixedUpdate();
+
+            Perception.FixedUpdate();
         }
 
-        protected override void OnDisabled()
+        protected override void OnDisable()
         {
-            Perception.Disable();
+            base.OnDisable();
+
+            Perception?.ForgetTarget();
         }
 
-        protected override void OnGizmosDrawn()
+        protected override void OnDrawGizmos()
         {
+            base.OnDrawGizmos();
+
             Perception.DrawGizmos();
         }
 
@@ -76,6 +74,20 @@ namespace LayerZero.Characters.Enemies
         protected override void OnDied()
         {
             StateMachine.ChangeState(EnemyStateId.Dead, StateTransitionMode.Immediate);
+        }
+
+        private void RegisterCombatStates(AttackKind kind)
+        {
+            switch (kind)
+            {
+                case AttackKind.Melee:
+                    StateMachine.Register(new EnemyChaseState(this));
+                    StateMachine.Register(new EnemyMeleeAttackState(this));
+                    break;
+                default:
+                    GameLog.Error(this, $"'{name}' has no combat states for attack kind '{kind}'.");
+                    break;
+            }
         }
     }
 }

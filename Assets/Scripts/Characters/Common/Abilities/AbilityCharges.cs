@@ -4,34 +4,34 @@ namespace LayerZero.Characters.Common.Abilities
 {
     public sealed class AbilityCharges
     {
+        private readonly int _max;
+
+        private int _available;
+
         public AbilityCharges(int max)
         {
-            Max = Mathf.Max(0, max);
-            Available = Max;
+            _max = Mathf.Max(0, max);
+            _available = _max;
         }
 
-        public int Available { get; private set; }
-
-        public int Max { get; }
-
-        public bool HasCharges => Available > 0;
+        public bool HasCharges => _available > 0;
 
         public void Consume()
         {
-            if (Available > 0)
+            if (_available > 0)
             {
-                --Available;
+                --_available;
             }
         }
 
         public void Refill()
         {
-            Available = Max;
+            _available = _max;
         }
 
         public void RefillTo(int amount)
         {
-            Available = Mathf.Clamp(amount, 0, Max);
+            _available = Mathf.Clamp(amount, 0, _max);
         }
     }
 }

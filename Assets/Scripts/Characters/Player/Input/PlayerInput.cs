@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace LayerZero.Characters.Player.Input
 {
-    public sealed class PlayerInputHandler : IPlayerInput, IDisposable
+    public sealed class PlayerInput : IPlayerInput, IDisposable
     {
         private readonly BufferedRequest _jump;
         private readonly BufferedRequest _dash;
@@ -16,10 +16,10 @@ namespace LayerZero.Characters.Player.Input
         private PlayerInputSet.PlayerActions _actions;
         private bool _isEnabled;
 
-        public PlayerInputHandler(PlayerInputSettings settings)
+        public PlayerInput(PlayerInputConfig config)
         {
-            _jump = new BufferedRequest(settings.JumpBufferDuration);
-            _dash = new BufferedRequest(settings.DashBufferDuration);
+            _jump = new BufferedRequest(config.JumpBufferDuration);
+            _dash = new BufferedRequest(config.DashBufferDuration);
 
             _inputSet = new PlayerInputSet();
             _actions = _inputSet.Player;
@@ -61,12 +61,6 @@ namespace LayerZero.Characters.Player.Input
             Move = Vector2.zero;
         }
 
-        public void Tick(float deltaTime)
-        {
-            _jump.Tick(deltaTime);
-            _dash.Tick(deltaTime);
-        }
-
         public void Dispose()
         {
             Disable();
@@ -76,6 +70,11 @@ namespace LayerZero.Characters.Player.Input
 
         public bool WasPerformed(PlayerInputAction action)
         {
+            if (!_isEnabled)
+            {
+                return false;
+            }
+
             return action switch
             {
                 PlayerInputAction.Jump => _jump.IsPending,
@@ -87,6 +86,11 @@ namespace LayerZero.Characters.Player.Input
 
         public void Consume(PlayerInputAction action)
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             switch (action)
             {
                 case PlayerInputAction.Jump:

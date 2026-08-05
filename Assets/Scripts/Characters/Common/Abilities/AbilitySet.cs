@@ -7,16 +7,10 @@ namespace LayerZero.Characters.Common.Abilities
     public class AbilitySet
     {
         private readonly Dictionary<int, IAbility> _abilities = new();
-        private readonly List<ITickableAbility> _tickable = new();
 
         public AbilitySet Add(int id, IAbility ability)
         {
             _abilities[id] = ability ?? throw new ArgumentNullException(nameof(ability));
-
-            if (ability is ITickableAbility tickable)
-            {
-                _tickable.Add(tickable);
-            }
 
             return this;
         }
@@ -50,14 +44,6 @@ namespace LayerZero.Characters.Common.Abilities
             if (TryGetChargeable(id, out IChargeableAbility ability))
             {
                 ability.RefillTo(amount);
-            }
-        }
-
-        public void Tick(float deltaTime)
-        {
-            for (int i = 0; i < _tickable.Count; i++)
-            {
-                _tickable[i].Tick(deltaTime);
             }
         }
 

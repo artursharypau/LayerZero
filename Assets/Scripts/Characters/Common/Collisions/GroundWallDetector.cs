@@ -1,8 +1,9 @@
 using System;
+using LayerZero.Characters.Common.Movement;
 using LayerZero.Core.Collisions;
 using UnityEngine;
 
-namespace LayerZero.Characters.Common.Movement
+namespace LayerZero.Characters.Common.Collisions
 {
     [Serializable]
     public sealed class GroundWallDetector
@@ -12,7 +13,6 @@ namespace LayerZero.Characters.Common.Movement
         [SerializeField] private LayerMask _solidMask;
 
         private IPositioned _positioned;
-        private bool _useDefaultMask;
 
         public bool IsGrounded { get; private set; }
         public bool IsWalled { get; private set; }
@@ -20,7 +20,6 @@ namespace LayerZero.Characters.Common.Movement
         public void Initialize(IPositioned positioned)
         {
             _positioned = positioned;
-            _useDefaultMask = _solidMask.value == 0;
         }
 
         public void Refresh()
@@ -30,7 +29,7 @@ namespace LayerZero.Characters.Common.Movement
                 return;
             }
 
-            LayerMask mask = _useDefaultMask ? GameLayers.Ground : _solidMask;
+            LayerMask mask = _solidMask.Or(GameLayers.Ground);
 
             IsGrounded = _groundProbe.AllHit(Vector2.down, mask);
             IsWalled = _wallProbe.AllHit(_positioned.FacingVector, mask);

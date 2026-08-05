@@ -9,6 +9,10 @@ namespace LayerZero.Characters.Player.States
         public PlayerWallSlideState(PlayerController owner)
             : base(owner, PlayerAnimatorParameters.WallSlide)
         {
+            On(() => Input.WasPerformed(PlayerInputAction.Jump), PlayerStateId.WallJump);
+
+            OnFixed(() => Movement.IsGrounded, TransitToIdle);
+            OnFixed(() => !Movement.IsWalled && Movement.IsFalling, PlayerStateId.Fall);
         }
 
         public override int Id => PlayerStateId.WallSlide;
@@ -17,48 +21,9 @@ namespace LayerZero.Characters.Player.States
         {
             base.Enter();
 
-            SetMovementEnabled(false);
+            IsMovementEnabled = false;
 
             Owner.Abilities.RefillTo(PlayerAbilityId.Jump, 1);
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (Input.WasPerformed(PlayerInputAction.Jump))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.WallJump);
-                return true;
-            }
-
-            return false;
-        }
-
-        public override bool TryFixedTransition()
-        {
-            if (base.TryFixedTransition())
-            {
-                return true;
-            }
-
-            if (Movement.IsGrounded)
-            {
-                Movement.FaceTowards(Input.Move.x);
-                Owner.StateMachine.ChangeState(PlayerStateId.Idle);
-                return true;
-            }
-
-            if (!Movement.IsWalled && Movement.IsFalling)
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Fall);
-                return true;
-            }
-
-            return false;
         }
 
         public override void FixedUpdate()
@@ -70,6 +35,12 @@ namespace LayerZero.Characters.Player.States
                 : Movement.VelocityY * Config.Movement.WallSlideMultiplier;
 
             Movement.SetVelocity(0f, velocityY);
+        }
+
+        private int TransitToIdle()
+        {
+            Movement.FaceTowards(Input.Move.x);
+            return PlayerStateId.Idle;
         }
     }
 }

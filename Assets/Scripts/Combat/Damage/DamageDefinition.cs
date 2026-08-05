@@ -29,7 +29,6 @@ namespace LayerZero.Combat.Damage
         public DamageSource Source => _source;
 
         public Vector2 Knockback => _knockback;
-
         public float StunDuration => _stunDuration;
 
         public bool HasImpact => _knockback != Vector2.zero || _stunDuration > 0f;

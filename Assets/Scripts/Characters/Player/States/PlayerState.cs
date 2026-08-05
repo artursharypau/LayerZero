@@ -1,6 +1,5 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
-using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Config;
 using LayerZero.Characters.Player.Input;
 
@@ -16,20 +15,14 @@ namespace LayerZero.Characters.Player.States
         protected IPlayerInput Input => Owner.Input;
         protected PlayerConfig Config => Owner.Config;
 
-        public override bool TryTransition()
+        protected int ResolveLocomotionState()
         {
-            if (base.TryTransition())
+            if (Movement.IsFalling)
             {
-                return true;
+                return PlayerStateId.Fall;
             }
 
-            if (Owner.Abilities.CanUse(PlayerAbilityId.Dash))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.Dash);
-                return true;
-            }
-
-            return false;
+            return Input.Move.x != 0f ? PlayerStateId.Move : PlayerStateId.Idle;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace LayerZero.Characters.Common.Animation
             }
         }
 
-        public void Fire(in AnimatorParameter parameter)
+        public void Trigger(in AnimatorParameter parameter)
         {
             if (_animator && parameter.Kind == AnimatorParameterKind.Trigger)
             {

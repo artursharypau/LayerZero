@@ -1,4 +1,5 @@
 using LayerZero.Characters.Common.Animation;
+using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Input;
 
 namespace LayerZero.Characters.Player.States
@@ -8,31 +9,17 @@ namespace LayerZero.Characters.Player.States
         protected PlayerInAirState(PlayerController owner, AnimatorParameter parameter)
             : base(owner, parameter)
         {
+            On(() => IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.JumpAttack);
+            On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
         }
 
-        protected bool IsMovementEnabled { get; private set; } = true;
+        protected bool IsMovementEnabled { get; set; } = true;
 
         public override void Enter()
         {
             base.Enter();
 
             IsMovementEnabled = true;
-        }
-
-        public override bool TryTransition()
-        {
-            if (base.TryTransition())
-            {
-                return true;
-            }
-
-            if (IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack))
-            {
-                Owner.StateMachine.ChangeState(PlayerStateId.JumpAttack);
-                return true;
-            }
-
-            return false;
         }
 
         public override void Update()
@@ -48,15 +35,8 @@ namespace LayerZero.Characters.Player.States
 
             if (IsMovementEnabled && Input.Move.x != 0f)
             {
-                Movement.SetVelocityX(
-                    Config.Movement.MoveSpeed * Config.Movement.InAirMoveMultiplier * Input.Move.x,
-                    true);
+                Movement.SetVelocityX(Config.Movement.MoveSpeed * Config.Movement.InAirMoveMultiplier * Input.Move.x, true);
             }
-        }
-
-        protected void SetMovementEnabled(bool enabled)
-        {
-            IsMovementEnabled = enabled;
         }
     }
 }

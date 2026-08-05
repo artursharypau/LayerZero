@@ -12,15 +12,14 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private SpriteRenderer _renderer;
         private IDamageReceiver _damageReceiver;
-        private CountdownTimer _timer;
         private Material _defaultMaterial;
+        private Countdown _timer;
         private bool _isFlashing;
 
         private void Awake()
         {
             _renderer = this.GetRequiredInChildren<SpriteRenderer>();
             _damageReceiver = this.GetRequired<IDamageReceiver>();
-            _timer = new CountdownTimer();
 
             if (_renderer)
             {
@@ -48,13 +47,7 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private void Update()
         {
-            if (!_isFlashing)
-            {
-                return;
-            }
-
-            _timer.Tick(Time.deltaTime);
-            if (_timer.IsExpired)
+            if (_isFlashing && _timer.IsExpired)
             {
                 StopFlash();
             }

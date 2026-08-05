@@ -1,41 +1,29 @@
 namespace LayerZero.Core.Timing
 {
-    public sealed class BufferedRequest : ITickable
+    public sealed class BufferedRequest
     {
         private readonly float _lifetime;
-        private readonly CountdownTimer _timer = new();
+
+        private Countdown _timer;
+        private bool _isPending;
 
         public BufferedRequest(float lifetime)
         {
             _lifetime = lifetime;
         }
 
-        public bool IsPending { get; private set; }
+        public bool IsPending => _isPending && !_timer.IsExpired;
 
         public void Raise()
         {
-            IsPending = true;
             _timer.Start(_lifetime);
+            _isPending = true;
         }
 
         public void Consume()
         {
-            IsPending = false;
             _timer.Stop();
-        }
-
-        public void Tick(float deltaTime)
-        {
-            if (!IsPending)
-            {
-                return;
-            }
-
-            _timer.Tick(deltaTime);
-            if (_timer.IsExpired)
-            {
-                Consume();
-            }
+            _isPending = false;
         }
     }
 }
