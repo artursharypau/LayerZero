@@ -123,7 +123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Player.PlayerController
   _config: {fileID: 11400000, guid: 1f34ed5da028ced7976a3cdf24707b68, type: 2}
-
 --- !u!114 &193036875018734244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +148,7 @@ MonoBehaviour:
       _distance: 0.5
     _solidMask:
       serializedVersion: 2
-      m_Bits: 0
-
+      m_Bits: 64
 --- !u!114 &4145020159193950360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba795a0b53074911a60c580c1a7b86a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.CombatSystem
-
 --- !u!114 &4454657804293619681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +200,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Vfx.DamageFlashVfx
   _duration: 0.15
   _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
+--- !u!114 &7100000000000000101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514101050448271214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
+  _origin: {fileID: 9122607069633984326}
+  _radius: 1
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &2698962825770619270
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,21 +499,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9126213500252039777}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-
---- !u!114 &7100000000000000101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514101050448271214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
-  _origin: {fileID: 9122607069633984326}
-  _radius: 1
-  _targetMask:
-    serializedVersion: 2
-    m_Bits: 256
