@@ -1,5 +1,6 @@
 using LayerZero.Characters.Common.States;
 using LayerZero.Combat.Damage;
+using LayerZero.Combat.Damage.Resistance;
 using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Characters.Player.States
@@ -9,6 +10,7 @@ namespace LayerZero.Characters.Player.States
         private readonly StunBehaviour _stun = new();
 
         private DamageImpactInfo _impact;
+        private ResistanceHandle _resistance;
 
         public PlayerHurtState(PlayerController owner)
             : base(owner)
@@ -28,9 +30,19 @@ namespace LayerZero.Characters.Player.States
             base.Enter();
 
             DamageImpactInfo impact = _impact;
-            _impact = DamageImpactInfo.None;
 
-            _stun.Begin(Movement, impact);
+            _impact = DamageImpactInfo.None;
+            _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
+
+            _stun.Begin(impact.StunDuration);
+            Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            Owner.DamageResistances.Remove(_resistance);
         }
     }
 }

@@ -4,19 +4,19 @@ using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Characters.Enemies.States
 {
-    public sealed class EnemyHurtState : EnemyState, IStatePayload<DamageImpactInfo>
+    public sealed class EnemyStunnedState : EnemyState, IStatePayload<DamageImpactInfo>
     {
         private readonly StunBehaviour _stun = new();
 
         private DamageImpactInfo _impact;
 
-        public EnemyHurtState(EnemyController owner)
+        public EnemyStunnedState(EnemyController owner)
             : base(owner)
         {
             On(() => _stun.IsFinished, ResolveRecoveryState);
         }
 
-        public override int Id => EnemyStateId.Hurt;
+        public override int Id => EnemyStateId.Stunned;
 
         public void SetPayload(DamageImpactInfo payload)
         {
@@ -30,7 +30,7 @@ namespace LayerZero.Characters.Enemies.States
             DamageImpactInfo impact = _impact;
             _impact = DamageImpactInfo.None;
 
-            _stun.Begin(Movement, impact);
+            _stun.Begin(impact.StunDuration);
         }
 
         private int ResolveRecoveryState()

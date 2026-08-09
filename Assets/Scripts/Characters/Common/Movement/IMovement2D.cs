@@ -9,6 +9,7 @@ namespace LayerZero.Characters.Common.Movement
         float VelocityY { get; }
         float GravityScale { get; }
 
+        void LockVelocityFor(float duration);
         void SetVelocity(float x, float y, bool updateFacing = false);
         void SetVelocityX(float x, bool updateFacing = false);
         void FaceTowards(float direction);

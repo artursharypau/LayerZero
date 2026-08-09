@@ -49,14 +49,14 @@ namespace LayerZero.Characters.Common
             _animatorStateBinder.Bind();
 
             Health.Died += HandleDied;
-            DamageReceiver.ImpactReceived += OnDamageImpactReceived;
+            DamageReceiver.ImpactReceived += HandleDamageImpactReceived;
             DamageReceiver.Damaged += OnDamaged;
         }
 
         protected virtual void OnDisable()
         {
             DamageReceiver.Damaged -= OnDamaged;
-            DamageReceiver.ImpactReceived -= OnDamageImpactReceived;
+            DamageReceiver.ImpactReceived -= HandleDamageImpactReceived;
             Health.Died -= HandleDied;
 
             _animatorStateBinder.Unbind();
@@ -88,6 +88,14 @@ namespace LayerZero.Characters.Common
 
         protected virtual void OnDied()
         {
+        }
+
+        private void HandleDamageImpactReceived(DamageImpactInfo impact)
+        {
+            if (impact.HasImpact)
+            {
+                OnDamageImpactReceived(impact);
+            }
         }
 
         private void HandleDied()
