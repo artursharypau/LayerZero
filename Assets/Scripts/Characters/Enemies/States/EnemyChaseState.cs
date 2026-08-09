@@ -8,7 +8,7 @@ namespace LayerZero.Characters.Enemies.States
         private float _defaultAnimationMultiplier;
 
         public EnemyChaseState(EnemyController owner)
-            : base(owner, EnemyAnimatorParameters.Chase)
+            : base(owner)
         {
             On(() => !Perception.HasTarget, EnemyStateId.Patrol);
             On(() => Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target.Transform), EnemyStateId.Attack);
@@ -20,8 +20,8 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Enter();
 
-            _defaultAnimationMultiplier = Animator.GetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier);
-            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, Config.Chase.AnimationMultiplier);
+            _defaultAnimationMultiplier = Animator.GetFloat(EnemyAnimatorParameters.ChaseAnimMultiplier);
+            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimMultiplier, Config.Chase.AnimationMultiplier);
         }
 
         public override void Update()
@@ -51,7 +51,7 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Exit();
 
-            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimationMultiplier, _defaultAnimationMultiplier);
+            Animator.SetFloat(EnemyAnimatorParameters.ChaseAnimMultiplier, _defaultAnimationMultiplier);
         }
     }
 }

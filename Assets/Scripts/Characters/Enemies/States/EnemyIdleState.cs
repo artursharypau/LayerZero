@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Enemies.States
@@ -8,7 +7,7 @@ namespace LayerZero.Characters.Enemies.States
         private Countdown _timer;
 
         public EnemyIdleState(EnemyController owner)
-            : base(owner, CommonAnimatorParameters.Idle)
+            : base(owner)
         {
             On(() => _timer.IsExpired, EnemyStateId.Patrol);
         }

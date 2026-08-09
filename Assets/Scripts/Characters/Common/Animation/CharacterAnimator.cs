@@ -14,32 +14,6 @@ namespace LayerZero.Characters.Common.Animation
 
         public IAnimatorEvents Events { get; }
 
-        public void Enter(in AnimatorParameter parameter)
-        {
-            switch (parameter.Kind)
-            {
-                case AnimatorParameterKind.Bool:
-                    _animator.SetBool(parameter.Hash, true);
-                    break;
-                case AnimatorParameterKind.Trigger:
-                    _animator.SetTrigger(parameter.Hash);
-                    break;
-            }
-        }
-
-        public void Exit(in AnimatorParameter parameter)
-        {
-            switch (parameter.Kind)
-            {
-                case AnimatorParameterKind.Bool:
-                    _animator.SetBool(parameter.Hash, false);
-                    break;
-                case AnimatorParameterKind.Trigger:
-                    _animator.ResetTrigger(parameter.Hash);
-                    break;
-            }
-        }
-
         public void Trigger(in AnimatorParameter parameter)
         {
             if (_animator && parameter.Kind == AnimatorParameterKind.Trigger)

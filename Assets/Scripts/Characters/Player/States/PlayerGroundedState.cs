@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Input;
 using UnityEngine;
@@ -7,8 +6,8 @@ namespace LayerZero.Characters.Player.States
 {
     public abstract class PlayerGroundedState : PlayerState
     {
-        protected PlayerGroundedState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        protected PlayerGroundedState(PlayerController owner)
+            : base(owner)
         {
             On(() => Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.Attack);
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);

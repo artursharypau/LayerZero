@@ -3,9 +3,8 @@ namespace LayerZero.Characters.Common.Animation
     public enum AnimatorParameterKind
     {
         None = 0,
-        Bool = 1,
-        Trigger = 2,
-        Float = 3,
-        Int = 4
+        Trigger = 1,
+        Float = 2,
+        Int = 3
     }
 }

@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
 using LayerZero.Combat.Damage;
 using LayerZero.Core.StateMachine;
@@ -12,7 +11,7 @@ namespace LayerZero.Characters.Player.States
         private DamageImpactInfo _impact;
 
         public PlayerHurtState(PlayerController owner)
-            : base(owner, CommonAnimatorParameters.Hurt)
+            : base(owner)
         {
             On(() => _stun.IsFinished, ResolveLocomotionState);
         }

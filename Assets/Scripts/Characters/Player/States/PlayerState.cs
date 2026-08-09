@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
 using LayerZero.Characters.Player.Config;
 using LayerZero.Characters.Player.Input;
@@ -7,8 +6,8 @@ namespace LayerZero.Characters.Player.States
 {
     public abstract class PlayerState : CharacterState<PlayerController>
     {
-        protected PlayerState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        protected PlayerState(PlayerController owner)
+            : base(owner)
         {
         }
 

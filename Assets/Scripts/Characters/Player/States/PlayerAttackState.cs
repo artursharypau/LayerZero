@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
 using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
@@ -20,7 +19,7 @@ namespace LayerZero.Characters.Player.States
         private bool _isNextAttackQueued;
 
         public PlayerAttackState(PlayerController owner)
-            : base(owner, CommonAnimatorParameters.Attack)
+            : base(owner)
         {
             _attack = new AttackBehaviour(owner, ResolveAttack);
 

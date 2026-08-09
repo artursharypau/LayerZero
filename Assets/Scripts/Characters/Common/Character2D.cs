@@ -15,6 +15,8 @@ namespace LayerZero.Characters.Common
     [RequireComponent(typeof(CombatSystem))]
     public abstract class Character2D : MonoBehaviour
     {
+        private AnimatorStateBinder _animatorStateBinder;
+
         public StateMachine StateMachine { get; } = new();
         public CharacterMovement2D Movement { get; private set; }
         public CharacterAnimator Animator { get; private set; }
@@ -38,10 +40,14 @@ namespace LayerZero.Characters.Common
 
             DamageResistances = new DamageResistances();
             DamageReceiver.SetResistances(DamageResistances);
+
+            _animatorStateBinder = new AnimatorStateBinder(Animator, StateMachine);
         }
 
         protected virtual void OnEnable()
         {
+            _animatorStateBinder.Bind();
+
             Health.Died += HandleDied;
             DamageReceiver.ImpactReceived += OnDamageImpactReceived;
             DamageReceiver.Damaged += OnDamaged;
@@ -52,6 +58,8 @@ namespace LayerZero.Characters.Common
             DamageReceiver.Damaged -= OnDamaged;
             DamageReceiver.ImpactReceived -= OnDamageImpactReceived;
             Health.Died -= HandleDied;
+
+            _animatorStateBinder.Unbind();
         }
 
         protected virtual void Update()

@@ -1,11 +1,9 @@
-using LayerZero.Characters.Common.Animation;
-
 namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerMoveState : PlayerGroundedState
     {
         public PlayerMoveState(PlayerController owner)
-            : base(owner, CommonAnimatorParameters.Move)
+            : base(owner)
         {
             On(() => Input.Move.x == 0f, PlayerStateId.Idle);
 

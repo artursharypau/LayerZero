@@ -12,7 +12,7 @@ namespace LayerZero.Characters.Player.States
         private bool _hasLanded;
 
         public PlayerJumpAttackState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpAttack)
+            : base(owner)
         {
             _attack = new AttackBehaviour(owner, ResolveAttack);
 

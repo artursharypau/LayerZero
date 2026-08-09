@@ -1,11 +1,11 @@
-using LayerZero.Characters.Enemies.Animation;
+using LayerZero.Characters.Common.Animation;
 
 namespace LayerZero.Characters.Enemies.States
 {
     public sealed class EnemyPatrolState : EnemyGroundedState
     {
         public EnemyPatrolState(EnemyController owner)
-            : base(owner, EnemyAnimatorParameters.Patrol)
+            : base(owner)
         {
             OnFixed(IsBlocked, EnemyStateId.Idle);
         }
@@ -21,7 +21,7 @@ namespace LayerZero.Characters.Enemies.States
                 Movement.Flip();
             }
 
-            Animator.SetFloat(EnemyAnimatorParameters.MoveAnimationMultiplier, Config.Movement.MoveAnimationMultiplier);
+            Animator.SetFloat(CommonAnimatorParameters.VelocityXAnimMultiplier, Config.Movement.MoveAnimationMultiplier);
         }
 
         public override void FixedUpdate()
