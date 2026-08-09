@@ -16,21 +16,21 @@ namespace LayerZero.Characters.Enemies
         [SerializeField] private EnemyConfig _config;
 
         [Header("Scene references")]
-        [Tooltip("Where the line-of-sight ray starts from.")] [SerializeField]
-        private Transform _sightOrigin;
+        [SerializeField] private Transform _perceptionOrigin;
 
         public EnemyConfig Config => _config;
-        public TargetPerception Perception { get; private set; }
+        public EnemyTargetPerception Perception { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
 
-            Perception = new TargetPerception(Movement, _config.Perception, _sightOrigin);
+            Perception = new EnemyTargetPerception(_config.Perception, _perceptionOrigin, Movement);
 
             StateMachine.Register(new EnemyIdleState(this));
             StateMachine.Register(new EnemyPatrolState(this));
             StateMachine.Register(new EnemyHurtState(this));
+            StateMachine.Register(new EnemyDeadState(this));
 
             RegisterCombatStates(_config.Attack.Kind);
         }
@@ -58,7 +58,7 @@ namespace LayerZero.Characters.Enemies
         {
             base.OnDrawGizmos();
 
-            Perception.DrawGizmos();
+            Perception?.DrawGizmos();
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

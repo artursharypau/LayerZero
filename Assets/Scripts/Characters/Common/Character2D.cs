@@ -27,14 +27,14 @@ namespace LayerZero.Characters.Common
 
         protected virtual void Awake()
         {
-            Movement = this.GetRequired<CharacterMovement2D>();
-            Health = this.GetRequired<IDamageable>();
-            DamageReceiver = this.GetRequired<IDamageReceiver>();
-            Combat = this.GetRequired<CombatSystem>();
+            Movement = this.GetRequiredComponent<CharacterMovement2D>();
+            Health = this.GetRequiredComponent<IDamageable>();
+            DamageReceiver = this.GetRequiredComponent<IDamageReceiver>();
+            Combat = this.GetRequiredComponent<CombatSystem>();
 
             Animator = new CharacterAnimator(
-                this.GetRequiredInChildren<Animator>(),
-                this.GetRequiredInChildren<AnimatorEvents>());
+                this.GetRequiredComponentInChildren<Animator>(),
+                this.GetRequiredComponentInChildren<AnimatorEvents>());
 
             DamageResistances = new DamageResistances();
             DamageReceiver.SetResistances(DamageResistances);
@@ -67,7 +67,7 @@ namespace LayerZero.Characters.Common
 
         protected virtual void OnDrawGizmos()
         {
-            Movement.DrawGizmos();
+            Movement?.DrawGizmos();
         }
 
         protected virtual void OnDamaged(DamageInfo damageInfo)

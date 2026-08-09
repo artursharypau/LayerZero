@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LayerZero.Combat.Damage;
+using LayerZero.Core.Extensions;
 using UnityEngine;
 
 namespace LayerZero.Combat.Attacks
@@ -64,7 +65,7 @@ namespace LayerZero.Combat.Attacks
             DamageInfo damageInfo = DamageInfo.FromDefinition(damage, _owner ? _owner : transform);
             for (int i = 0; i < count; i++)
             {
-                if (_targets[i].TryGetComponent(out IDamageReceiver receiver))
+                if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver))
                 {
                     receiver.TakeDamage(damageInfo);
                 }

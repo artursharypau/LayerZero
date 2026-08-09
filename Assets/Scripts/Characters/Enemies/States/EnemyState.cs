@@ -13,6 +13,6 @@ namespace LayerZero.Characters.Enemies.States
         }
 
         protected EnemyConfig Config => Owner.Config;
-        protected TargetPerception Perception => Owner.Perception;
+        protected EnemyTargetPerception Perception => Owner.Perception;
     }
 }

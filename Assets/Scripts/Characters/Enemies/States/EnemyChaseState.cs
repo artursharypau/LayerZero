@@ -11,7 +11,7 @@ namespace LayerZero.Characters.Enemies.States
             : base(owner, EnemyAnimatorParameters.Chase)
         {
             On(() => !Perception.HasTarget, EnemyStateId.Patrol);
-            On(() => Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target), EnemyStateId.Attack);
+            On(() => Owner.Combat.IsInRange(Config.Attack.Kind, Perception.Target.Transform), EnemyStateId.Attack);
         }
 
         public override int Id => EnemyStateId.Chase;

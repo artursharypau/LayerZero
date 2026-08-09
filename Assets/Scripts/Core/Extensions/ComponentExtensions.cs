@@ -5,7 +5,7 @@ namespace LayerZero.Core.Extensions
 {
     public static class ComponentExtensions
     {
-        public static TComponent GetRequired<TComponent>(this Component self)
+        public static TComponent GetRequiredComponent<TComponent>(this Component self)
             where TComponent : class
         {
             TComponent component = self.GetComponent<TComponent>();
@@ -17,13 +17,61 @@ namespace LayerZero.Core.Extensions
             return component;
         }
 
-        public static TComponent GetRequiredInChildren<TComponent>(this Component self)
+        public static TComponent[] GetRequiredComponents<TComponent>(this Component self)
+            where TComponent : class
+        {
+            TComponent[] component = self.GetComponents<TComponent>();
+            if (component == null)
+            {
+                GameLog.Error(self, $"'{self.name}' is missing a required component of type '{typeof(TComponent).Name}'.");
+            }
+
+            return component;
+        }
+
+        public static bool TryGetRequiredComponent<TComponent>(this Component self, out TComponent component)
+            where TComponent : class
+        {
+            if (self.TryGetComponent(out component))
+            {
+                return true;
+            }
+
+            GameLog.Error(self, $"'{self.name}' is missing a required component of type '{typeof(TComponent).Name}'.");
+            return false;
+        }
+
+        public static TComponent GetRequiredComponentInChildren<TComponent>(this Component self)
             where TComponent : class
         {
             TComponent component = self.GetComponentInChildren<TComponent>(true);
             if (component == null)
             {
                 GameLog.Error(self, $"'{self.name}' is missing a required child component of type '{typeof(TComponent).Name}'.");
+            }
+
+            return component;
+        }
+
+        public static TComponent[] GetRequiredComponentsInChildren<TComponent>(this Component self)
+            where TComponent : class
+        {
+            TComponent[] component = self.GetComponentsInChildren<TComponent>(true);
+            if (component == null || component.Length == 0)
+            {
+                GameLog.Error(self, $"'{self.name}' is missing a required child component of type '{typeof(TComponent).Name}'.");
+            }
+
+            return component;
+        }
+
+        public static TComponent GetRequiredComponentInParent<TComponent>(this Component self)
+            where TComponent : class
+        {
+            TComponent component = self.GetComponentInParent<TComponent>(true);
+            if (component == null)
+            {
+                GameLog.Error(self, $"'{self.name}' is missing a required parent component of type '{typeof(TComponent).Name}'.");
             }
 
             return component;

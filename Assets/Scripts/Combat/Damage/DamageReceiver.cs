@@ -15,7 +15,7 @@ namespace LayerZero.Combat.Damage
 
         private void Awake()
         {
-            _damageable = this.GetRequired<IDamageable>();
+            _damageable = this.GetRequiredComponent<IDamageable>();
         }
 
         public void SetResistances(IDamageResistances resistances)

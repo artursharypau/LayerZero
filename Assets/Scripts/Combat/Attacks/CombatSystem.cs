@@ -14,7 +14,7 @@ namespace LayerZero.Combat.Attacks
 
         private void Awake()
         {
-            foreach (IAttackExecutor executor in GetComponentsInChildren<IAttackExecutor>(true))
+            foreach (IAttackExecutor executor in this.GetRequiredComponentsInChildren<IAttackExecutor>())
             {
                 if (!_executors.TryAdd(executor.Kind, executor))
                 {
@@ -25,7 +25,7 @@ namespace LayerZero.Combat.Attacks
                 executor.Initialize(transform);
             }
 
-            _attackEvents = this.GetRequiredInChildren<IAttackEvents>();
+            _attackEvents = this.GetRequiredComponentInChildren<IAttackEvents>();
         }
 
         private void OnEnable()

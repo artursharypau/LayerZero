@@ -2,27 +2,29 @@ using LayerZero.Characters.Common.Movement;
 using LayerZero.Characters.Enemies.Config;
 using LayerZero.Combat.Damage;
 using LayerZero.Core.Collisions;
+using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
 using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.Perception
 {
-    public sealed class TargetPerception
+    public sealed class EnemyTargetPerception
     {
         private readonly PerceptionConfig _config;
-        private readonly Transform _sightOrigin;
+        private readonly Transform _origin;
         private readonly IPositioned _positioned;
+
         private readonly LayerMask _targetMask;
         private readonly LayerMask _blockerMask;
 
         private Countdown _alertTimer;
         private Countdown _scanTimer;
 
-        public TargetPerception(IPositioned positioned, PerceptionConfig config, Transform sightOrigin)
+        public EnemyTargetPerception(PerceptionConfig config, Transform origin, IPositioned positioned)
         {
-            _positioned = positioned;
             _config = config;
-            _sightOrigin = sightOrigin;
+            _origin = origin;
+            _positioned = positioned;
 
             _targetMask = _config.TargetMask.Or(GameLayers.Player);
             _blockerMask = _config.BlockerMask.Or(GameLayers.Ground);
@@ -30,39 +32,42 @@ namespace LayerZero.Characters.Enemies.Perception
             _scanTimer.Start(_config.ScanInterval);
         }
 
-        public Transform Target { get; private set; }
-        public bool HasTarget => Target;
+        public EnemyPerceivedTarget Target { get; private set; }
+        public bool HasTarget => Target.IsValid;
 
         public bool IsTargetBehind =>
-            Target && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
+            HasTarget && !Mathf.Approximately(DirectionToTarget, _positioned.FacingDirection);
 
         public float DirectionToTarget
         {
             get
             {
-                if (!Target)
+                if (!HasTarget)
                 {
                     return 0f;
                 }
 
-                return Target.position.x > _positioned.Position.x ? 1f : -1f;
+                return Target.Transform.position.x > _positioned.Position.x ? 1f : -1f;
             }
         }
 
         public void FixedUpdate()
         {
-            if (!_scanTimer.IsExpired)
+            if (!Target.IsValid)
             {
-                return;
+                ForgetTarget();
             }
 
-            _scanTimer.Start(_config.ScanInterval);
-            Scan();
+            if (_scanTimer.IsExpired)
+            {
+                _scanTimer.Start(_config.ScanInterval);
+                ScanForTarget();
+            }
         }
 
         public void ForgetTarget()
         {
-            Target = null;
+            Target = EnemyPerceivedTarget.None;
         }
 
         public void NotifyDamaged(DamageInfo damageInfo)
@@ -75,23 +80,23 @@ namespace LayerZero.Characters.Enemies.Perception
 
         public void DrawGizmos()
         {
-            if (!_sightOrigin)
+            if (!_origin)
             {
                 return;
             }
 
             Gizmos.color = HasTarget ? Color.red : Color.gray;
             Gizmos.DrawLine(
-                _sightOrigin.position,
-                _sightOrigin.position + new Vector3(_config.SightDistance * _positioned.FacingDirection, 0f));
+                _origin.position,
+                _origin.position + new Vector3(_config.Distance * _positioned.FacingDirection, 0f));
         }
 
-        private void Scan()
+        private void ScanForTarget()
         {
-            Transform seen = CastForTarget();
-            if (seen)
+            Transform targetTransform = CastForTarget();
+            if (targetTransform)
             {
-                SetTarget(seen);
+                SetTarget(targetTransform);
                 return;
             }
 
@@ -103,23 +108,29 @@ namespace LayerZero.Characters.Enemies.Perception
 
         private Transform CastForTarget()
         {
-            if (!_sightOrigin)
+            if (!_origin)
             {
                 return null;
             }
 
             RaycastHit2D hit = Physics2D.Raycast(
-                _sightOrigin.position,
+                _origin.position,
                 _positioned.FacingVector,
-                _config.SightDistance,
+                _config.Distance,
                 _targetMask | _blockerMask);
 
             return hit.collider && _targetMask.Contains(hit.collider.gameObject) ? hit.transform : null;
         }
 
-        private void SetTarget(Transform target)
+        private void SetTarget(Transform transform)
         {
-            Target = target;
+            IDamageable health = transform.GetRequiredComponentInParent<IDamageable>();
+            if (health == null || health.IsDead)
+            {
+                return;
+            }
+
+            Target = new EnemyPerceivedTarget(transform, health);
             _alertTimer.Start(_config.AlertDuration);
         }
     }
