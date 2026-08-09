@@ -5,10 +5,12 @@ namespace LayerZero.Combat.Damage.Resistance
         public static readonly ResistanceHandle None = default;
 
         internal readonly int Id;
+        internal readonly ResistanceKind Kind;
 
-        internal ResistanceHandle(int id)
+        internal ResistanceHandle(int id, ResistanceKind kind)
         {
             Id = id;
+            Kind = kind;
         }
     }
 }

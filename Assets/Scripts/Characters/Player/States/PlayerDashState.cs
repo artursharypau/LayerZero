@@ -37,7 +37,7 @@ namespace LayerZero.Characters.Player.States
             _timer.Start(Config.Dash.Duration);
             _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
 
-            _resistance = Owner.DamageResistances.Apply(DamageResistance.Default.WithInvulnerability());
+            _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
 
             Movement.SetGravityScale(0f);
         }

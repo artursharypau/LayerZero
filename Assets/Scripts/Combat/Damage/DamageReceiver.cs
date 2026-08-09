@@ -35,7 +35,7 @@ namespace LayerZero.Combat.Damage
                 return;
             }
 
-            DamageImpactInfo impact = _resistances?.Filter(damageInfo.Impact) ?? damageInfo.Impact;
+            DamageImpactInfo impact = _resistances?.Resolve(damageInfo.Impact) ?? damageInfo.Impact;
             DamageInfo resolved = damageInfo.WithImpact(impact);
 
             _damageable.TakeDamage(resolved.Amount);

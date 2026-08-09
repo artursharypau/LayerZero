@@ -16,12 +16,12 @@ namespace LayerZero.Combat.Damage.Resistance
             int id = _nextId++;
             _active.Add(id, resistance);
 
-            if (resistance.IsInvulnerable)
+            if (resistance.Kind == ResistanceKind.Invulnerability)
             {
                 ++_invulnerabilityCount;
             }
 
-            return new ResistanceHandle(id);
+            return new ResistanceHandle(id, resistance.Kind);
         }
 
         public void Remove(ResistanceHandle handle)
@@ -31,13 +31,13 @@ namespace LayerZero.Combat.Damage.Resistance
                 return;
             }
 
-            if (resistance.IsInvulnerable)
+            if (resistance.Kind == ResistanceKind.Invulnerability)
             {
                 --_invulnerabilityCount;
             }
         }
 
-        public DamageImpactInfo Filter(DamageImpactInfo impact)
+        public DamageImpactInfo Resolve(DamageImpactInfo impact)
         {
             if (!impact.HasImpact || _active.Count == 0)
             {
@@ -49,8 +49,15 @@ namespace LayerZero.Combat.Damage.Resistance
 
             foreach (DamageResistance resistance in _active.Values)
             {
-                ignoresStun |= resistance.IgnoresStun;
-                knockbackMultiplier *= resistance.KnockbackMultiplier;
+                switch (resistance.Kind)
+                {
+                    case ResistanceKind.StunImmunity:
+                        ignoresStun = true;
+                        break;
+                    case ResistanceKind.Knockback:
+                        knockbackMultiplier *= resistance.Value;
+                        break;
+                }
             }
 
             return new DamageImpactInfo(
