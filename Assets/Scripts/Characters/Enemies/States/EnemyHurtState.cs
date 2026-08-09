@@ -1,6 +1,7 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
 using LayerZero.Combat.Damage;
+using LayerZero.Core.Diagnostics;
 using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Characters.Enemies.States
@@ -27,6 +28,8 @@ namespace LayerZero.Characters.Enemies.States
         public override void Enter()
         {
             base.Enter();
+
+            GameLog.Info(this, "Entering hurt state");
 
             DamageImpactInfo impact = _impact;
             _impact = DamageImpactInfo.None;

@@ -1,4 +1,5 @@
 using System;
+using LayerZero.Core.Extensions;
 using UnityEngine;
 
 namespace LayerZero.Environment.Parallax
@@ -25,7 +26,7 @@ namespace LayerZero.Environment.Parallax
                 return;
             }
 
-            SpriteRenderer[] renderers = _root.GetComponentsInChildren<SpriteRenderer>();
+            SpriteRenderer[] renderers = _root.GetRequiredComponentsInChildren<SpriteRenderer>();
             if (renderers.Length == 0)
             {
                 return;

@@ -25,7 +25,7 @@ namespace LayerZero.Characters.Common.Movement
 
         private void Awake()
         {
-            _rigidbody = this.GetRequired<Rigidbody2D>();
+            _rigidbody = this.GetRequiredComponent<Rigidbody2D>();
             _groundWallDetector.Initialize(this);
         }
 

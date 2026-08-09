@@ -20,19 +20,19 @@ MonoBehaviour:
     _speedMultiplier: 2
     _animationMultiplier: 2
   _perception:
-    _sightDistance: 13
+    _distance: 13
     _scanInterval: 0.5
     _alertDuration: 5
     _targetMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 128
     _blockerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 64
   _attack:
     _kind: 0
     _damage:
-      _amount: 10
+      _amount: 25
       _source: 2
-      _knockback: {x: 4, y: 6}
+      _knockback: {x: 1, y: 0}
       _stunDuration: 0.3

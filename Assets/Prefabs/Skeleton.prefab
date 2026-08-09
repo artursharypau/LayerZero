@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 394000721608118910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.15, y: -0.19, z: 0}
+  m_LocalPosition: {x: 1.02, y: -0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -174,7 +174,6 @@ GameObject:
   - component: {fileID: 6929327695061375567}
   - component: {fileID: 7765971437028232559}
   - component: {fileID: 3589202579622647878}
-  - component: {fileID: 3401725131487728625}
   - component: {fileID: 7100000000000000201}
   m_Layer: 8
   m_Name: Skeleton
@@ -278,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Enemies.EnemyController
   _config: {fileID: 11400000, guid: 9b91371a343fc5dfe429459f09563945, type: 2}
-  _sightOrigin: {fileID: 1613318259418196058}
+  _perceptionOrigin: {fileID: 1613318259418196058}
 --- !u!114 &5630542884956237323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,20 +339,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.DamageReceiver
---- !u!114 &3401725131487728625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1adf0d5d081418099873539808e8115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Vfx.DamageFlashVfx
-  _duration: 0.15
-  _material: {fileID: 2100000, guid: 9ba89e662caeb4c1fb7a217939b9c98b, type: 2}
 --- !u!114 &7100000000000000201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,7 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
   _origin: {fileID: 4973008962671906359}
-  _radius: 1
+  _radius: 1.4
   _targetMask:
     serializedVersion: 2
     m_Bits: 128

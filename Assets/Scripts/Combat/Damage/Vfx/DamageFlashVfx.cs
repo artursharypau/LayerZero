@@ -18,8 +18,8 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private void Awake()
         {
-            _renderer = this.GetRequiredInChildren<SpriteRenderer>();
-            _damageReceiver = this.GetRequired<IDamageReceiver>();
+            _renderer = this.GetRequiredComponentInChildren<SpriteRenderer>();
+            _damageReceiver = this.GetRequiredComponent<IDamageReceiver>();
 
             if (_renderer)
             {

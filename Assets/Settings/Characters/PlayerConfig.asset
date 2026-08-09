@@ -30,31 +30,31 @@ MonoBehaviour:
     _cooldown: 2
     _speedMultiplier: 3
   _attack:
-    _combo:
-    - _velocity: {x: 3, y: 1.5}
+    _comboSteps:
+    - _velocity: {x: 1, y: 2}
       _attack:
         _kind: 0
         _damage:
-          _amount: 15
+          _amount: 20
           _source: 1
           _knockback: {x: 1, y: 3}
           _stunDuration: 0.2
-    - _velocity: {x: 1, y: 2.5}
+    - _velocity: {x: 1, y: 2}
       _attack:
         _kind: 0
         _damage:
-          _amount: 15
+          _amount: 20
           _source: 1
-          _knockback: {x: 2, y: 5}
+          _knockback: {x: 1, y: 3}
           _stunDuration: 0.2
-    - _velocity: {x: 4, y: 5}
+    - _velocity: {x: 2, y: 4}
       _attack:
         _kind: 0
         _damage:
-          _amount: 25
+          _amount: 30
           _source: 1
-          _knockback: {x: 3, y: 7}
-          _stunDuration: 0.3
+          _knockback: {x: 3, y: 5}
+          _stunDuration: 0.4
     _velocityDuration: 0.1
     _comboResetDelay: 1
   _jumpAttack:

@@ -6,6 +6,8 @@ namespace LayerZero.Characters.Player.Input
     {
         Vector2 Move { get; }
 
+        void Enable();
+        void Disable();
         bool WasPerformed(PlayerInputAction action);
         void Consume(PlayerInputAction action);
     }

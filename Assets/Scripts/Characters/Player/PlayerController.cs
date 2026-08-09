@@ -40,6 +40,7 @@ namespace LayerZero.Characters.Player
             StateMachine.Register(new PlayerAttackState(this));
             StateMachine.Register(new PlayerJumpAttackState(this));
             StateMachine.Register(new PlayerHurtState(this));
+            StateMachine.Register(new PlayerDeadState(this));
         }
 
         private void Start()
