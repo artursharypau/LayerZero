@@ -6,6 +6,6 @@ namespace LayerZero.Combat.Damage.Resistance
 
         ResistanceHandle Apply(DamageResistance resistance);
         void Remove(ResistanceHandle handle);
-        DamageImpactInfo Filter(DamageImpactInfo impact);
+        DamageImpactInfo Resolve(DamageImpactInfo impact);
     }
 }

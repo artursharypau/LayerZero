@@ -1,35 +1,22 @@
-using UnityEngine;
-
 namespace LayerZero.Combat.Damage.Resistance
 {
     public readonly struct DamageResistance
     {
-        public static readonly DamageResistance Default = new(false, false, 1f);
+        public static readonly DamageResistance Invulnerability = new(ResistanceKind.Invulnerability);
+        public static readonly DamageResistance StunImmunity = new(ResistanceKind.StunImmunity);
 
-        public readonly bool IsInvulnerable;
-        public readonly bool IgnoresStun;
-        public readonly float KnockbackMultiplier;
+        public readonly ResistanceKind Kind;
+        public readonly float Value;
 
-        private DamageResistance(bool isInvulnerable, bool ignoresStun, float knockbackMultiplier)
+        private DamageResistance(ResistanceKind kind, float value = 0f)
         {
-            IsInvulnerable = isInvulnerable;
-            IgnoresStun = ignoresStun;
-            KnockbackMultiplier = knockbackMultiplier;
+            Kind = kind;
+            Value = value;
         }
 
-        public DamageResistance WithInvulnerability()
+        public static DamageResistance Knockback(float multiplier)
         {
-            return new DamageResistance(true, IgnoresStun, KnockbackMultiplier);
-        }
-
-        public DamageResistance WithStunImmunity()
-        {
-            return new DamageResistance(IsInvulnerable, true, KnockbackMultiplier);
-        }
-
-        public DamageResistance WithKnockbackMultiplier(float multiplier)
-        {
-            return new DamageResistance(IsInvulnerable, IgnoresStun, Mathf.Max(0f, multiplier));
+            return new DamageResistance(ResistanceKind.Knockback, multiplier);
         }
     }
 }
