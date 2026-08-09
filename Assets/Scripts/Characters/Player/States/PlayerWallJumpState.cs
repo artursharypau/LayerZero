@@ -1,5 +1,4 @@
 using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
 using LayerZero.Core.Timing;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace LayerZero.Characters.Player.States
         private Countdown _moveLock;
 
         public PlayerWallJumpState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+            : base(owner)
         {
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
 

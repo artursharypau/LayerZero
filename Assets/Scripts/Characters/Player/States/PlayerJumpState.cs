@@ -1,12 +1,11 @@
 using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
 
 namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerJumpState : PlayerInAirState
     {
         public PlayerJumpState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+            : base(owner)
         {
             OnFixed(() => Movement.VelocityY <= 0f, PlayerStateId.Fall);
         }

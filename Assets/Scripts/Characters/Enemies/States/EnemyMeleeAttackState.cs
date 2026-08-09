@@ -1,4 +1,3 @@
-using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.States;
 
 namespace LayerZero.Characters.Enemies.States
@@ -8,7 +7,7 @@ namespace LayerZero.Characters.Enemies.States
         private readonly AttackBehaviour _attack;
 
         public EnemyMeleeAttackState(EnemyController owner)
-            : base(owner, CommonAnimatorParameters.Attack)
+            : base(owner)
         {
             _attack = new AttackBehaviour(owner, () => Config.Attack);
 

@@ -1,11 +1,9 @@
-using LayerZero.Characters.Common.Animation;
-
 namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerIdleState : PlayerGroundedState
     {
         public PlayerIdleState(PlayerController owner)
-            : base(owner, CommonAnimatorParameters.Idle)
+            : base(owner)
         {
             On(() => Input.Move.x != 0f && !IsPushingIntoWall(), PlayerStateId.Move);
         }

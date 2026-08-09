@@ -1,5 +1,4 @@
 using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
 using LayerZero.Combat.Damage.Resistance;
 using LayerZero.Core.Timing;
 
@@ -14,7 +13,7 @@ namespace LayerZero.Characters.Player.States
         private bool _isDashing;
 
         public PlayerDashState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.Dash)
+            : base(owner)
         {
             OnFixed(() => !_isDashing, ResolveLocomotionState);
             OnFixed(() => _timer.IsExpired, ResolveLocomotionState);

@@ -32,7 +32,7 @@ MonoBehaviour:
   _attack:
     _kind: 0
     _damage:
-      _amount: 25
+      _amount: 20
       _source: 2
-      _knockback: {x: 1, y: 0}
+      _knockback: {x: 3, y: 5}
       _stunDuration: 0.3

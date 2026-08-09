@@ -1,5 +1,4 @@
 using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
 
 namespace LayerZero.Characters.Player.States
 {
@@ -8,7 +7,7 @@ namespace LayerZero.Characters.Player.States
         private float _defaultGravityScale;
 
         public PlayerFallState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.JumpFall)
+            : base(owner)
         {
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
 

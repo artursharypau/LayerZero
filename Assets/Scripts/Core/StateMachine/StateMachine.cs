@@ -11,6 +11,8 @@ namespace LayerZero.Core.StateMachine
 
         private bool _isFlushing;
 
+        public event Action<StateBase> StateEntered;
+
         public StateBase Pending { get; private set; }
         public StateBase Current { get; private set; }
 
@@ -24,6 +26,8 @@ namespace LayerZero.Core.StateMachine
             Pending = null;
             Current = _registry.Get(id);
             Current.Enter();
+
+            StateEntered?.Invoke(Current);
         }
 
         public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
@@ -122,6 +126,8 @@ namespace LayerZero.Core.StateMachine
                 Current?.Exit();
                 Current = next;
                 Current.Enter();
+
+                StateEntered?.Invoke(Current);
             }
 
             _isFlushing = false;

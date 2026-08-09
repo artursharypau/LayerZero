@@ -1,11 +1,9 @@
-using LayerZero.Characters.Common.Animation;
-
 namespace LayerZero.Characters.Enemies.States
 {
     public class EnemyDeadState : EnemyState
     {
         public EnemyDeadState(EnemyController owner)
-            : base(owner, CommonAnimatorParameters.Dead)
+            : base(owner)
         {
         }
 

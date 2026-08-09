@@ -6,8 +6,8 @@ namespace LayerZero.Characters.Player.States
 {
     public abstract class PlayerInAirState : PlayerState
     {
-        protected PlayerInAirState(PlayerController owner, AnimatorParameter parameter)
-            : base(owner, parameter)
+        protected PlayerInAirState(PlayerController owner)
+            : base(owner)
         {
             On(() => IsMovementEnabled && Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.JumpAttack);
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);

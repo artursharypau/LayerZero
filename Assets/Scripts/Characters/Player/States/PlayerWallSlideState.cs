@@ -1,5 +1,4 @@
 using LayerZero.Characters.Player.Abilities;
-using LayerZero.Characters.Player.Animation;
 using LayerZero.Characters.Player.Input;
 
 namespace LayerZero.Characters.Player.States
@@ -7,7 +6,7 @@ namespace LayerZero.Characters.Player.States
     public sealed class PlayerWallSlideState : PlayerInAirState
     {
         public PlayerWallSlideState(PlayerController owner)
-            : base(owner, PlayerAnimatorParameters.WallSlide)
+            : base(owner)
         {
             On(() => Input.WasPerformed(PlayerInputAction.Jump), PlayerStateId.WallJump);
 
