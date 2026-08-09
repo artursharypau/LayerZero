@@ -1,5 +1,6 @@
 using LayerZero.Characters.Common.Collisions;
 using LayerZero.Core.Extensions;
+using LayerZero.Core.Timing;
 using UnityEngine;
 
 namespace LayerZero.Characters.Common.Movement
@@ -9,6 +10,7 @@ namespace LayerZero.Characters.Common.Movement
     {
         [SerializeField] private GroundWallDetector _groundWallDetector = new();
 
+        private Countdown _lockTimer;
         private Rigidbody2D _rigidbody;
 
         public bool IsGrounded => _groundWallDetector.IsGrounded;
@@ -39,8 +41,18 @@ namespace LayerZero.Characters.Common.Movement
             _groundWallDetector.DrawGizmos();
         }
 
+        public void LockVelocityFor(float duration)
+        {
+            _lockTimer.Start(duration);
+        }
+
         public void SetVelocity(float x, float y, bool updateFacing = false)
         {
+            if (!_lockTimer.IsExpired)
+            {
+                return;
+            }
+
             _rigidbody.linearVelocity = new Vector2(x, y);
 
             if (updateFacing)
@@ -56,6 +68,11 @@ namespace LayerZero.Characters.Common.Movement
 
         public void FaceTowards(float direction)
         {
+            if (!_lockTimer.IsExpired)
+            {
+                return;
+            }
+
             if (direction == 0f)
             {
                 return;
@@ -69,6 +86,11 @@ namespace LayerZero.Characters.Common.Movement
 
         public void Flip()
         {
+            if (!_lockTimer.IsExpired)
+            {
+                return;
+            }
+
             transform.Rotate(0f, 180f, 0f);
             FacingDirection = -FacingDirection;
 

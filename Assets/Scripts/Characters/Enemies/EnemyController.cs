@@ -29,7 +29,7 @@ namespace LayerZero.Characters.Enemies
 
             StateMachine.Register(new EnemyIdleState(this));
             StateMachine.Register(new EnemyPatrolState(this));
-            StateMachine.Register(new EnemyHurtState(this));
+            StateMachine.Register(new EnemyStunnedState(this));
             StateMachine.Register(new EnemyDeadState(this));
 
             RegisterCombatStates(_config.Attack.Kind);
@@ -68,7 +68,16 @@ namespace LayerZero.Characters.Enemies
 
         protected override void OnDamageImpactReceived(DamageImpactInfo impact)
         {
-            StateMachine.ChangeState(EnemyStateId.Hurt, impact, StateTransitionMode.Immediate);
+            if (impact.StunDuration > 0f)
+            {
+                StateMachine.ChangeState(EnemyStateId.Stunned, impact, StateTransitionMode.Immediate);
+            }
+
+            if (impact.Knockback != Vector2.zero)
+            {
+                Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
+                Movement.LockVelocityFor(0.2f);
+            }
         }
 
         protected override void OnDied()
