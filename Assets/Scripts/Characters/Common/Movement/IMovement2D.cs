@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace LayerZero.Characters.Common.Movement
 {
     public interface IMovement2D : IPositioned
@@ -9,11 +11,11 @@ namespace LayerZero.Characters.Common.Movement
         float VelocityY { get; }
         float GravityScale { get; }
 
-        void LockVelocityFor(float duration);
         void SetVelocity(float x, float y, bool updateFacing = false);
         void SetVelocityX(float x, bool updateFacing = false);
         void FaceTowards(float direction);
         void Flip();
         void SetGravityScale(float scale);
+        void ApplyKnockback(Vector2 knockback);
     }
 }

@@ -73,11 +73,7 @@ namespace LayerZero.Characters.Enemies
                 StateMachine.ChangeState(EnemyStateId.Stunned, impact, StateTransitionMode.Immediate);
             }
 
-            if (impact.Knockback != Vector2.zero)
-            {
-                Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
-                Movement.LockVelocityFor(0.2f);
-            }
+            Movement.ApplyKnockback(impact.Knockback);
         }
 
         protected override void OnDied()

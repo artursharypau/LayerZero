@@ -35,7 +35,7 @@ namespace LayerZero.Characters.Player.States
             _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
 
             _stun.Begin(impact.StunDuration);
-            Movement.SetVelocity(impact.Knockback.x, impact.Knockback.y);
+            Movement.ApplyKnockback(impact.Knockback);
         }
 
         public override void Exit()
@@ -43,6 +43,7 @@ namespace LayerZero.Characters.Player.States
             base.Exit();
 
             Owner.DamageResistances.Remove(_resistance);
+            _resistance = ResistanceHandle.None;
         }
     }
 }
