@@ -37,7 +37,7 @@ MonoBehaviour:
         _damage:
           _amount: 20
           _source: 1
-          _knockback: {x: 10, y: 20}
+          _knockback: {x: 10, y: 5}
           _stunDuration: 0
     - _velocity: {x: 1, y: 2}
       _attack:
