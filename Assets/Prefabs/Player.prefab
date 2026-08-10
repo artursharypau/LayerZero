@@ -148,6 +148,7 @@ MonoBehaviour:
     _solidMask:
       serializedVersion: 2
       m_Bits: 64
+  _knockbackDeceleration: 40
 --- !u!114 &4145020159193950360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
   _origin: {fileID: 9122607069633984326}
-  _radius: 1
+  _radius: 1.2
   _targetMask:
     serializedVersion: 2
     m_Bits: 256
