@@ -8,12 +8,5 @@ namespace LayerZero.Characters.Enemies.States
         }
 
         public override int Id => EnemyStateId.Dead;
-
-        public override void Enter()
-        {
-            base.Enter();
-
-            Owner.Perception.ForgetTarget();
-        }
     }
 }

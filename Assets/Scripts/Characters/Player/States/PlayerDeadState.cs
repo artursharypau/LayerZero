@@ -8,12 +8,5 @@ namespace LayerZero.Characters.Player.States
         }
 
         public override int Id => PlayerStateId.Dead;
-
-        public override void Enter()
-        {
-            base.Enter();
-
-            Input.Disable();
-        }
     }
 }
