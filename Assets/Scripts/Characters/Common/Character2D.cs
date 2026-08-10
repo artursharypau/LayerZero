@@ -101,9 +101,13 @@ namespace LayerZero.Characters.Common
         private void HandleDied()
         {
             Movement.SetVelocity(0f, 0f);
+            Movement.enabled = false;
             Combat.enabled = false;
 
             OnDied();
+
+            StateMachine.Stop();
+            enabled = false;
         }
     }
 }

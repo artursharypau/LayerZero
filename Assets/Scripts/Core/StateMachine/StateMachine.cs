@@ -13,6 +13,7 @@ namespace LayerZero.Core.StateMachine
 
         public event Action<StateBase> StateEntered;
 
+        public bool Running { get; private set; }
         public StateBase Pending { get; private set; }
         public StateBase Current { get; private set; }
 
@@ -21,23 +22,41 @@ namespace LayerZero.Core.StateMachine
             _registry.Add(state);
         }
 
-        public void Start(int id)
+        public void Start(int initialId)
         {
+            Running = true;
             Pending = null;
-            Current = _registry.Get(id);
+            Current = _registry.Get(initialId);
             Current.Enter();
 
             StateEntered?.Invoke(Current);
         }
 
+        public void Stop()
+        {
+            FlushPending();
+
+            Running = false;
+        }
+
         public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
+            if (!Running)
+            {
+                return;
+            }
+
             StateBase newState = _registry.Get(id);
             Schedule(newState, mode);
         }
 
         public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
         {
+            if (!Running)
+            {
+                return;
+            }
+
             StateBase state = _registry.Get(id);
             if (state is not IStatePayload<TPayload> statePayload)
             {
@@ -51,6 +70,11 @@ namespace LayerZero.Core.StateMachine
 
         public void Update()
         {
+            if (!Running)
+            {
+                return;
+            }
+
             FlushPending();
 
             if (Current == null)
@@ -69,6 +93,11 @@ namespace LayerZero.Core.StateMachine
 
         public void FixedUpdate()
         {
+            if (!Running)
+            {
+                return;
+            }
+
             if (Current == null)
             {
                 return;
