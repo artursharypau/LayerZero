@@ -10,6 +10,7 @@ namespace LayerZero.Characters.Player.States
             : base(owner)
         {
             On(() => Input.WasPerformed(PlayerInputAction.Attack), PlayerStateId.Attack);
+            On(() => Input.WasPerformed(PlayerInputAction.Counterattack), PlayerStateId.Counterattack);
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
 

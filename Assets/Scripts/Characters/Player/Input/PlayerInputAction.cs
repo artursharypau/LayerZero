@@ -5,6 +5,7 @@ namespace LayerZero.Characters.Player.Input
         None = 0,
         Jump = 1,
         Dash = 2,
-        Attack = 3
+        Attack = 3,
+        Counterattack = 4
     }
 }

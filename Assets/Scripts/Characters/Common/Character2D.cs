@@ -1,6 +1,6 @@
 using LayerZero.Characters.Common.Animation;
 using LayerZero.Characters.Common.Movement;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat;
 using LayerZero.Combat.Damage;
 using LayerZero.Combat.Damage.Resistance;
 using LayerZero.Core.Extensions;

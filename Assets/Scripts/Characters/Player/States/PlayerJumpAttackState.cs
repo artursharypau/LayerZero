@@ -1,7 +1,7 @@
 using LayerZero.Characters.Common.States;
 using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 
 namespace LayerZero.Characters.Player.States
 {

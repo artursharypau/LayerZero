@@ -2,7 +2,7 @@ using LayerZero.Characters.Common;
 using LayerZero.Characters.Enemies.Config;
 using LayerZero.Characters.Enemies.Perception;
 using LayerZero.Characters.Enemies.States;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 using LayerZero.Combat.Damage;
 using LayerZero.Core.Diagnostics;
 using LayerZero.Core.StateMachine;

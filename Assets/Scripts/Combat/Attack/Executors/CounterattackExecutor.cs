@@ -3,9 +3,9 @@ using LayerZero.Combat.Damage;
 using LayerZero.Core.Extensions;
 using UnityEngine;
 
-namespace LayerZero.Combat.Attacks
+namespace LayerZero.Combat.Attack.Executors
 {
-    public sealed class MeleeAttackExecutor : MonoBehaviour, IAttackExecutor
+    public class CounterattackExecutor : MonoBehaviour, IAttackExecutor
     {
         private const int TargetsBufferCapacity = 8;
 
@@ -18,7 +18,7 @@ namespace LayerZero.Combat.Attacks
         private ContactFilter2D _filter;
         private Transform _owner;
 
-        public AttackKind Kind => AttackKind.Melee;
+        public AttackKind Kind => AttackKind.Counterattack;
 
         private void Awake()
         {
@@ -65,7 +65,11 @@ namespace LayerZero.Combat.Attacks
             DamageInfo damageInfo = DamageInfo.FromDefinition(damage, _owner ? _owner : transform);
             for (int i = 0; i < count; i++)
             {
-                if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver))
+                Collider2D target = _targets[i];
+
+                if (target.TryGetRequiredComponent(out IInterruptibleAttack interruptibleAttack)
+                    && interruptibleAttack.TryInterrupt(damageInfo)
+                    && target.TryGetRequiredComponent(out IDamageReceiver receiver))
                 {
                     receiver.TakeDamage(damageInfo);
                 }

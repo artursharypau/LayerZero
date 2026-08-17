@@ -129,6 +129,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Counterattack"",
+                    ""type"": ""Button"",
+                    ""id"": ""dcdde41a-5b78-447c-a399-7d054659a2c6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -274,6 +283,17 @@ namespace InputSystem
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31e5075a-9f30-4942-be89-d54bf839ffac"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard & Mouse"",
+                    ""action"": ""Counterattack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -303,6 +323,7 @@ namespace InputSystem
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+            m_Player_Counterattack = m_Player.FindAction("Counterattack", throwIfNotFound: true);
         }
 
         ~@PlayerInputSet()
@@ -387,6 +408,7 @@ namespace InputSystem
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Dash;
         private readonly InputAction m_Player_Attack;
+        private readonly InputAction m_Player_Counterattack;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -414,6 +436,10 @@ namespace InputSystem
             /// Provides access to the underlying input action "Player/Attack".
             /// </summary>
             public InputAction @Attack => m_Wrapper.m_Player_Attack;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Counterattack".
+            /// </summary>
+            public InputAction @Counterattack => m_Wrapper.m_Player_Counterattack;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -452,6 +478,9 @@ namespace InputSystem
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Counterattack.started += instance.OnCounterattack;
+                @Counterattack.performed += instance.OnCounterattack;
+                @Counterattack.canceled += instance.OnCounterattack;
             }
 
             /// <summary>
@@ -475,6 +504,9 @@ namespace InputSystem
                 @Attack.started -= instance.OnAttack;
                 @Attack.performed -= instance.OnAttack;
                 @Attack.canceled -= instance.OnAttack;
+                @Counterattack.started -= instance.OnCounterattack;
+                @Counterattack.performed -= instance.OnCounterattack;
+                @Counterattack.canceled -= instance.OnCounterattack;
             }
 
             /// <summary>
@@ -556,6 +588,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Counterattack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCounterattack(InputAction.CallbackContext context);
         }
     }
 }

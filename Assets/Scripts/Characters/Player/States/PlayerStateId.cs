@@ -13,5 +13,6 @@ namespace LayerZero.Characters.Player.States
         public const int JumpAttack = 8;
         public const int Hurt = 9;
         public const int Dead = 10;
+        public const int Counterattack = 11;
     }
 }

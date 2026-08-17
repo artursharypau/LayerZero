@@ -2,7 +2,7 @@ using System;
 using LayerZero.Combat.Damage;
 using UnityEngine;
 
-namespace LayerZero.Combat.Attacks
+namespace LayerZero.Combat.Attack
 {
     [Serializable]
     public sealed class AttackDefinition

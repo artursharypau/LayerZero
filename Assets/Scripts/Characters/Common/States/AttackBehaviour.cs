@@ -1,5 +1,5 @@
 using System;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 
 namespace LayerZero.Characters.Common.States
 {
@@ -26,22 +26,22 @@ namespace LayerZero.Characters.Common.States
                 _owner.Combat.Arm(attack);
             }
 
-            _owner.Animator.Events.AttackFinished += HandleFinished;
+            _owner.Animator.Events.AttackFinished += OnAttackFinished;
         }
 
         public void End()
         {
             IsFinished = true;
 
-            _owner.Animator.Events.AttackFinished -= HandleFinished;
+            _owner.Animator.Events.AttackFinished -= OnAttackFinished;
             _owner.Combat.Disarm();
         }
 
-        private void HandleFinished()
+        private void OnAttackFinished()
         {
             IsFinished = true;
 
-            _owner.Animator.Events.AttackFinished -= HandleFinished;
+            _owner.Animator.Events.AttackFinished -= OnAttackFinished;
         }
     }
 }
