@@ -17,5 +17,6 @@ namespace LayerZero.Characters.Common.Movement
         void Flip();
         void SetGravityScale(float scale);
         void ApplyKnockback(Vector2 knockback);
+        void CancelKnockback();
     }
 }

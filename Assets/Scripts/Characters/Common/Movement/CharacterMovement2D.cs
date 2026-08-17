@@ -11,7 +11,7 @@ namespace LayerZero.Characters.Common.Movement
         [SerializeField] private GroundWallDetector _groundWallDetector = new();
         [SerializeField] [Min(1f)] private float _knockbackDeceleration = 40f;
 
-        private Countdown _knockbackLock;
+        private Countdown _knockbackTimer;
         private Rigidbody2D _rigidbody;
 
         public bool IsGrounded => _groundWallDetector.IsGrounded;
@@ -30,6 +30,8 @@ namespace LayerZero.Characters.Common.Movement
         {
             _rigidbody = this.GetRequiredComponent<Rigidbody2D>();
             _groundWallDetector.Initialize(this);
+
+            FacingDirection = transform.right.x < 0f ? -1f : 1f;
         }
 
         public void Refresh()
@@ -44,7 +46,7 @@ namespace LayerZero.Characters.Common.Movement
 
         public void SetVelocity(float x, float y, bool updateFacing = false)
         {
-            if (!_knockbackLock.IsExpired)
+            if (!_knockbackTimer.IsExpired)
             {
                 return;
             }
@@ -77,7 +79,7 @@ namespace LayerZero.Characters.Common.Movement
 
         public void Flip()
         {
-            if (!_knockbackLock.IsExpired)
+            if (!_knockbackTimer.IsExpired)
             {
                 return;
             }
@@ -95,13 +97,20 @@ namespace LayerZero.Characters.Common.Movement
 
         public void ApplyKnockback(Vector2 knockback)
         {
-            if (knockback != Vector2.zero)
+            if (knockback == Vector2.zero)
             {
-                _rigidbody.linearVelocity = knockback;
-
-                float duration = Mathf.Abs(knockback.x) / _knockbackDeceleration;
-                _knockbackLock.Start(duration);
+                return;
             }
+
+            _rigidbody.linearVelocity = knockback;
+
+            float duration = Mathf.Abs(knockback.x) / _knockbackDeceleration;
+            _knockbackTimer.Start(duration);
+        }
+
+        public void CancelKnockback()
+        {
+            _knockbackTimer.Stop();
         }
     }
 }

@@ -65,4 +65,4 @@ MonoBehaviour:
         _amount: 40
         _source: 1
         _knockback: {x: 5, y: 9}
-        _stunDuration: 0.5
+        _stunDuration: 2

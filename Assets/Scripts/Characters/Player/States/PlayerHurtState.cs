@@ -1,21 +1,20 @@
-using LayerZero.Characters.Common.States;
 using LayerZero.Combat.Damage;
 using LayerZero.Combat.Damage.Resistance;
 using LayerZero.Core.StateMachine;
+using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Player.States
 {
     public sealed class PlayerHurtState : PlayerState, IStatePayload<DamageImpactInfo>
     {
-        private readonly StunBehaviour _stun = new();
-
+        private Countdown _stunTimer;
         private DamageImpactInfo _impact;
         private ResistanceHandle _resistance;
 
         public PlayerHurtState(PlayerController owner)
             : base(owner)
         {
-            On(() => _stun.IsFinished, ResolveLocomotionState);
+            On(() => _stunTimer.IsExpired, ResolveLocomotionState);
         }
 
         public override int Id => PlayerStateId.Hurt;
@@ -34,7 +33,7 @@ namespace LayerZero.Characters.Player.States
             _impact = DamageImpactInfo.None;
             _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
 
-            _stun.Begin(impact.StunDuration);
+            _stunTimer.Start(impact.StunDuration);
             Movement.ApplyKnockback(impact.Knockback);
         }
 
