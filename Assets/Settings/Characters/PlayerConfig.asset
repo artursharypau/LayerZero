@@ -66,3 +66,12 @@ MonoBehaviour:
         _source: 1
         _knockback: {x: 5, y: 9}
         _stunDuration: 2
+  _counterattack:
+    _windowWaitingDuration: 0.2
+    _attack:
+      _kind: 2
+      _damage:
+        _amount: 0
+        _source: 1
+        _knockback: {x: 0, y: 0}
+        _stunDuration: 1

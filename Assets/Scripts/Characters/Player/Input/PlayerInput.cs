@@ -80,6 +80,7 @@ namespace LayerZero.Characters.Player.Input
                 PlayerInputAction.Jump => _jump.IsPending,
                 PlayerInputAction.Dash => _dash.IsPending,
                 PlayerInputAction.Attack => _isEnabled && _actions.Attack.WasPerformedThisFrame(),
+                PlayerInputAction.Counterattack => _isEnabled && _actions.Counterattack.WasPerformedThisFrame(),
                 _ => false
             };
         }

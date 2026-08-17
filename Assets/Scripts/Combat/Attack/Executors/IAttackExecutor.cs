@@ -1,7 +1,7 @@
 using LayerZero.Combat.Damage;
 using UnityEngine;
 
-namespace LayerZero.Combat.Attacks
+namespace LayerZero.Combat.Attack.Executors
 {
     public interface IAttackExecutor
     {

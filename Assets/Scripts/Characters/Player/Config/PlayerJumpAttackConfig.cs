@@ -1,5 +1,5 @@
 using System;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 using UnityEngine;
 
 namespace LayerZero.Characters.Player.Config

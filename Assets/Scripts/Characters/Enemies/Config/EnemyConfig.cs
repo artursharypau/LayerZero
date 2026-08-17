@@ -1,4 +1,4 @@
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 using UnityEngine;
 
 namespace LayerZero.Characters.Enemies.Config

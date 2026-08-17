@@ -11,6 +11,7 @@ namespace LayerZero.Characters.Player.Config
         [SerializeField] private DashAbilityConfig _dash = new();
         [SerializeField] private PlayerAttackConfig _attack = new();
         [SerializeField] private PlayerJumpAttackConfig _jumpAttack = new();
+        [SerializeField] private PlayerCounterattackConfig _counterattack = new();
 
         public PlayerMovementConfig Movement => _movement;
         public PlayerInputConfig Input => _input;
@@ -18,5 +19,6 @@ namespace LayerZero.Characters.Player.Config
         public DashAbilityConfig Dash => _dash;
         public PlayerAttackConfig Attack => _attack;
         public PlayerJumpAttackConfig JumpAttack => _jumpAttack;
+        public PlayerCounterattackConfig Counterattack => _counterattack;
     }
 }

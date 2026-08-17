@@ -3,7 +3,7 @@ using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Animation;
 using LayerZero.Characters.Player.Config;
 using LayerZero.Characters.Player.Input;
-using LayerZero.Combat.Attacks;
+using LayerZero.Combat.Attack;
 using LayerZero.Core.Timing;
 using UnityEngine;
 

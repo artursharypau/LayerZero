@@ -7,6 +7,8 @@ namespace LayerZero.Characters.Common.Animation
     {
         public event Action AttackHit;
         public event Action AttackFinished;
+        public event Action AttackParryWindowOpened;
+        public event Action AttackParryWindowClosed;
 
         public void TriggerAttackHit()
         {
@@ -16,6 +18,16 @@ namespace LayerZero.Characters.Common.Animation
         public void TriggerAttackFinished()
         {
             AttackFinished?.Invoke();
+        }
+
+        public void TriggerAttackParryWindowOpened()
+        {
+            AttackParryWindowOpened?.Invoke();
+        }
+
+        public void TriggerAttackParryWindowClosed()
+        {
+            AttackParryWindowClosed?.Invoke();
         }
     }
 }

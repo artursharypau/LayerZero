@@ -6,5 +6,6 @@ namespace LayerZero.Characters.Player.Animation
     {
         public static readonly AnimatorParameter AttackIndex = new("attackIndex", AnimatorParameterKind.Int);
         public static readonly AnimatorParameter JumpAttackTrigger = new("jumpAttackTrigger", AnimatorParameterKind.Trigger);
+        public static readonly AnimatorParameter CounterattackTrigger = new("counterattackTrigger", AnimatorParameterKind.Trigger);
     }
 }

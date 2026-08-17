@@ -1,6 +1,6 @@
 using System;
 
-namespace LayerZero.Combat.Attacks
+namespace LayerZero.Combat.Attack
 {
     public interface IAttackEvents
     {
