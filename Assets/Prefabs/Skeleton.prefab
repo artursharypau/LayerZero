@@ -351,7 +351,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
+  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attack.Executors.OverlapAttackExecutor
+  _kind: 0
   _origin: {fileID: 4973008962671906359}
   _radius: 1.4
   _targetMask:

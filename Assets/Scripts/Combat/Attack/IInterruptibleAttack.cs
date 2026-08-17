@@ -1,9 +1,9 @@
-using LayerZero.Combat.Damage;
+using UnityEngine;
 
 namespace LayerZero.Combat.Attack
 {
     public interface IInterruptibleAttack
     {
-        bool TryInterrupt(DamageInfo damageInfo);
+        bool TryInterrupt(Transform parrier);
     }
 }
