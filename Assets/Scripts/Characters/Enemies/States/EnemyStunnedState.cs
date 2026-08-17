@@ -1,19 +1,18 @@
-using LayerZero.Characters.Common.States;
 using LayerZero.Combat.Damage;
 using LayerZero.Core.StateMachine;
+using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Enemies.States
 {
     public sealed class EnemyStunnedState : EnemyState, IStatePayload<DamageImpactInfo>
     {
-        private readonly StunBehaviour _stun = new();
-
+        private Countdown _stunTimer;
         private DamageImpactInfo _impact;
 
         public EnemyStunnedState(EnemyController owner)
             : base(owner)
         {
-            On(() => _stun.IsFinished, ResolveRecoveryState);
+            On(() => _stunTimer.IsExpired, ResolveRecoveryState);
         }
 
         public override int Id => EnemyStateId.Stunned;
@@ -27,10 +26,15 @@ namespace LayerZero.Characters.Enemies.States
         {
             base.Enter();
 
+            if (Perception.IsTargetBehind)
+            {
+                Movement.Flip();
+            }
+
             DamageImpactInfo impact = _impact;
             _impact = DamageImpactInfo.None;
 
-            _stun.Begin(impact.StunDuration);
+            _stunTimer.Start(impact.StunDuration);
         }
 
         private int ResolveRecoveryState()

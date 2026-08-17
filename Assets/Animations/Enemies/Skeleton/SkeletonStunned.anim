@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SkeletonHurt
+  m_Name: SkeletonStunned
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -30,12 +30,6 @@ AnimationClip:
       value: {fileID: 8452754394787171160, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
     - time: 0.30769232
       value: {fileID: 6079654374805429708, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - time: 0.3846154
-      value: {fileID: 3860408454011024614, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - time: 0.46153846
-      value: {fileID: -8501204524192146682, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - time: 0.53846157
-      value: {fileID: -8738580348800268814, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -63,15 +57,12 @@ AnimationClip:
     - {fileID: -1537884627087384292, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
     - {fileID: 8452754394787171160, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
     - {fileID: 6079654374805429708, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - {fileID: 3860408454011024614, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - {fileID: -8501204524192146682, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
-    - {fileID: -8738580348800268814, guid: d5c0fca586d304353b626bf4bad4e8ae, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.61538464
+    m_StopTime: 0.3846154
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

@@ -16,9 +16,10 @@ namespace LayerZero.Characters.Common
     public abstract class Character2D : MonoBehaviour
     {
         private AnimatorStateBinder _animatorStateBinder;
+        private CharacterMovement2D _movement;
 
         public StateMachine StateMachine { get; } = new();
-        public CharacterMovement2D Movement { get; private set; }
+        public IMovement2D Movement => _movement;
         public CharacterAnimator Animator { get; private set; }
         public IDamageable Health { get; private set; }
         public IDamageReceiver DamageReceiver { get; private set; }
@@ -29,7 +30,7 @@ namespace LayerZero.Characters.Common
 
         protected virtual void Awake()
         {
-            Movement = this.GetRequiredComponent<CharacterMovement2D>();
+            _movement = this.GetRequiredComponent<CharacterMovement2D>();
             Health = this.GetRequiredComponent<IDamageable>();
             DamageReceiver = this.GetRequiredComponent<IDamageReceiver>();
             Combat = this.GetRequiredComponent<CombatSystem>();
@@ -69,13 +70,13 @@ namespace LayerZero.Characters.Common
 
         protected virtual void FixedUpdate()
         {
-            Movement.Refresh();
+            _movement.Refresh();
             StateMachine.FixedUpdate();
         }
 
         protected virtual void OnDrawGizmos()
         {
-            Movement?.DrawGizmos();
+            _movement?.DrawGizmos();
         }
 
         protected virtual void OnDamaged(DamageInfo damageInfo)
@@ -100,8 +101,10 @@ namespace LayerZero.Characters.Common
 
         private void HandleDied()
         {
-            Movement.SetVelocity(0f, 0f);
-            Movement.enabled = false;
+            _movement.CancelKnockback();
+            _movement.SetVelocity(0f, 0f);
+            _movement.enabled = false;
+
             Combat.enabled = false;
 
             OnDied();

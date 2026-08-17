@@ -5,42 +5,33 @@ using UnityEngine;
 namespace LayerZero.Combat.Damage.Vfx
 {
     [RequireComponent(typeof(DamageReceiver))]
-    public sealed class DamageFlashVfx : MonoBehaviour
+    public sealed class DamageVfx : MonoBehaviour
     {
         [SerializeField] [Min(0f)] private float _duration = 0.15f;
         [SerializeField] private Material _material;
 
-        private SpriteRenderer _renderer;
         private IDamageReceiver _damageReceiver;
+        private SpriteRenderer _renderer;
         private Material _defaultMaterial;
+
         private Countdown _timer;
         private bool _isFlashing;
 
         private void Awake()
         {
-            _renderer = this.GetRequiredComponentInChildren<SpriteRenderer>();
             _damageReceiver = this.GetRequiredComponent<IDamageReceiver>();
-
-            if (_renderer)
-            {
-                _defaultMaterial = _renderer.sharedMaterial;
-            }
+            _renderer = this.GetRequiredComponentInChildren<SpriteRenderer>();
+            _defaultMaterial = _renderer.sharedMaterial;
         }
 
         private void OnEnable()
         {
-            if (_damageReceiver != null)
-            {
-                _damageReceiver.Damaged += OnDamaged;
-            }
+            _damageReceiver.Damaged += OnDamaged;
         }
 
         private void OnDisable()
         {
-            if (_damageReceiver != null)
-            {
-                _damageReceiver.Damaged -= OnDamaged;
-            }
+            _damageReceiver.Damaged -= OnDamaged;
 
             StopFlash();
         }
@@ -55,7 +46,7 @@ namespace LayerZero.Combat.Damage.Vfx
 
         private void OnDamaged(DamageInfo damageInfo)
         {
-            if (!_renderer || !_material)
+            if (!_material)
             {
                 return;
             }
