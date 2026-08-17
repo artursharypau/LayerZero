@@ -5,12 +5,12 @@ using UnityEngine;
 namespace LayerZero.Characters.Player.Config
 {
     [Serializable]
-    public class PlayerCounterattackConfig
+    public sealed class PlayerCounterattackConfig
     {
-        [SerializeField] private float _windowWaitingDuration;
+        [SerializeField] [Min(0f)] private float _recoveryDuration = 0.2f;
         [SerializeField] private AttackDefinition _attack = new();
 
-        public float WindowWaitingDuration => _windowWaitingDuration;
+        public float RecoveryDuration => _recoveryDuration;
         public AttackDefinition Attack => _attack;
     }
 }

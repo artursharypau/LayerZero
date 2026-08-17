@@ -1,22 +1,22 @@
 using LayerZero.Characters.Common.States;
 using LayerZero.Characters.Player.Animation;
-using LayerZero.Combat.Attack;
 using LayerZero.Core.Timing;
 
 namespace LayerZero.Characters.Player.States
 {
-    public class PlayerCounterattackState : PlayerState
+    public sealed class PlayerCounterattackState : PlayerState
     {
         private readonly AttackBehaviour _attack;
 
-        private Countdown _timer;
+        private bool _isParried;
+        private Countdown _recoveryTimer;
 
         public PlayerCounterattackState(PlayerController owner)
             : base(owner)
         {
-            _attack = new AttackBehaviour(Owner, ResolveAttack);
+            _attack = new AttackBehaviour(owner, () => Config.Counterattack.Attack);
 
-            On(() => _attack.IsFinished || _timer.IsExpired, ResolveLocomotionState);
+            On(() => _isParried ? _attack.IsFinished : _recoveryTimer.IsExpired, ResolveLocomotionState);
         }
 
         public override int Id => PlayerStateId.Counterattack;
@@ -25,15 +25,21 @@ namespace LayerZero.Characters.Player.States
         {
             base.Enter();
 
-            _timer.Start(Config.Counterattack.WindowWaitingDuration);
-            _attack.Begin();
+            _isParried = false;
+            _recoveryTimer.Start(Config.Counterattack.RecoveryDuration);
+
+            Movement.SetVelocityX(0f);
+            TryParry();
         }
 
-        public override void FixedUpdate()
+        public override void Update()
         {
-            base.FixedUpdate();
+            base.Update();
 
-            Animator.Trigger(PlayerAnimatorParameters.CounterattackTrigger);
+            if (!_isParried)
+            {
+                TryParry();
+            }
         }
 
         public override void Exit()
@@ -43,9 +49,17 @@ namespace LayerZero.Characters.Player.States
             _attack.End();
         }
 
-        private AttackDefinition ResolveAttack()
+        private void TryParry()
         {
-            return Config.Counterattack.Attack;
+            if (!Owner.Combat.TryParry())
+            {
+                return;
+            }
+
+            _isParried = true;
+
+            _attack.Begin();
+            Animator.Trigger(PlayerAnimatorParameters.CounterattackTrigger);
         }
     }
 }

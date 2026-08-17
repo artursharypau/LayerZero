@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using LayerZero.Combat.Attack;
 using LayerZero.Combat.Attack.Executors;
-using LayerZero.Combat.Damage;
 using LayerZero.Core.Diagnostics;
 using LayerZero.Core.Extensions;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace LayerZero.Combat
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
 
-        private bool _isCounterattackWindowOpen;
+        private bool _isParryWindowOpen;
         private AttackDefinition _attackDefinition;
 
         private IAttackEvents _attackEvents;
@@ -32,21 +31,21 @@ namespace LayerZero.Combat
             }
 
             _attackEvents = this.GetRequiredComponentInChildren<IAttackEvents>();
-            _attackParryWindowEvents = GetComponentInChildren<IAttackParryWindowEvents>();
+            _attackParryWindowEvents = this.GetRequiredComponentInChildren<IAttackParryWindowEvents>();
         }
 
         private void OnEnable()
         {
-            _attackEvents.AttackHit += OnAttackAttackHit;
-            _attackParryWindowEvents.AttackParryWindowOpened += OnParryWindowAttackParryWindowOpened;
-            _attackParryWindowEvents.AttackParryWindowClosed += OnParryWindowAttackParryWindowClosed;
+            _attackEvents.AttackHit += OnAttackHit;
+            _attackParryWindowEvents.AttackParryWindowOpened += OnParryWindowOpened;
+            _attackParryWindowEvents.AttackParryWindowClosed += OnParryWindowClosed;
         }
 
         private void OnDisable()
         {
-            _attackEvents.AttackHit -= OnAttackAttackHit;
-            _attackParryWindowEvents.AttackParryWindowOpened -= OnParryWindowAttackParryWindowOpened;
-            _attackParryWindowEvents.AttackParryWindowClosed -= OnParryWindowAttackParryWindowClosed;
+            _attackEvents.AttackHit -= OnAttackHit;
+            _attackParryWindowEvents.AttackParryWindowOpened -= OnParryWindowOpened;
+            _attackParryWindowEvents.AttackParryWindowClosed -= OnParryWindowClosed;
 
             Disarm();
         }
@@ -65,11 +64,13 @@ namespace LayerZero.Combat
                 return;
             }
 
+            _isParryWindowOpen = false;
             _attackDefinition = attack;
         }
 
         public void Disarm()
         {
+            _isParryWindowOpen = false;
             _attackDefinition = null;
         }
 
@@ -78,14 +79,33 @@ namespace LayerZero.Combat
             return target && _executors.TryGetValue(kind, out IAttackExecutor executor) && executor.IsInRange(target);
         }
 
-        public bool TryInterrupt(DamageInfo damageInfo)
+        public bool TryParry()
         {
-            if (!_isCounterattackWindowOpen || _attackDefinition == null)
+            if (!_executors.TryGetValue(AttackKind.Counterattack, out IAttackExecutor executor))
             {
+                GameLog.Error(this, $"'{name}' has no executor for '{AttackKind.Counterattack}'.");
                 return false;
             }
 
-            if (!IsInRange(_attackDefinition.Kind, damageInfo.Attacker))
+            bool isParried = false;
+
+            List<Collider2D> targets = new(2);
+            int count = executor.FindTargets(targets);
+
+            for (int i = 0; i < count; i++)
+            {
+                if (targets[i].TryGetComponent(out IInterruptibleAttack attacker) && attacker.TryInterrupt(transform))
+                {
+                    isParried = true;
+                }
+            }
+
+            return isParried;
+        }
+
+        bool IInterruptibleAttack.TryInterrupt(Transform parrier)
+        {
+            if (!_isParryWindowOpen || _attackDefinition == null || !IsInRange(_attackDefinition.Kind, parrier))
             {
                 return false;
             }
@@ -94,8 +114,10 @@ namespace LayerZero.Combat
             return true;
         }
 
-        private void OnAttackAttackHit()
+        private void OnAttackHit()
         {
+            _isParryWindowOpen = false;
+
             if (_attackDefinition == null)
             {
                 return;
@@ -107,14 +129,14 @@ namespace LayerZero.Combat
             }
         }
 
-        private void OnParryWindowAttackParryWindowOpened()
+        private void OnParryWindowOpened()
         {
-            _isCounterattackWindowOpen = true;
+            _isParryWindowOpen = _attackDefinition != null;
         }
 
-        private void OnParryWindowAttackParryWindowClosed()
+        private void OnParryWindowClosed()
         {
-            _isCounterattackWindowOpen = false;
+            _isParryWindowOpen = false;
         }
     }
 }

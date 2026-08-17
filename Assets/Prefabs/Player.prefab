@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 9099559585489720659}
   - component: {fileID: 4454657804293619681}
   - component: {fileID: 7100000000000000101}
+  - component: {fileID: 7100000000000000102}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -197,9 +198,28 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.MeleeAttackExecutor
+  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attack.Executors.OverlapAttackExecutor
+  _kind: 0
   _origin: {fileID: 9122607069633984326}
   _radius: 1.2
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &7100000000000000102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514101050448271214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attack.Executors.OverlapAttackExecutor
+  _kind: 2
+  _origin: {fileID: 9122607069633984326}
+  _radius: 1
   _targetMask:
     serializedVersion: 2
     m_Bits: 256

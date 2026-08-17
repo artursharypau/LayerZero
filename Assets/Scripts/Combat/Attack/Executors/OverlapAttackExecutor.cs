@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace LayerZero.Combat.Attack.Executors
 {
-    public class CounterattackExecutor : MonoBehaviour, IAttackExecutor
+    public sealed class OverlapAttackExecutor : MonoBehaviour, IAttackExecutor
     {
         private const int TargetsBufferCapacity = 8;
 
+        [SerializeField] private AttackKind _kind = AttackKind.Melee;
         [SerializeField] private Transform _origin;
         [SerializeField] [Min(0f)] private float _radius = 1f;
         [SerializeField] private LayerMask _targetMask;
@@ -18,7 +19,7 @@ namespace LayerZero.Combat.Attack.Executors
         private ContactFilter2D _filter;
         private Transform _owner;
 
-        public AttackKind Kind => AttackKind.Counterattack;
+        public AttackKind Kind => _kind;
 
         private void Awake()
         {
@@ -35,6 +36,12 @@ namespace LayerZero.Combat.Attack.Executors
             }
         }
 
+        public int FindTargets(List<Collider2D> results)
+        {
+            results.Clear();
+            return _origin ? Physics2D.OverlapCircle(_origin.position, _radius, _filter, results) : 0;
+        }
+
         public bool IsInRange(Transform target)
         {
             if (!target)
@@ -42,7 +49,7 @@ namespace LayerZero.Combat.Attack.Executors
                 return false;
             }
 
-            int count = Overlap();
+            int count = FindTargets(_targets);
             for (int i = 0; i < count; i++)
             {
                 if (_targets[i].transform == target || _targets[i].transform.IsChildOf(target))
@@ -56,7 +63,7 @@ namespace LayerZero.Combat.Attack.Executors
 
         public void Execute(DamageDefinition damage)
         {
-            int count = Overlap();
+            int count = FindTargets(_targets);
             if (count <= 0)
             {
                 return;
@@ -65,21 +72,11 @@ namespace LayerZero.Combat.Attack.Executors
             DamageInfo damageInfo = DamageInfo.FromDefinition(damage, _owner ? _owner : transform);
             for (int i = 0; i < count; i++)
             {
-                Collider2D target = _targets[i];
-
-                if (target.TryGetRequiredComponent(out IInterruptibleAttack interruptibleAttack)
-                    && interruptibleAttack.TryInterrupt(damageInfo)
-                    && target.TryGetRequiredComponent(out IDamageReceiver receiver))
+                if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver))
                 {
                     receiver.TakeDamage(damageInfo);
                 }
             }
-        }
-
-        private int Overlap()
-        {
-            _targets.Clear();
-            return _origin ? Physics2D.OverlapCircle(_origin.position, _radius, _filter, _targets) : 0;
         }
 
         private void OnDrawGizmosSelected()
@@ -89,7 +86,7 @@ namespace LayerZero.Combat.Attack.Executors
                 return;
             }
 
-            Gizmos.color = Color.red;
+            Gizmos.color = _kind == AttackKind.Counterattack ? Color.cyan : Color.red;
             Gizmos.DrawWireSphere(_origin.position, _radius);
         }
     }
