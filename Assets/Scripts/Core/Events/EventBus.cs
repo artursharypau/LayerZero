@@ -1,43 +1,42 @@
 using System.Collections.Generic;
-using LayerZero.Core.EventBus.Handlers;
-using LayerZero.Core.EventBus.Subjects;
+using LayerZero.Core.Events.Handlers;
+using LayerZero.Core.Events.Subjects;
 
-namespace LayerZero.Core.EventBus
+namespace LayerZero.Core.Events
 {
-    public class EventBus : IEventBus
+    public sealed class EventBus : IEventBus
     {
         private readonly Dictionary<string, IEventSubject> _subjects = new();
 
-        public void Subscribe<TEvent>(IEventHandler handler)
+        public void Subscribe<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : IEventBusEvent
         {
             string key = GetKey<TEvent>();
+
             if (!_subjects.TryGetValue(key, out IEventSubject subject))
             {
-                subject = new EventSubject();
+                subject = new EventSubject<TEvent>();
                 _subjects.Add(key, subject);
             }
 
-            subject.AddHandler(handler);
+            ((IEventSubject<TEvent>)subject).AddHandler(handler);
         }
 
-        public void Unsubscribe<TEvent>(IEventHandler handler)
+        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : IEventBusEvent
         {
-            string key = GetKey<TEvent>();
-            if (_subjects.TryGetValue(key, out IEventSubject subject))
+            if (_subjects.TryGetValue(GetKey<TEvent>(), out IEventSubject subject))
             {
-                subject.RemoveHandler(handler);
+                ((IEventSubject<TEvent>)subject).RemoveHandler(handler);
             }
         }
 
         public void Raise<TEvent>(TEvent e)
             where TEvent : IEventBusEvent
         {
-            string key = GetKey<TEvent>();
-            if (_subjects.TryGetValue(key, out IEventSubject subject))
+            if (_subjects.TryGetValue(GetKey<TEvent>(), out IEventSubject subject))
             {
-                subject.Notify(e);
+                ((IEventSubject<TEvent>)subject).Notify(e);
             }
         }
 

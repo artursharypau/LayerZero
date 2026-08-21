@@ -1,4 +1,4 @@
-namespace LayerZero.Core.EventBus
+namespace LayerZero.Core.Events
 {
     public interface IEventBusEvent
     {

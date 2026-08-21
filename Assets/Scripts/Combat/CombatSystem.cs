@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using LayerZero.Combat.Attack;
 using LayerZero.Combat.Attack.Executors;
 using LayerZero.Core.Diagnostics;
+using LayerZero.Core.Events;
 using LayerZero.Core.Extensions;
+using VContainer;
 using UnityEngine;
 
 namespace LayerZero.Combat
@@ -16,6 +18,13 @@ namespace LayerZero.Combat
 
         private IAttackEvents _attackEvents;
         private IAttackParryWindowEvents _attackParryWindowEvents;
+        private IEventBus _eventBus;
+
+        [Inject]
+        public void Construct(IEventBus eventBus)
+        {
+            _eventBus = eventBus;
+        }
 
         private void Awake()
         {
@@ -27,7 +36,7 @@ namespace LayerZero.Combat
                     continue;
                 }
 
-                executor.Initialize(transform);
+                executor.Initialize(transform, _eventBus);
             }
 
             _attackEvents = this.GetRequiredComponentInChildren<IAttackEvents>();
