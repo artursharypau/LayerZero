@@ -2,7 +2,8 @@
     "name": "LayerZero.Combat",
     "rootNamespace": "LayerZero.Combat",
     "references": [
-        "LayerZero.Core"
+        "LayerZero.Core",
+        "VContainer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -23,16 +23,16 @@ namespace LayerZero.Combat.Damage
             _resistances = resistances;
         }
 
-        public void TakeDamage(DamageInfo damageInfo)
+        public bool TakeDamage(DamageInfo damageInfo)
         {
             if (_damageable == null || _damageable.IsDead)
             {
-                return;
+                return false;
             }
 
             if (_resistances?.IsInvulnerable == true)
             {
-                return;
+                return false;
             }
 
             DamageImpactInfo impact = _resistances?.Resolve(damageInfo.Impact) ?? damageInfo.Impact;
@@ -45,6 +45,8 @@ namespace LayerZero.Combat.Damage
             {
                 ImpactReceived?.Invoke(impact);
             }
+
+            return true;
         }
     }
 }

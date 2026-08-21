@@ -5,7 +5,8 @@
         "LayerZero.Core",
         "LayerZero.Combat",
         "LayerZero.GeneratedInput",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "VContainer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

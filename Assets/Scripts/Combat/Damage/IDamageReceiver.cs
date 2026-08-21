@@ -9,6 +9,6 @@ namespace LayerZero.Combat.Damage
         event Action<DamageImpactInfo> ImpactReceived;
 
         void SetResistances(IDamageResistances resistances);
-        void TakeDamage(DamageInfo damageInfo);
+        bool TakeDamage(DamageInfo damageInfo);
     }
 }
