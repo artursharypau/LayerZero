@@ -4,7 +4,7 @@ using LayerZero.Core.Events.Subjects;
 
 namespace LayerZero.Core.Events
 {
-    public sealed class EventBus : IEventBus
+    public class EventBus : IEventBus
     {
         private readonly Dictionary<string, IEventSubject> _subjects = new();
 

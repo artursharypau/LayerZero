@@ -3,9 +3,9 @@ using LayerZero.Characters.Common.Movement;
 using LayerZero.Combat;
 using LayerZero.Combat.Damage;
 using LayerZero.Combat.Damage.Resistance;
-using LayerZero.Core.Extensions;
 using LayerZero.Core.StateMachine;
 using UnityEngine;
+using VContainer;
 
 namespace LayerZero.Characters.Common
 {
@@ -18,7 +18,7 @@ namespace LayerZero.Characters.Common
         private AnimatorStateBinder _animatorStateBinder;
         private CharacterMovement2D _movement;
 
-        public StateMachine StateMachine { get; } = new();
+        public StateMachine StateMachine { get; private set; }
         public IMovement2D Movement => _movement;
         public CharacterAnimator Animator { get; private set; }
         public IDamageable Health { get; private set; }
@@ -28,21 +28,25 @@ namespace LayerZero.Characters.Common
 
         public bool IsDead => Health.IsDead;
 
-        protected virtual void Awake()
+        [Inject]
+        public void Construct(
+            StateMachine stateMachine,
+            AnimatorStateBinder animatorStateBinder,
+            CharacterAnimator animator,
+            CharacterMovement2D movement,
+            IDamageable health,
+            IDamageReceiver damageReceiver,
+            IDamageResistances damageResistances,
+            CombatSystem combat)
         {
-            _movement = this.GetRequiredComponent<CharacterMovement2D>();
-            Health = this.GetRequiredComponent<IDamageable>();
-            DamageReceiver = this.GetRequiredComponent<IDamageReceiver>();
-            Combat = this.GetRequiredComponent<CombatSystem>();
-
-            Animator = new CharacterAnimator(
-                this.GetRequiredComponentInChildren<Animator>(),
-                this.GetRequiredComponentInChildren<AnimatorEvents>());
-
-            DamageResistances = new DamageResistances();
-            DamageReceiver.SetResistances(DamageResistances);
-
-            _animatorStateBinder = new AnimatorStateBinder(Animator, StateMachine);
+            StateMachine = stateMachine;
+            _animatorStateBinder = animatorStateBinder;
+            Animator = animator;
+            _movement = movement;
+            Health = health;
+            DamageReceiver = damageReceiver;
+            DamageResistances = damageResistances;
+            Combat = combat;
         }
 
         protected virtual void OnEnable()

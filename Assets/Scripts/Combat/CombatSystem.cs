@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using LayerZero.Combat.Attack;
 using LayerZero.Combat.Attack.Executors;
 using LayerZero.Core.Diagnostics;
-using LayerZero.Core.Events;
-using LayerZero.Core.Extensions;
-using VContainer;
 using UnityEngine;
+using VContainer;
 
 namespace LayerZero.Combat
 {
@@ -18,29 +16,23 @@ namespace LayerZero.Combat
 
         private IAttackEvents _attackEvents;
         private IAttackParryWindowEvents _attackParryWindowEvents;
-        private IEventBus _eventBus;
 
         [Inject]
-        public void Construct(IEventBus eventBus)
+        public void Construct(
+            IReadOnlyList<IAttackExecutor> executors,
+            IAttackEvents attackEvents,
+            IAttackParryWindowEvents attackParryWindowEvents)
         {
-            _eventBus = eventBus;
-        }
+            _attackEvents = attackEvents;
+            _attackParryWindowEvents = attackParryWindowEvents;
 
-        private void Awake()
-        {
-            foreach (IAttackExecutor executor in this.GetRequiredComponentsInChildren<IAttackExecutor>())
+            foreach (IAttackExecutor executor in executors)
             {
                 if (!_executors.TryAdd(executor.Kind, executor))
                 {
                     GameLog.Warning(this, $"'{name}' has more than one executor for '{executor.Kind}'. Extra ones are ignored.");
-                    continue;
                 }
-
-                executor.Initialize(transform, _eventBus);
             }
-
-            _attackEvents = this.GetRequiredComponentInChildren<IAttackEvents>();
-            _attackParryWindowEvents = this.GetRequiredComponentInChildren<IAttackParryWindowEvents>();
         }
 
         private void OnEnable()
