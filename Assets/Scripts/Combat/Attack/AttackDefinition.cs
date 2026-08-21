@@ -22,5 +22,5 @@ namespace LayerZero.Combat.Attack
 
         public AttackKind Kind => _kind;
         public DamageDefinition Damage => _damage;
-            }
+    }
 }

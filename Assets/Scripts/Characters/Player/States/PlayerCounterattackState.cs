@@ -32,16 +32,6 @@ namespace LayerZero.Characters.Player.States
             TryParry();
         }
 
-        public override void Update()
-        {
-            base.Update();
-
-            if (!_isParried)
-            {
-                TryParry();
-            }
-        }
-
         public override void Exit()
         {
             base.Exit();

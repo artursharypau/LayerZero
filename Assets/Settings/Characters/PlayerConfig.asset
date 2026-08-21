@@ -65,13 +65,13 @@ MonoBehaviour:
         _amount: 40
         _source: 1
         _knockback: {x: 5, y: 9}
-        _stunDuration: 2
+        _stunDuration: 0.4
   _counterattack:
-    _recoveryDuration: 0.35
+    _recoveryDuration: 0.2
     _attack:
       _kind: 2
       _damage:
         _amount: 0
         _source: 1
         _knockback: {x: 0, y: 0}
-        _stunDuration: 0.5
+        _stunDuration: 0.4

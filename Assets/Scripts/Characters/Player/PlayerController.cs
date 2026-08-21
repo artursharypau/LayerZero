@@ -1,10 +1,13 @@
+using System;
 using LayerZero.Characters.Common;
 using LayerZero.Characters.Common.Abilities;
 using LayerZero.Characters.Player.Abilities;
 using LayerZero.Characters.Player.Config;
+using LayerZero.Characters.Player.Events;
 using LayerZero.Characters.Player.Input;
 using LayerZero.Characters.Player.States;
 using LayerZero.Combat.Damage;
+using LayerZero.Core.EventBus;
 using LayerZero.Core.StateMachine;
 using UnityEngine;
 
@@ -55,6 +58,12 @@ namespace LayerZero.Characters.Player
             base.OnEnable();
 
             _input.Enable();
+            EventBus.SubscribeCallback<AttackIsDoneEvent>(OnAttackDone);
+        }
+
+        private void OnAttackDone(AttackIsDoneEvent obj)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void OnDisable()
