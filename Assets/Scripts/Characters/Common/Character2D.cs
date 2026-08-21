@@ -3,6 +3,7 @@ using LayerZero.Characters.Common.Movement;
 using LayerZero.Combat;
 using LayerZero.Combat.Damage;
 using LayerZero.Combat.Damage.Resistance;
+using LayerZero.Core.EventBus;
 using LayerZero.Core.Extensions;
 using LayerZero.Core.StateMachine;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace LayerZero.Characters.Common
         private AnimatorStateBinder _animatorStateBinder;
         private CharacterMovement2D _movement;
 
+        public EventBus EventBus { get; } = new();
         public StateMachine StateMachine { get; } = new();
         public IMovement2D Movement => _movement;
         public CharacterAnimator Animator { get; private set; }
