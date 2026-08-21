@@ -21,10 +21,8 @@ namespace LayerZero.Characters.Enemies
         public EnemyConfig Config => _config;
         public EnemyTargetPerception Perception { get; private set; }
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             Perception = new EnemyTargetPerception(_config.Perception, _perceptionOrigin, Movement);
 
             StateMachine.Register(new EnemyIdleState(this));

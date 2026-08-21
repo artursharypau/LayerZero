@@ -20,10 +20,8 @@ namespace LayerZero.Characters.Player
         public IPlayerInput Input => _input;
         public AbilitySet Abilities { get; private set; }
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             _input = new PlayerInput(_config.Input);
 
             Abilities = new AbilitySet()

@@ -1,5 +1,4 @@
 using System;
-using LayerZero.Combat.Damage.Resistance;
 
 namespace LayerZero.Combat.Damage
 {
@@ -8,7 +7,6 @@ namespace LayerZero.Combat.Damage
         event Action<DamageInfo> Damaged;
         event Action<DamageImpactInfo> ImpactReceived;
 
-        void SetResistances(IDamageResistances resistances);
         bool TakeDamage(DamageInfo damageInfo);
     }
 }

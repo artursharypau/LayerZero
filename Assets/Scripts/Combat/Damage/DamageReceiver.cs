@@ -1,7 +1,7 @@
 using System;
 using LayerZero.Combat.Damage.Resistance;
-using LayerZero.Core.Extensions;
 using UnityEngine;
+using VContainer;
 
 namespace LayerZero.Combat.Damage
 {
@@ -13,13 +13,10 @@ namespace LayerZero.Combat.Damage
         public event Action<DamageInfo> Damaged;
         public event Action<DamageImpactInfo> ImpactReceived;
 
-        private void Awake()
+        [Inject]
+        public void Construct(IDamageable damageable, IDamageResistances resistances)
         {
-            _damageable = this.GetRequiredComponent<IDamageable>();
-        }
-
-        public void SetResistances(IDamageResistances resistances)
-        {
+            _damageable = damageable;
             _resistances = resistances;
         }
 
