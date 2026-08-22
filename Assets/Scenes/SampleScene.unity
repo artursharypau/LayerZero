@@ -11740,6 +11740,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 6929327695061375567, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
+      propertyPath: _max
+      value: 1000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11756,6 +11760,10 @@ PrefabInstance:
     - target: {fileID: 2514101050448271214, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4145020159193950360, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
+      propertyPath: _max
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 9126213500252039777, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_LocalPosition.x

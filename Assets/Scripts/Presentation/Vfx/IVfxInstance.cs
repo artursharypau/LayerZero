@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx
 {
@@ -6,9 +7,9 @@ namespace LayerZero.Presentation.Vfx
     {
         event Action<IVfxInstance> Finished;
 
-        public VfxKind Kind { get; }
+        VfxKind Kind { get; }
 
+        void Play(Vector2 position, Quaternion rotation);
         void Disable();
-        void Play();
     }
 }

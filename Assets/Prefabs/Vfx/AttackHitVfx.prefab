@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22d3e42a92a49bebdb815d4ab45e84e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
+  _kind: 1
+  _failsafeLifetime: 2
 --- !u!1 &8291350897174118000
 GameObject:
   m_ObjectHideFlags: 0

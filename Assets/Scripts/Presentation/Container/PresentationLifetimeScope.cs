@@ -1,5 +1,6 @@
 using LayerZero.Presentation.Vfx;
-using LayerZero.Presentation.Vfx.Attack;
+using LayerZero.Presentation.Vfx.Catalog;
+using LayerZero.Presentation.Vfx.Combat;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -12,7 +13,10 @@ namespace LayerZero.Presentation.Container
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<VfxService>(Lifetime.Singleton).As<IVfxService>();
+            builder.RegisterInstance(_vfxCatalog);
+            builder.Register<VfxService>(Lifetime.Singleton)
+                .As<IVfxService>()
+                .WithParameter(transform);
 
             builder.RegisterEntryPoint<AttackHitVfxPresenter>();
         }

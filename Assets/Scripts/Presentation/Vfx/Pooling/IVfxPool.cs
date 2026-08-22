@@ -1,6 +1,6 @@
 using System;
 
-namespace LayerZero.Presentation.Vfx
+namespace LayerZero.Presentation.Vfx.Pooling
 {
     internal interface IVfxPool : IDisposable
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace LayerZero.Presentation.Vfx
+namespace LayerZero.Presentation.Vfx.Catalog
 {
     [Serializable]
     public sealed class VfxEntry

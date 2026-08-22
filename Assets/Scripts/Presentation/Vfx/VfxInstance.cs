@@ -1,14 +1,21 @@
 using System;
+using LayerZero.Core.Diagnostics;
 using LayerZero.Core.Extensions;
+using LayerZero.Core.Timing;
 using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public class VfxInstance : MonoBehaviour, IVfxInstance
+    public sealed class VfxInstance : MonoBehaviour, IVfxInstance
     {
         [SerializeField] private VfxKind _kind;
+        [SerializeField] [Min(0f)] private float _fallbackLifetime = 2f;
 
+        private Animator _animator;
         private IVfxAnimatorEvents _vfxAnimatorEvents;
+
+        private Countdown _fallbackTimer;
+        private bool _isPlaying;
 
         public event Action<IVfxInstance> Finished;
 
@@ -16,6 +23,7 @@ namespace LayerZero.Presentation.Vfx
 
         private void Awake()
         {
+            _animator = this.GetRequiredComponentInChildren<Animator>();
             _vfxAnimatorEvents = this.GetRequiredComponentInChildren<IVfxAnimatorEvents>();
         }
 
@@ -23,7 +31,7 @@ namespace LayerZero.Presentation.Vfx
         {
             if (_vfxAnimatorEvents != null)
             {
-                _vfxAnimatorEvents.VfxFinished += OnFinished;
+                _vfxAnimatorEvents.VfxFinished += OnVfxFinished;
             }
         }
 
@@ -31,22 +39,46 @@ namespace LayerZero.Presentation.Vfx
         {
             if (_vfxAnimatorEvents != null)
             {
-                _vfxAnimatorEvents.VfxFinished -= OnFinished;
+                _vfxAnimatorEvents.VfxFinished -= OnVfxFinished;
             }
+        }
+
+        private void Update()
+        {
+            if (!_isPlaying || !_fallbackTimer.IsExpired)
+            {
+                return;
+            }
+
+            GameLog.Warning(this, $"'{name}' has not raised a finish event, releasing by timeout.");
+            OnVfxFinished();
+        }
+
+        public void Play(Vector2 position, Quaternion rotation)
+        {
+            transform.SetPositionAndRotation(position, rotation);
+            gameObject.SetActive(true);
+
+            _animator.Update(0f);
+
+            _isPlaying = true;
+            _fallbackTimer.Start(_fallbackLifetime);
         }
 
         public void Disable()
         {
+            _isPlaying = false;
             gameObject.SetActive(false);
         }
 
-        public void Play()
+        private void OnVfxFinished()
         {
-            gameObject.SetActive(true);
-        }
+            if (!_isPlaying)
+            {
+                return;
+            }
 
-        private void OnFinished()
-        {
+            _isPlaying = false;
             Finished?.Invoke(this);
         }
     }
