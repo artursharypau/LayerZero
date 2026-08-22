@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace LayerZero.Presentation.Presentation.Vfx
+namespace LayerZero.Presentation.Vfx
 {
-    public class VfxService : IVfxService
+    public sealed class VfxService : IVfxService
     {
-        public void Play(GameObject go, Transform parent, Quaternion? rotation = null)
+        public void Play(GameObject prefab, Vector2 position, Quaternion rotation)
         {
         }
     }

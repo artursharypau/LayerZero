@@ -3,9 +3,9 @@ using LayerZero.Core.Events;
 using UnityEngine;
 using VContainer;
 
-namespace LayerZero.Presentation.Presentation.Vfx
+namespace LayerZero.Presentation.Vfx
 {
-    public class AttackHitVfx : MonoBehaviour
+    public sealed class AttackHitVfx : MonoBehaviour
     {
         [SerializeField] private GameObject _vfxPrefab;
 
@@ -21,19 +21,21 @@ namespace LayerZero.Presentation.Presentation.Vfx
             _vfxService = vfxService;
         }
 
-        private void OnEnable()
+        private void Start()
         {
             _subscription = _eventBus.SubscribeCallback<AttackHitEvent>(OnAttackHit);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            _subscription.Dispose();
+            _subscription?.Dispose();
         }
 
         private void OnAttackHit(AttackHitEvent e)
         {
-            _vfxService.Play(_vfxPrefab, e.Target);
+            float angle = Mathf.Atan2(e.Direction.y, e.Direction.x) * Mathf.Rad2Deg;
+
+            _vfxService.Play(_vfxPrefab, e.Point, Quaternion.Euler(0f, 0f, angle));
         }
     }
 }
