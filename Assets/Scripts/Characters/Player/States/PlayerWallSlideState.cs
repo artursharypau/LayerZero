@@ -10,8 +10,8 @@ namespace LayerZero.Characters.Player.States
         {
             On(() => Input.WasPerformed(PlayerInputAction.Jump), PlayerStateId.WallJump);
 
-            OnFixed(() => Movement.IsGrounded, TransitToIdle);
-            OnFixed(() => !Movement.IsWalled && Movement.IsFalling, PlayerStateId.Fall);
+            On(() => Movement.IsGrounded, TransitToIdle);
+            On(() => !Movement.IsWalled && Movement.IsFalling, PlayerStateId.Fall);
         }
 
         public override int Id => PlayerStateId.WallSlide;

@@ -14,7 +14,7 @@ namespace LayerZero.Characters.Player.States
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Dash), PlayerStateId.Dash);
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
 
-            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
+            On(() => Movement.IsFalling, PlayerStateId.Fall);
         }
 
         public override void Enter()

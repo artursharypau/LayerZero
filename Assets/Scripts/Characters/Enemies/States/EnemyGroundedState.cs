@@ -5,7 +5,7 @@ namespace LayerZero.Characters.Enemies.States
         protected EnemyGroundedState(EnemyController owner)
             : base(owner)
         {
-            OnFixed(() => Perception.HasTarget, EnemyStateId.Chase);
+            On(() => Perception.HasTarget, EnemyStateId.Chase);
         }
     }
 }

@@ -6,7 +6,6 @@ namespace LayerZero.Core.StateMachine
     public abstract class StateBase
     {
         private readonly List<StateTransition> _transitions = new();
-        private readonly List<StateTransition> _fixedTransitions = new();
 
         public abstract int Id { get; }
 
@@ -36,24 +35,9 @@ namespace LayerZero.Core.StateMachine
             _transitions.Add(new StateTransition(condition, resolveTarget));
         }
 
-        protected void OnFixed(Func<bool> condition, int target)
-        {
-            _fixedTransitions.Add(new StateTransition(condition, target));
-        }
-
-        protected void OnFixed(Func<bool> condition, Func<int> resolveTarget)
-        {
-            _fixedTransitions.Add(new StateTransition(condition, resolveTarget));
-        }
-
         internal bool TryGetTransition(out int target)
         {
             return TryResolve(_transitions, out target);
-        }
-
-        internal bool TryGetFixedTransition(out int target)
-        {
-            return TryResolve(_fixedTransitions, out target);
         }
 
         private static bool TryResolve(List<StateTransition> transitions, out int target)

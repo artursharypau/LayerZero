@@ -15,9 +15,9 @@ namespace LayerZero.Characters.Player.States
         public PlayerDashState(PlayerController owner)
             : base(owner)
         {
-            OnFixed(() => !_isDashing, ResolveLocomotionState);
-            OnFixed(() => _timer.IsExpired, ResolveLocomotionState);
-            OnFixed(() => Movement.IsWalled, PlayerStateId.Idle);
+            On(() => !_isDashing, ResolveLocomotionState);
+            On(() => _timer.IsExpired, ResolveLocomotionState);
+            On(() => Movement.IsWalled, PlayerStateId.Idle);
         }
 
         public override int Id => PlayerStateId.Dash;
