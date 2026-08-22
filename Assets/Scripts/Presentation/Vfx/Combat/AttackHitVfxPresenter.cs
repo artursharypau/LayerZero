@@ -4,7 +4,7 @@ using LayerZero.Core.EventBus.Events;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace LayerZero.Presentation.Vfx.Attack
+namespace LayerZero.Presentation.Vfx.Combat
 {
     internal sealed class AttackHitVfxPresenter : IStartable, IDisposable
     {
