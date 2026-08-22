@@ -371,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attack.Executors.OverlapAttackExecutor
   _kind: 0
   _origin: {fileID: 4973008962671906359}
-  _radius: 1.4
+  _radius: 1
   _targetMask:
     serializedVersion: 2
     m_Bits: 128

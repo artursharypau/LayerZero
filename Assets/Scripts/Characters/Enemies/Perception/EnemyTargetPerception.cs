@@ -72,9 +72,9 @@ namespace LayerZero.Characters.Enemies.Perception
 
         public void NotifyDamaged(DamageInfo damageInfo)
         {
-            if (damageInfo.Source == DamageSource.Player && damageInfo.Attacker)
+            if (damageInfo.Source == DamageSource.Player && damageInfo.AttackerTransform)
             {
-                SetTarget(damageInfo.Attacker);
+                SetTarget(damageInfo.AttackerTransform);
             }
         }
 

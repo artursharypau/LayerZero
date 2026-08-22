@@ -13,9 +13,9 @@ namespace LayerZero.Environment.Parallax
         {
             _camera = Camera.main;
 
-            foreach (ParallaxLayer layer in _layers)
+            for (int i = 0; i < _layers.Length; i++)
             {
-                layer.Initialize();
+                _layers[i].Initialize();
             }
         }
 
@@ -42,8 +42,10 @@ namespace LayerZero.Environment.Parallax
             float leftEdge = cameraX - halfWidth;
             float rightEdge = cameraX + halfWidth;
 
-            foreach (ParallaxLayer layer in _layers)
+            for (int i = 0; i < _layers.Length; i++)
             {
+                ParallaxLayer layer = _layers[i];
+
                 layer.Move(distance);
                 layer.Recycle(distance, leftEdge, rightEdge);
             }

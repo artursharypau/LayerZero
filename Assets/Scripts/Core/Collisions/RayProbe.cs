@@ -18,8 +18,9 @@ namespace LayerZero.Core.Collisions
                 return false;
             }
 
-            foreach (Transform origin in _origins)
+            for (int i = 0; i < _origins.Length; i++)
             {
+                Transform origin = _origins[i];
                 if (!origin || !Physics2D.Raycast(origin.position, direction, _distance, mask))
                 {
                     return false;
@@ -37,8 +38,9 @@ namespace LayerZero.Core.Collisions
             }
 
             Vector3 offset = (Vector3)direction.normalized * _distance;
-            foreach (Transform origin in _origins)
+            for (int i = 0; i < _origins.Length; i++)
             {
+                Transform origin = _origins[i];
                 if (origin)
                 {
                     Gizmos.DrawLine(origin.position, origin.position + offset);

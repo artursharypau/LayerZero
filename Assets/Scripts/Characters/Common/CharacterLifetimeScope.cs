@@ -7,6 +7,7 @@ using LayerZero.Combat.Attack;
 using LayerZero.Combat.Attack.Executors;
 using LayerZero.Combat.Damage;
 using LayerZero.Combat.Damage.Resistance;
+using LayerZero.Core.Events;
 using LayerZero.Core.StateMachine;
 using UnityEngine;
 using VContainer;
@@ -18,7 +19,9 @@ namespace LayerZero.Characters.Common
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<CharacterEventBus>(Lifetime.Scoped).As<ICharacterEventBus>();
+            builder.Register<CharacterEventBus>(Lifetime.Scoped)
+                .As<ICharacterEventBus>()
+                .As<IEventBus>();
             builder.Register<DamageResistances>(Lifetime.Scoped).As<IDamageResistances>();
             builder.Register<StateMachine>(Lifetime.Scoped);
             builder.Register<CharacterAnimator>(Lifetime.Scoped);
@@ -35,12 +38,14 @@ namespace LayerZero.Characters.Common
                         .As<IAnimatorEvents>()
                         .As<IAttackEvents>()
                         .As<IAttackParryWindowEvents>();
+
                     components.AddInHierarchy<CharacterMovement2D>()
                         .AsSelf()
                         .As<IMovement2D>();
+
                     components.AddInHierarchy<Health>().As<IDamageable>();
                     components.AddInHierarchy<DamageReceiver>().As<IDamageReceiver>();
-                    components.AddInHierarchy<CombatSystem>();
+                    components.AddInHierarchy<CombatSystem>().As<ICombatSystem>();
                 });
         }
 
@@ -51,11 +56,9 @@ namespace LayerZero.Characters.Common
             builder.RegisterInstance(executors).As<IReadOnlyList<IAttackExecutor>>();
             builder.RegisterBuildCallback(container =>
             {
-                ICharacterEventBus eventBus = container.Resolve<ICharacterEventBus>();
-
-                foreach (IAttackExecutor executor in executors)
+                for (int i = 0; i < executors.Length; i++)
                 {
-                    executor.Initialize(transform, eventBus);
+                    container.Inject(executors[i]);
                 }
             });
         }
