@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1893969544661301485}
-  - component: {fileID: 4178157017190397842}
-  - component: {fileID: 7074610978013674542}
+  - component: {fileID: 1683860669960816829}
   m_Layer: 0
   m_Name: AttackHitVfx
   m_TagString: Untagged
@@ -34,7 +33,7 @@ Transform:
   - {fileID: 8746258114337917499}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4178157017190397842
+--- !u!114 &1683860669960816829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,26 +42,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1601066794472438631}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb6dbfb63fd4244a22dfc4476559005, type: 3}
+  m_Script: {fileID: 11500000, guid: b22d3e42a92a49bebdb815d4ab45e84e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Presentation.Container.PresentationLifetimeScope
-  parentReference:
-    TypeName: 
-  autoRun: 1
-  autoInjectGameObjects: []
---- !u!114 &7074610978013674542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601066794472438631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe6b1c7e00124dafa3544e490219008a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Presentation.Vfx.AttackHitVfx
-  _vfxPrefab: {fileID: 0}
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
 --- !u!1 &8291350897174118000
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,8 +54,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8746258114337917499}
+  - component: {fileID: 4880677273112212917}
   - component: {fileID: 2865827207963660895}
-  - component: {fileID: 1177558657462938623}
+  - component: {fileID: 2558357438539857995}
   m_Layer: 0
   m_Name: Animator
   m_TagString: Untagged
@@ -96,29 +79,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1893969544661301485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &2865827207963660895
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8291350897174118000}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 036cc565822e6449b9e6c82cb6b1f37c, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!212 &1177558657462938623
+--- !u!212 &4880677273112212917
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
@@ -168,7 +129,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7d54c7a7814974499b88d19013ac26a4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8113208, g: 0.7757744, b: 0.19517621, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -177,3 +138,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &2865827207963660895
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291350897174118000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 036cc565822e6449b9e6c82cb6b1f37c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2558357438539857995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291350897174118000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e03f329f41e9402280cfe7b3d01de242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxAnimatorEvents

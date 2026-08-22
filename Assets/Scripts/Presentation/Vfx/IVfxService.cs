@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public interface IVfxService
+    internal interface IVfxService : IDisposable
     {
-        void Play(GameObject prefab, Vector2 position, Quaternion rotation);
+        void Play(VfxKind kind, Vector2 position, Quaternion rotation);
     }
 }
