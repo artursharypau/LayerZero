@@ -1,7 +1,10 @@
 {
-  "name": "LayerZero.Core",
-  "rootNamespace": "LayerZero.Core",
+  "name": "LayerZero.Gameplay",
+  "rootNamespace": "LayerZero.Gameplay",
   "references": [
+    "LayerZero.Core",
+    "LayerZero.GeneratedInput",
+    "Unity.InputSystem",
     "VContainer"
   ],
   "includePlatforms": [],
