@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using LayerZero.Core.Events.Handlers;
-using LayerZero.Core.Events.Subjects;
+using LayerZero.Core.EventBus.Events;
+using LayerZero.Core.EventBus.Handlers;
+using LayerZero.Core.EventBus.Subjects;
 
-namespace LayerZero.Core.Events
+namespace LayerZero.Core.EventBus
 {
     public class EventBus : IEventBus
     {

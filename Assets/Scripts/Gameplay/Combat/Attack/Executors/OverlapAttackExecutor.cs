@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using LayerZero.Core.Events;
+using LayerZero.Core.EventBus.Events;
+using LayerZero.Core.EventBus;
 using LayerZero.Core.Extensions;
 using LayerZero.Gameplay.Combat.Damage;
 using UnityEngine;

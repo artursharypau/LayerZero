@@ -1,4 +1,4 @@
-using LayerZero.Core.Events;
+using LayerZero.Core.EventBus;
 using VContainer;
 using VContainer.Unity;
 

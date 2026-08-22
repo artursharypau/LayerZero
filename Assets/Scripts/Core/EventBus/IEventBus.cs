@@ -1,6 +1,7 @@
-using LayerZero.Core.Events.Handlers;
+using LayerZero.Core.EventBus.Events;
+using LayerZero.Core.EventBus.Handlers;
 
-namespace LayerZero.Core.Events
+namespace LayerZero.Core.EventBus
 {
     public interface IEventBus
     {
