@@ -231,7 +231,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b51266704c4c64070a5244dbc1dbdfa9, type: 3}
@@ -326,7 +326,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -213981581
-  m_SortingLayer: -3
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -10727,7 +10727,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b51266704c4c64070a5244dbc1dbdfa9, type: 3}
@@ -10952,7 +10952,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4987070d1311c4468b94ff608d90a4a7, type: 3}
@@ -11094,7 +11094,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4987070d1311c4468b94ff608d90a4a7, type: 3}
@@ -11318,7 +11318,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4987070d1311c4468b94ff608d90a4a7, type: 3}
@@ -11592,7 +11592,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 84768251
-  m_SortingLayer: -4
+  m_SortingLayer: -2
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b51266704c4c64070a5244dbc1dbdfa9, type: 3}
@@ -11740,10 +11740,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
-    - target: {fileID: 6929327695061375567, guid: 125d781624e304e77bf5a192ecd70476, type: 3}
-      propertyPath: _max
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11760,10 +11756,6 @@ PrefabInstance:
     - target: {fileID: 2514101050448271214, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4145020159193950360, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
-      propertyPath: _max
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 9126213500252039777, guid: dce2cb4683a5c40c597b454ffe31d7bc, type: 3}
       propertyPath: m_LocalPosition.x
