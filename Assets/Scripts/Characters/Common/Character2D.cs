@@ -24,25 +24,26 @@ namespace LayerZero.Characters.Common
         public IDamageable Health { get; private set; }
         public IDamageReceiver DamageReceiver { get; private set; }
         public IDamageResistances DamageResistances { get; private set; }
-        public CombatSystem Combat { get; private set; }
+        public ICombatSystem Combat { get; private set; }
 
         public bool IsDead => Health.IsDead;
 
         [Inject]
         public void Construct(
-            StateMachine stateMachine,
             AnimatorStateBinder animatorStateBinder,
-            CharacterAnimator animator,
             CharacterMovement2D movement,
+            StateMachine stateMachine,
+            CharacterAnimator animator,
             IDamageable health,
             IDamageReceiver damageReceiver,
             IDamageResistances damageResistances,
-            CombatSystem combat)
+            ICombatSystem combat)
         {
-            StateMachine = stateMachine;
             _animatorStateBinder = animatorStateBinder;
-            Animator = animator;
             _movement = movement;
+
+            StateMachine = stateMachine;
+            Animator = animator;
             Health = health;
             DamageReceiver = damageReceiver;
             DamageResistances = damageResistances;
@@ -107,9 +108,8 @@ namespace LayerZero.Characters.Common
         {
             _movement.CancelKnockback();
             _movement.SetVelocity(0f, 0f);
-            _movement.enabled = false;
 
-            Combat.enabled = false;
+            Combat.Disarm();
 
             OnDied();
 

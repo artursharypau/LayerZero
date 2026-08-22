@@ -6,33 +6,33 @@ namespace LayerZero.Combat.Damage
     {
         public readonly int Amount;
         public readonly DamageSource Source;
-        public readonly Transform Attacker;
+        public readonly Transform AttackerTransform;
         public readonly DamageImpactInfo Impact;
 
-        public DamageInfo(int amount, DamageSource source, Transform attacker, DamageImpactInfo impact = default)
+        public DamageInfo(int amount, DamageSource source, Transform attackerTransform, DamageImpactInfo impact = default)
         {
             Amount = amount;
             Source = source;
-            Attacker = attacker;
+            AttackerTransform = attackerTransform;
             Impact = impact;
         }
 
         public DamageInfo WithImpact(DamageImpactInfo impact)
         {
-            return new DamageInfo(Amount, Source, Attacker, impact);
+            return new DamageInfo(Amount, Source, AttackerTransform, impact);
         }
 
-        public static DamageInfo FromDefinition(DamageDefinition definition, Transform attacker)
+        public static DamageInfo FromDefinition(DamageDefinition definition, Transform attackerTransform)
         {
             DamageImpactInfo impact = DamageImpactInfo.None;
 
-            if (definition.HasImpact && attacker)
+            if (definition.HasImpact && attackerTransform)
             {
-                Vector2 knockback = attacker.TransformDirection(definition.Knockback);
+                Vector2 knockback = attackerTransform.TransformDirection(definition.Knockback);
                 impact = new DamageImpactInfo(knockback, definition.StunDuration);
             }
 
-            return new DamageInfo(definition.Amount, definition.Source, attacker, impact);
+            return new DamageInfo(definition.Amount, definition.Source, attackerTransform, impact);
         }
     }
 }

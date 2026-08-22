@@ -7,7 +7,7 @@ using VContainer;
 
 namespace LayerZero.Combat
 {
-    public sealed class CombatSystem : MonoBehaviour, IInterruptibleAttack
+    public sealed class CombatSystem : MonoBehaviour, ICombatSystem, IInterruptibleAttack
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
 
@@ -26,8 +26,9 @@ namespace LayerZero.Combat
             _attackEvents = attackEvents;
             _attackParryWindowEvents = attackParryWindowEvents;
 
-            foreach (IAttackExecutor executor in executors)
+            for (int i = 0; i < executors.Count; i++)
             {
+                IAttackExecutor executor = executors[i];
                 if (!_executors.TryAdd(executor.Kind, executor))
                 {
                     GameLog.Warning(this, $"'{name}' has more than one executor for '{executor.Kind}'. Extra ones are ignored.");

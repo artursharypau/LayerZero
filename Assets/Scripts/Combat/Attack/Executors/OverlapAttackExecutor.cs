@@ -4,6 +4,7 @@ using LayerZero.Combat.Damage;
 using LayerZero.Core.Events;
 using LayerZero.Core.Extensions;
 using UnityEngine;
+using VContainer;
 
 namespace LayerZero.Combat.Attack.Executors
 {
@@ -19,26 +20,20 @@ namespace LayerZero.Combat.Attack.Executors
         private readonly List<Collider2D> _targets = new(TargetsBufferCapacity);
 
         private ContactFilter2D _filter;
-        private Transform _owner;
         private IEventBus _eventBus;
 
         public AttackKind Kind => _kind;
+
+        [Inject]
+        public void Construct(IEventBus eventBus)
+        {
+            _eventBus = eventBus;
+        }
 
         private void Awake()
         {
             _filter = new ContactFilter2D();
             _filter.SetLayerMask(_targetMask);
-        }
-
-        public void Initialize(Transform owner, IEventBus eventBus)
-        {
-            _owner = owner;
-            _eventBus = eventBus;
-
-            if (!_origin)
-            {
-                _origin = owner;
-            }
         }
 
         public int FindTargets(List<Collider2D> results)
@@ -74,7 +69,7 @@ namespace LayerZero.Combat.Attack.Executors
                 return;
             }
 
-            DamageInfo damageInfo = DamageInfo.FromDefinition(damage, _owner ? _owner : transform);
+            DamageInfo damageInfo = DamageInfo.FromDefinition(damage, transform);
             for (int i = 0; i < count; i++)
             {
                 if (!_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver) || !receiver.TakeDamage(damageInfo))
