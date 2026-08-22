@@ -7,7 +7,7 @@ namespace LayerZero.Characters.Enemies.States
         public EnemyPatrolState(EnemyController owner)
             : base(owner)
         {
-            OnFixed(IsBlocked, EnemyStateId.Idle);
+            On(IsBlocked, EnemyStateId.Idle);
         }
 
         public override int Id => EnemyStateId.Patrol;

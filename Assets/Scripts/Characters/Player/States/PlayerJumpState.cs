@@ -7,7 +7,7 @@ namespace LayerZero.Characters.Player.States
         public PlayerJumpState(PlayerController owner)
             : base(owner)
         {
-            OnFixed(() => Movement.VelocityY <= 0f, PlayerStateId.Fall);
+            On(() => Movement.VelocityY <= 0f, PlayerStateId.Fall);
         }
 
         public override int Id => PlayerStateId.Jump;

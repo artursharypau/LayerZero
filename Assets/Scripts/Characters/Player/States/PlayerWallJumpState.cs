@@ -13,8 +13,8 @@ namespace LayerZero.Characters.Player.States
         {
             On(() => Owner.Abilities.CanUse(PlayerAbilityId.Jump), PlayerStateId.Jump);
 
-            OnFixed(() => Movement.IsFalling, PlayerStateId.Fall);
-            OnFixed(() => Movement.IsWalled, PlayerStateId.WallSlide);
+            On(() => Movement.IsFalling, PlayerStateId.Fall);
+            On(() => Movement.IsWalled, PlayerStateId.WallSlide);
         }
 
         public override int Id => PlayerStateId.WallJump;

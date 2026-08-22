@@ -7,7 +7,7 @@ namespace LayerZero.Characters.Player.States
         {
             On(() => Input.Move.x == 0f, PlayerStateId.Idle);
 
-            OnFixed(IsPushingIntoWall, PlayerStateId.Idle);
+            On(IsPushingIntoWall, PlayerStateId.Idle);
         }
 
         public override int Id => PlayerStateId.Move;

@@ -39,35 +39,6 @@ namespace LayerZero.Core.StateMachine
             Running = false;
         }
 
-        public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
-        {
-            if (!Running)
-            {
-                return;
-            }
-
-            StateBase newState = _registry.Get(id);
-            Schedule(newState, mode);
-        }
-
-        public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
-        {
-            if (!Running)
-            {
-                return;
-            }
-
-            StateBase state = _registry.Get(id);
-            if (state is not IStatePayload<TPayload> statePayload)
-            {
-                throw new InvalidOperationException(
-                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'");
-            }
-
-            statePayload.SetPayload(payload);
-            Schedule(state, mode);
-        }
-
         public void Update()
         {
             if (!Running)
@@ -98,18 +69,7 @@ namespace LayerZero.Core.StateMachine
                 return;
             }
 
-            if (Current == null)
-            {
-                return;
-            }
-
-            if (Current.TryGetFixedTransition(out int target))
-            {
-                ChangeState(target);
-                return;
-            }
-
-            Current.FixedUpdate();
+            Current?.FixedUpdate();
         }
 
         private void Schedule(StateBase state, StateTransitionMode mode)
@@ -127,6 +87,35 @@ namespace LayerZero.Core.StateMachine
             {
                 FlushPending();
             }
+        }
+
+        public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
+        {
+            if (!Running)
+            {
+                return;
+            }
+
+            StateBase newState = _registry.Get(id);
+            Schedule(newState, mode);
+        }
+
+        public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
+        {
+            if (!Running)
+            {
+                return;
+            }
+
+            StateBase state = _registry.Get(id);
+            if (state is not IStatePayload<TPayload> statePayload)
+            {
+                throw new InvalidOperationException(
+                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'");
+            }
+
+            statePayload.SetPayload(payload);
+            Schedule(state, mode);
         }
 
         private void FlushPending()
