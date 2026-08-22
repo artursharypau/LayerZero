@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LayerZero.Core.Events
+namespace LayerZero.Core.EventBus.Events
 {
     public readonly struct AttackHitEvent : IEventBusEvent
     {

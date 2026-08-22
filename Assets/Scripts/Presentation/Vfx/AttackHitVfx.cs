@@ -1,5 +1,6 @@
 using System;
-using LayerZero.Core.Events;
+using LayerZero.Core.EventBus.Events;
+using LayerZero.Core.EventBus;
 using UnityEngine;
 using VContainer;
 

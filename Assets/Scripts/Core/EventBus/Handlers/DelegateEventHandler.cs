@@ -1,6 +1,7 @@
 using System;
+using LayerZero.Core.EventBus.Events;
 
-namespace LayerZero.Core.Events.Handlers
+namespace LayerZero.Core.EventBus.Handlers
 {
     public sealed class DelegateEventHandler<TEvent> : IEventHandler<TEvent>
         where TEvent : IEventBusEvent

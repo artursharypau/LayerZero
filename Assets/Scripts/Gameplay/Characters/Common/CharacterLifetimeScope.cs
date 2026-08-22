@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using LayerZero.Core.Events;
+using LayerZero.Core.EventBus;
 using LayerZero.Core.StateMachine;
 using LayerZero.Gameplay.Characters.Common.Animation;
-using LayerZero.Gameplay.Characters.Common.Events;
+using LayerZero.Gameplay.Characters.Common.EventBus;
 using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Combat;
 using LayerZero.Gameplay.Combat.Attack;
