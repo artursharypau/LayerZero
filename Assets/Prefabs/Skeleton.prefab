@@ -111,7 +111,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1545291057
-  m_SortingLayer: -2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7928858964255100155, guid: 2126915fb7a3f47a083731778e5188fd, type: 3}
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7738c9bed48a45268f528d56fd19a679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Health
-  _max: 100
+  _max: 1000
 --- !u!114 &7765971437028232559
 MonoBehaviour:
   m_ObjectHideFlags: 0

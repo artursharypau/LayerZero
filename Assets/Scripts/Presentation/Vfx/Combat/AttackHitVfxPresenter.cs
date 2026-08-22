@@ -31,7 +31,7 @@ namespace LayerZero.Presentation.Vfx.Combat
 
         private void OnAttackHit(AttackHitEvent e)
         {
-            _vfxService.Play(VfxKind.AttackHit, e.Point, Quaternion.identity);
+            _vfxService.Play(VfxKind.AttackHit, e.Position, Quaternion.identity);
         }
     }
 }

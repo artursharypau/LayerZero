@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using LayerZero.Core.EventBus.Events;
 using LayerZero.Core.EventBus;
+using LayerZero.Core.EventBus.Events;
 using LayerZero.Core.Extensions;
 using LayerZero.Gameplay.Combat.Damage;
 using UnityEngine;
@@ -83,15 +83,7 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
 
         private void RaiseAttackHit(Collider2D target)
         {
-            if (_eventBus == null)
-            {
-                return;
-            }
-
-            Vector2 origin = _origin.position;
-            Vector2 point = target.ClosestPoint(origin);
-
-            _eventBus.Raise(new AttackHitEvent(target.transform, point, (point - origin).normalized));
+            _eventBus?.Raise(new AttackHitEvent(target.bounds.center));
         }
 
         private void OnDrawGizmosSelected()

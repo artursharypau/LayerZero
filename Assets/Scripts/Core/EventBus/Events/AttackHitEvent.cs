@@ -4,15 +4,11 @@ namespace LayerZero.Core.EventBus.Events
 {
     public readonly struct AttackHitEvent : IEventBusEvent
     {
-        public readonly Transform Target;
-        public readonly Vector2 Point;
-        public readonly Vector2 Direction;
+        public readonly Vector2 Position;
 
-        public AttackHitEvent(Transform target, Vector2 point, Vector2 direction)
+        public AttackHitEvent(Vector2 position)
         {
-            Target = target;
-            Point = point;
-            Direction = direction;
+            Position = position;
         }
     }
 }
