@@ -7,7 +7,7 @@ using VContainer.Unity;
 
 namespace LayerZero.Presentation.Container
 {
-    public sealed class PresentationLifetimeScope : LifetimeScope
+    internal sealed class PresentationLifetimeScope : LifetimeScope
     {
         [SerializeField] private VfxCatalog _vfxCatalog;
 

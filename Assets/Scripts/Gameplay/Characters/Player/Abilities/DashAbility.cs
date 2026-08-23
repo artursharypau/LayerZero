@@ -6,7 +6,7 @@ using LayerZero.Gameplay.Characters.Player.Input;
 
 namespace LayerZero.Gameplay.Characters.Player.Abilities
 {
-    public sealed class DashAbility : IAbility
+    internal sealed class DashAbility : IAbility
     {
         private readonly DashAbilityConfig _config;
         private readonly IPlayerInput _input;

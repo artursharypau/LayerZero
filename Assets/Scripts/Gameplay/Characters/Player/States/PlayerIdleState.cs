@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerIdleState : PlayerGroundedState
+    internal sealed class PlayerIdleState : PlayerGroundedState
     {
         public PlayerIdleState(PlayerController owner)
             : base(owner)

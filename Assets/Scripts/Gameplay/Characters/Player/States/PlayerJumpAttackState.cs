@@ -5,7 +5,7 @@ using LayerZero.Gameplay.Combat.Attack;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerJumpAttackState : PlayerState
+    internal sealed class PlayerJumpAttackState : PlayerState
     {
         private readonly AttackBehaviour _attack;
 

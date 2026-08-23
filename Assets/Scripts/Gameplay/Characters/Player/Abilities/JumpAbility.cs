@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Player.Input;
 
 namespace LayerZero.Gameplay.Characters.Player.Abilities
 {
-    public sealed class JumpAbility : IChargeableAbility
+    internal sealed class JumpAbility : IChargeableAbility
     {
         private readonly AbilityCharges _charges;
         private readonly IPlayerInput _input;

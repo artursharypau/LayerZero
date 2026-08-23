@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Common.Movement;
 
 namespace LayerZero.Gameplay.Characters.Common.States
 {
-    public abstract class CharacterState<TCharacter> : StateBase
+    internal abstract class CharacterState<TCharacter> : StateBase
         where TCharacter : Character2D
     {
         protected CharacterState(TCharacter owner)

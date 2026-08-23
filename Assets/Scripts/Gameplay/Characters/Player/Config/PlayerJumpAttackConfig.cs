@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Player.Config
 {
     [Serializable]
-    public sealed class PlayerJumpAttackConfig
+    internal sealed class PlayerJumpAttackConfig
     {
         [SerializeField] private Vector2 _velocity = new(3f, -5f);
         [SerializeField] private AttackDefinition _attack = new();

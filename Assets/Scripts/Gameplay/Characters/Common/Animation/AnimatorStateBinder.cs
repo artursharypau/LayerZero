@@ -2,7 +2,7 @@ using LayerZero.Core.StateMachine;
 
 namespace LayerZero.Gameplay.Characters.Common.Animation
 {
-    public sealed class AnimatorStateBinder
+    internal sealed class AnimatorStateBinder
     {
         private readonly CharacterAnimator _animator;
         private readonly StateMachine _stateMachine;

@@ -3,11 +3,11 @@ using LayerZero.Core.EventBus.Handlers;
 
 namespace LayerZero.Core.EventBus.Subjects
 {
-    public interface IEventSubject
+    internal interface IEventSubject
     {
     }
 
-    public interface IEventSubject<TEvent> : IEventSubject
+    internal interface IEventSubject<TEvent> : IEventSubject
         where TEvent : IEventBusEvent
     {
         void AddHandler(IEventHandler<TEvent> handler);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat.Attack.Executors
 {
-    public interface IAttackExecutor
+    internal interface IAttackExecutor
     {
         AttackKind Kind { get; }
 

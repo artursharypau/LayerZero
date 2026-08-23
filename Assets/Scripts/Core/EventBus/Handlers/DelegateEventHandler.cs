@@ -3,7 +3,7 @@ using LayerZero.Core.EventBus.Events;
 
 namespace LayerZero.Core.EventBus.Handlers
 {
-    public sealed class DelegateEventHandler<TEvent> : IEventHandler<TEvent>
+    internal sealed class DelegateEventHandler<TEvent> : IEventHandler<TEvent>
         where TEvent : IEventBusEvent
     {
         private readonly Action<TEvent> _handler;

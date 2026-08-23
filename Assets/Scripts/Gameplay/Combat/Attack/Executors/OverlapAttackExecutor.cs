@@ -8,7 +8,7 @@ using VContainer;
 
 namespace LayerZero.Gameplay.Combat.Attack.Executors
 {
-    public sealed class OverlapAttackExecutor : MonoBehaviour, IAttackExecutor
+    internal sealed class OverlapAttackExecutor : MonoBehaviour, IAttackExecutor
     {
         private const int TargetsBufferCapacity = 8;
 

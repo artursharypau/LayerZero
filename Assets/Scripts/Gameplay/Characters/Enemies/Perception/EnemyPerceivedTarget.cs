@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Enemies.Perception
 {
-    public readonly struct EnemyPerceivedTarget
+    internal readonly struct EnemyPerceivedTarget
     {
         public static readonly EnemyPerceivedTarget None = default;
 

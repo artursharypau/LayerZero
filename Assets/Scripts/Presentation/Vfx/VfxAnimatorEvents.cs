@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public sealed class VfxAnimatorEvents : MonoBehaviour, IVfxAnimatorEvents
+    internal sealed class VfxAnimatorEvents : MonoBehaviour, IVfxAnimatorEvents
     {
         public event Action VfxFinished;
 

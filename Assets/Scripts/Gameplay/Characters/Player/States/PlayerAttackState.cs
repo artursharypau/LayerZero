@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerAttackState : PlayerState
+    internal sealed class PlayerAttackState : PlayerState
     {
         private readonly AttackBehaviour _attack;
 

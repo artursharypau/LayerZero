@@ -2,7 +2,7 @@ using LayerZero.Gameplay.Characters.Player.Abilities;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerFallState : PlayerInAirState
+    internal sealed class PlayerFallState : PlayerInAirState
     {
         private float _defaultGravityScale;
 

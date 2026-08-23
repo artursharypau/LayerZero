@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace LayerZero.Presentation.Ui.HealthBar
 {
-    public sealed class EnemyHealthBar : MonoBehaviour
+    internal sealed class EnemyHealthBar : MonoBehaviour
     {
         [SerializeField] [Min(0f)] private float _visibleDuration = 3f;
         [SerializeField] [Min(0.01f)] private float _fadeOutDuration = 0.25f;

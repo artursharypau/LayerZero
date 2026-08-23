@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Enemies.Config
 {
     [Serializable]
-    public sealed class EnemyMovementConfig
+    internal sealed class EnemyMovementConfig
     {
         [SerializeField] [Min(0f)] private float _idleDuration = 2f;
         [SerializeField] [Min(0f)] private float _moveSpeed = 1.5f;

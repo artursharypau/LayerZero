@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Attack
 {
-    public enum AttackKind
+    internal enum AttackKind
     {
         Melee = 0,
         Ranged = 1,

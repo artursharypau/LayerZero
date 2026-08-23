@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public class EnemyDeadState : EnemyState
+    internal sealed class EnemyDeadState : EnemyState
     {
         public EnemyDeadState(EnemyController owner)
             : base(owner)

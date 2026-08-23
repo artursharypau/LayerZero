@@ -2,7 +2,7 @@ using System;
 
 namespace LayerZero.Gameplay.Combat.Attack
 {
-    public interface IAttackEvents
+    internal interface IAttackEvents
     {
         event Action AttackHit;
         event Action AttackFinished;

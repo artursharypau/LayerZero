@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Enemies.Perception;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public abstract class EnemyState : CharacterState<EnemyController>
+    internal abstract class EnemyState : CharacterState<EnemyController>
     {
         protected EnemyState(EnemyController owner)
             : base(owner)

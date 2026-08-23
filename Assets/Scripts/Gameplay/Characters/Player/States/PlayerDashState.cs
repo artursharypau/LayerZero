@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Combat.Damage.Resistance;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerDashState : PlayerState
+    internal sealed class PlayerDashState : PlayerState
     {
         private Countdown _timer;
         private ResistanceHandle _resistance = ResistanceHandle.None;

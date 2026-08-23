@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public static class EnemyStateId
+    internal static class EnemyStateId
     {
         public const int Idle = 0;
         public const int Patrol = 1;

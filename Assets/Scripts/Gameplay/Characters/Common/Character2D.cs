@@ -13,7 +13,7 @@ namespace LayerZero.Gameplay.Characters.Common
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(DamageReceiver))]
     [RequireComponent(typeof(CombatSystem))]
-    public abstract class Character2D : MonoBehaviour
+    internal abstract class Character2D : MonoBehaviour
     {
         private AnimatorStateBinder _animatorStateBinder;
         private CharacterMovement2D _movement;

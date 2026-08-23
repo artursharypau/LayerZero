@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LayerZero.Presentation.Parallax
 {
     [Serializable]
-    public sealed class ParallaxLayer
+    internal sealed class ParallaxLayer
     {
         private const float DistanceThreshold = 0.1f;
 

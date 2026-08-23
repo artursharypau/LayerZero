@@ -15,7 +15,7 @@ using VContainer.Unity;
 
 namespace LayerZero.Gameplay.Characters.Common
 {
-    public abstract class CharacterLifetimeScope : LifetimeScope
+    internal abstract class CharacterLifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

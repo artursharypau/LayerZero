@@ -1,6 +1,6 @@
 namespace LayerZero.Core.EventBus
 {
-    public class GameEventBus : EventBus, IGameEventBus
+    internal sealed class GameEventBus : EventBus, IGameEventBus
     {
     }
 }

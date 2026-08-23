@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public interface IVfxInstance
+    internal interface IVfxInstance
     {
         event Action<IVfxInstance> Finished;
 
