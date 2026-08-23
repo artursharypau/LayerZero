@@ -1,8 +1,9 @@
 using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
+using LayerZero.Gameplay.Combat.Damage;
 using UnityEngine;
 
-namespace LayerZero.Gameplay.Combat.Damage.Vfx
+namespace LayerZero.Presentation.Vfx.Combat
 {
     [RequireComponent(typeof(DamageReceiver))]
     public sealed class DamageVfx : MonoBehaviour

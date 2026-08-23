@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using LayerZero.Core.EventBus;
-using LayerZero.Core.EventBus.Events;
 using LayerZero.Core.Extensions;
 using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Combat.Events;
 using UnityEngine;
 using VContainer;
 

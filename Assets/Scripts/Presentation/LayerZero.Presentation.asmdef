@@ -2,8 +2,9 @@
   "name": "LayerZero.Presentation",
   "rootNamespace": "LayerZero.Presentation",
   "references": [
+    "VContainer",
     "LayerZero.Core",
-    "VContainer"
+    "LayerZero.Gameplay"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

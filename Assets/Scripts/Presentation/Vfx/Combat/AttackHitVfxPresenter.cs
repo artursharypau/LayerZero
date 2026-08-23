@@ -1,6 +1,6 @@
 using System;
 using LayerZero.Core.EventBus;
-using LayerZero.Core.EventBus.Events;
+using LayerZero.Gameplay.Combat.Events;
 using UnityEngine;
 using VContainer.Unity;
 

@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
   _kind: 1
-  _failsafeLifetime: 2
+  _fallbackLifetime: 2
+  _positionJitter: 0.4
+  _randomizeRotation: 1
 --- !u!1 &8291350897174118000
 GameObject:
   m_ObjectHideFlags: 0

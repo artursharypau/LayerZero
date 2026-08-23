@@ -1,6 +1,7 @@
+using LayerZero.Core.EventBus.Events;
 using UnityEngine;
 
-namespace LayerZero.Core.EventBus.Events
+namespace LayerZero.Gameplay.Combat.Events
 {
     public readonly struct AttackHitEvent : IEventBusEvent
     {
