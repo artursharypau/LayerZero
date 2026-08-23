@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
-    public readonly struct DamageResistance
+    internal readonly struct DamageResistance
     {
         public static readonly DamageResistance Invulnerability = new(ResistanceKind.Invulnerability);
         public static readonly DamageResistance StunImmunity = new(ResistanceKind.StunImmunity);

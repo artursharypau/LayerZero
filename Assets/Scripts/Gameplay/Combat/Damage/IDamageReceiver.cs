@@ -2,7 +2,7 @@ using System;
 
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public interface IDamageReceiver
+    internal interface IDamageReceiver
     {
         event Action<DamageInfo> Damaged;
         event Action<DamageImpactInfo> ImpactReceived;

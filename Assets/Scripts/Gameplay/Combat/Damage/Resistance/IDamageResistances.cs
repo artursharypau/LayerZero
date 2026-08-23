@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
-    public interface IDamageResistances
+    internal interface IDamageResistances
     {
         bool IsInvulnerable { get; }
 

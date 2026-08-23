@@ -9,7 +9,10 @@ namespace LayerZero.Gameplay.Combat
 {
     internal sealed class CombatSystem : MonoBehaviour, ICombatSystem, IInterruptibleAttack
     {
+        private const int ParryTargetsBufferCapacity = 2;
+
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
+        private readonly List<Collider2D> _parryTargets = new(ParryTargetsBufferCapacity);
 
         private bool _isParryWindowOpen;
         private AttackDefinition _attackDefinition;
@@ -91,12 +94,10 @@ namespace LayerZero.Gameplay.Combat
 
             bool isParried = false;
 
-            List<Collider2D> targets = new(2);
-            int count = executor.FindTargets(targets);
-
+            int count = executor.FindTargets(_parryTargets);
             for (int i = 0; i < count; i++)
             {
-                if (targets[i].TryGetComponent(out IInterruptibleAttack attacker) && attacker.TryInterrupt(transform))
+                if (_parryTargets[i].TryGetComponent(out IInterruptibleAttack attacker) && attacker.TryInterrupt(transform))
                 {
                     isParried = true;
                 }

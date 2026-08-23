@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public readonly struct DamageInfo
+    internal readonly struct DamageInfo
     {
         public readonly int Amount;
         public readonly DamageSource Source;

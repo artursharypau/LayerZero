@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace LayerZero.Core.Collisions
+namespace LayerZero.Gameplay.Collisions
 {
-    public static class GameLayers
+    internal static class GameLayers
     {
         public const string GroundName = "Ground";
         public const string PlayerName = "Player";

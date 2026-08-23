@@ -5,7 +5,7 @@ using VContainer;
 
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public sealed class DamageReceiver : MonoBehaviour, IDamageReceiver
+    internal sealed class DamageReceiver : MonoBehaviour, IDamageReceiver
     {
         private IDamageable _damageable;
         private IDamageResistances _resistances;

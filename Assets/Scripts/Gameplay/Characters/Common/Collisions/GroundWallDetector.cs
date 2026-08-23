@@ -1,6 +1,7 @@
 using System;
 using LayerZero.Core.Collisions;
 using LayerZero.Gameplay.Characters.Common.Movement;
+using LayerZero.Gameplay.Collisions;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Collisions

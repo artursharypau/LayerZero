@@ -16,7 +16,7 @@ namespace LayerZero.Presentation.Ui.HealthBar
         private CanvasGroup _canvasGroup;
         private Slider _slider;
         private IPositioned _positioned;
-        private IDamageable _damageable;
+        private IHealth _health;
 
         private Countdown _visibleTimer;
 
@@ -26,20 +26,20 @@ namespace LayerZero.Presentation.Ui.HealthBar
             _canvasGroup = this.GetRequiredComponent<CanvasGroup>();
             _slider = this.GetRequiredComponentInChildren<Slider>();
             _positioned = this.GetRequiredComponentInParent<IPositioned>();
-            _damageable = this.GetRequiredComponentInParent<IDamageable>();
+            _health = this.GetRequiredComponentInParent<IHealth>();
         }
 
         private void Start()
         {
-            _slider.value = _damageable.CurrentHealth;
+            _slider.value = (float)_health.CurrentHealth / _health.MaxHealth;
             Hide();
         }
 
         private void OnEnable()
         {
             _positioned.FacingDirectionChanged += OnFacingDirectionChanged;
-            _damageable.HealthChanged += OnHealthChanged;
-            _damageable.Died += OnDied;
+            _health.HealthChanged += OnHealthChanged;
+            _health.Died += OnDied;
         }
 
         private void Update()
@@ -60,8 +60,8 @@ namespace LayerZero.Presentation.Ui.HealthBar
         private void OnDisable()
         {
             _positioned.FacingDirectionChanged -= OnFacingDirectionChanged;
-            _damageable.HealthChanged -= OnHealthChanged;
-            _damageable.Died -= OnDied;
+            _health.HealthChanged -= OnHealthChanged;
+            _health.Died -= OnDied;
         }
 
         private void OnFacingDirectionChanged(float _)
@@ -71,7 +71,7 @@ namespace LayerZero.Presentation.Ui.HealthBar
 
         private void OnHealthChanged(int _)
         {
-            _slider.value = (float)_damageable.CurrentHealth / _damageable.MaxHealth;
+            _slider.value = (float)_health.CurrentHealth / _health.MaxHealth;
             Show();
         }
 

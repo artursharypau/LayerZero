@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace LayerZero.Presentation.Vfx.Combat
 {
-    [RequireComponent(typeof(DamageReceiver))]
     internal sealed class DamageVfx : MonoBehaviour
     {
         [SerializeField] [Min(0f)] private float _duration = 0.15f;
         [SerializeField] private Material _material;
 
-        private IDamageReceiver _damageReceiver;
+        private IHealth _health;
         private SpriteRenderer _renderer;
         private Material _defaultMaterial;
 
@@ -20,19 +19,19 @@ namespace LayerZero.Presentation.Vfx.Combat
 
         private void Awake()
         {
-            _damageReceiver = this.GetRequiredComponent<IDamageReceiver>();
+            _health = this.GetRequiredComponent<IHealth>();
             _renderer = this.GetRequiredComponentInChildren<SpriteRenderer>();
             _defaultMaterial = _renderer.sharedMaterial;
         }
 
         private void OnEnable()
         {
-            _damageReceiver.Damaged += OnDamaged;
+            _health.HealthChanged += OnHealthChanged;
         }
 
         private void OnDisable()
         {
-            _damageReceiver.Damaged -= OnDamaged;
+            _health.HealthChanged -= OnHealthChanged;
 
             StopFlash();
         }
@@ -45,7 +44,7 @@ namespace LayerZero.Presentation.Vfx.Combat
             }
         }
 
-        private void OnDamaged(DamageInfo damageInfo)
+        private void OnHealthChanged(int _)
         {
             if (!_material)
             {
