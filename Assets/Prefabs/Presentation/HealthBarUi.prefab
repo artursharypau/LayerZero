@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 3549593980878020198}
   - component: {fileID: 8978077757308869935}
   - component: {fileID: 2763574558190313640}
+  - component: {fileID: 7055298627466087772}
   - component: {fileID: 1426759663483120489}
   - component: {fileID: 4497621936860564695}
   m_Layer: 5
@@ -438,6 +439,18 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
+--- !u!225 &7055298627466087772
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9009669051046667598}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &1426759663483120489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,3 +480,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca19403c58784a0f9e9bc7c915fb8f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Presentation.Ui.HealthBar
+  _visibleDuration: 3
+  _fadeOutDuration: 0.25
