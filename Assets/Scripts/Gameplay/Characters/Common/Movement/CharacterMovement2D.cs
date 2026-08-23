@@ -1,3 +1,4 @@
+using System;
 using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
 using LayerZero.Gameplay.Characters.Common.Collisions;
@@ -13,6 +14,8 @@ namespace LayerZero.Gameplay.Characters.Common.Movement
 
         private Countdown _knockbackTimer;
         private Rigidbody2D _rigidbody;
+
+        public event Action<float> FacingDirectionChanged;
 
         public bool IsGrounded => _groundWallDetector.IsGrounded;
         public bool IsWalled => _groundWallDetector.IsWalled;
@@ -86,6 +89,8 @@ namespace LayerZero.Gameplay.Characters.Common.Movement
 
             transform.Rotate(0f, 180f, 0f);
             FacingDirection = -FacingDirection;
+
+            FacingDirectionChanged?.Invoke(FacingDirection);
 
             _groundWallDetector.Refresh();
         }
