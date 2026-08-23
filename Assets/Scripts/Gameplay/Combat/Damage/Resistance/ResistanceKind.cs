@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
-    public enum ResistanceKind
+    internal enum ResistanceKind
     {
         None,
         Invulnerability,

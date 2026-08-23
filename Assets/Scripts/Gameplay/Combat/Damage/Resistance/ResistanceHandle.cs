@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
-    public readonly struct ResistanceHandle
+    internal readonly struct ResistanceHandle
     {
         public static readonly ResistanceHandle None = default;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Combat.Damage
 {
     [Serializable]
-    public sealed class DamageDefinition
+    internal sealed class DamageDefinition
     {
         [SerializeField] [Min(0)] private int _amount = 10;
         [SerializeField] private DamageSource _source = DamageSource.None;

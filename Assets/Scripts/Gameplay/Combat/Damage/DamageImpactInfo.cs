@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public readonly struct DamageImpactInfo
+    internal readonly struct DamageImpactInfo
     {
         public static readonly DamageImpactInfo None = default;
 

@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public enum DamageSource
+    internal enum DamageSource
     {
         None = 0,
         Player = 1,
