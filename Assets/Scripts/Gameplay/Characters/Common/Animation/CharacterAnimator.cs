@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Animation
 {
-    public sealed class CharacterAnimator
+    internal sealed class CharacterAnimator
     {
         private readonly Animator _animator;
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
-    public sealed class DamageResistances : IDamageResistances
+    internal sealed class DamageResistances : IDamageResistances
     {
         private readonly Dictionary<int, DamageResistance> _active = new();
 

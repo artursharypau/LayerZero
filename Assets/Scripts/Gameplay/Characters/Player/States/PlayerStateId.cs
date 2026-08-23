@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public static class PlayerStateId
+    internal static class PlayerStateId
     {
         public const int Idle = 0;
         public const int Move = 1;

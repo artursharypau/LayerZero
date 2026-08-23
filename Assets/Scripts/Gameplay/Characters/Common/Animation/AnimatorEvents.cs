@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Animation
 {
-    public sealed class AnimatorEvents : MonoBehaviour, IAnimatorEvents
+    internal sealed class AnimatorEvents : MonoBehaviour, IAnimatorEvents
     {
         public event Action AttackHit;
         public event Action AttackFinished;

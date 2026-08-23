@@ -3,7 +3,7 @@ using LayerZero.Gameplay.Characters.Enemies.Animation;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public sealed class EnemyChaseState : EnemyState
+    internal sealed class EnemyChaseState : EnemyState
     {
         private float _defaultAnimationMultiplier;
 

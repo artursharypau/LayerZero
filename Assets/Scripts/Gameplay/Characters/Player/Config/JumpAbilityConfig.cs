@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Player.Config
 {
     [Serializable]
-    public sealed class JumpAbilityConfig
+    internal sealed class JumpAbilityConfig
     {
         [SerializeField] [Min(1)] private int _charges = 2;
         [SerializeField] [Min(0f)] private float _force = 13f;

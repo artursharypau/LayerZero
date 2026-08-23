@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Animation
 {
-    public readonly struct AnimatorParameter
+    internal readonly struct AnimatorParameter
     {
         public static readonly AnimatorParameter None = default;
 

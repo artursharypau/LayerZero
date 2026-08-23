@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Presentation.Vfx.Catalog
 {
     [Serializable]
-    public sealed class VfxEntry
+    internal sealed class VfxEntry
     {
         [SerializeField] private VfxInstance _prefab;
         [SerializeField] [Min(0)] private int _prewarmCount = 4;

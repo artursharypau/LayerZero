@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Combat.Damage;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public sealed class EnemyStunnedState : EnemyState, IStatePayload<DamageImpactInfo>
+    internal sealed class EnemyStunnedState : EnemyState, IStatePayload<DamageImpactInfo>
     {
         private Countdown _stunTimer;
         private DamageImpactInfo _impact;

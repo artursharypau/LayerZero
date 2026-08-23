@@ -2,7 +2,7 @@ using LayerZero.Gameplay.Characters.Player.Abilities;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerJumpState : PlayerInAirState
+    internal sealed class PlayerJumpState : PlayerInAirState
     {
         public PlayerJumpState(PlayerController owner)
             : base(owner)

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat
 {
-    public interface ICombatSystem
+    internal interface ICombatSystem
     {
         void Arm(AttackDefinition attack);
         void Disarm();

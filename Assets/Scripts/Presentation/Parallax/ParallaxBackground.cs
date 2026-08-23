@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Presentation.Parallax
 {
-    public sealed class ParallaxBackground : MonoBehaviour
+    internal sealed class ParallaxBackground : MonoBehaviour
     {
         [SerializeField] private ParallaxLayer[] _layers;
 

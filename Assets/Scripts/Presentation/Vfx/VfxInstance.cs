@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public sealed class VfxInstance : MonoBehaviour, IVfxInstance
+    internal sealed class VfxInstance : MonoBehaviour, IVfxInstance
     {
         [SerializeField] private VfxKind _kind;
         [SerializeField] [Min(0f)] private float _fallbackLifetime = 2f;

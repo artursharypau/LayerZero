@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace LayerZero.Gameplay.Characters.Player.Input
 {
-    public sealed class PlayerInput : IPlayerInput, IDisposable
+    internal sealed class PlayerInput : IPlayerInput, IDisposable
     {
         private readonly BufferedRequest _jump;
         private readonly BufferedRequest _dash;

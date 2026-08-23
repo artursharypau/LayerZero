@@ -3,7 +3,7 @@ using LayerZero.Gameplay.Combat.Attack;
 
 namespace LayerZero.Gameplay.Characters.Common.States
 {
-    public sealed class AttackBehaviour
+    internal sealed class AttackBehaviour
     {
         private readonly Character2D _owner;
         private readonly Func<AttackDefinition> _resolveAttack;

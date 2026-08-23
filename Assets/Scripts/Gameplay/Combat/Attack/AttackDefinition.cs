@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Combat.Attack
 {
     [Serializable]
-    public sealed class AttackDefinition
+    internal sealed class AttackDefinition
     {
         [SerializeField] private AttackKind _kind = AttackKind.Melee;
         [SerializeField] private DamageDefinition _damage = new();

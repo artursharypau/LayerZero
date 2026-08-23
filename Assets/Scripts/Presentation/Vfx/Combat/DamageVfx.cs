@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LayerZero.Presentation.Vfx.Combat
 {
     [RequireComponent(typeof(DamageReceiver))]
-    public sealed class DamageVfx : MonoBehaviour
+    internal sealed class DamageVfx : MonoBehaviour
     {
         [SerializeField] [Min(0f)] private float _duration = 0.15f;
         [SerializeField] private Material _material;

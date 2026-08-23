@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Player.Config
 {
     [Serializable]
-    public sealed class PlayerMovementConfig
+    internal sealed class PlayerMovementConfig
     {
         [SerializeField] [Min(0f)] private float _moveSpeed = 15f;
         [SerializeField] [Range(0f, 1f)] private float _inAirMoveMultiplier = 0.5f;

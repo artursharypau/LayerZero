@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Player.Animation;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerCounterattackState : PlayerState
+    internal sealed class PlayerCounterattackState : PlayerState
     {
         private readonly AttackBehaviour _attack;
 

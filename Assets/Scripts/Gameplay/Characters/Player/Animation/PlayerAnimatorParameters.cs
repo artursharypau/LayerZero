@@ -2,7 +2,7 @@ using LayerZero.Gameplay.Characters.Common.Animation;
 
 namespace LayerZero.Gameplay.Characters.Player.Animation
 {
-    public static class PlayerAnimatorParameters
+    internal static class PlayerAnimatorParameters
     {
         public static readonly AnimatorParameter AttackIndex = new("attackIndex", AnimatorParameterKind.Int);
         public static readonly AnimatorParameter JumpAttackTrigger = new("jumpAttackTrigger", AnimatorParameterKind.Trigger);

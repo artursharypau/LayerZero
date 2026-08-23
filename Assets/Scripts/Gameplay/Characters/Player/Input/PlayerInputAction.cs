@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Player.Input
 {
-    public enum PlayerInputAction
+    internal enum PlayerInputAction
     {
         None = 0,
         Jump = 1,

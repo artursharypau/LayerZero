@@ -5,7 +5,7 @@ using LayerZero.Gameplay.Combat.Damage.Resistance;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerHurtState : PlayerState, IStatePayload<DamageImpactInfo>
+    internal sealed class PlayerHurtState : PlayerState, IStatePayload<DamageImpactInfo>
     {
         private Countdown _stunTimer;
         private DamageImpactInfo _impact;

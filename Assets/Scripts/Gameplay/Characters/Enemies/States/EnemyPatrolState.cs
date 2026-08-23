@@ -2,7 +2,7 @@ using LayerZero.Gameplay.Characters.Common.Animation;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public sealed class EnemyPatrolState : EnemyGroundedState
+    internal sealed class EnemyPatrolState : EnemyGroundedState
     {
         public EnemyPatrolState(EnemyController owner)
             : base(owner)

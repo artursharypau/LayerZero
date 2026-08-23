@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    public sealed class Health : MonoBehaviour, IDamageable
+    internal sealed class Health : MonoBehaviour, IDamageable
     {
         [SerializeField] [Min(1)] private int _max = 100;
 

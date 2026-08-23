@@ -2,7 +2,7 @@ using LayerZero.Gameplay.Characters.Common.States;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public sealed class EnemyMeleeAttackState : EnemyState
+    internal sealed class EnemyMeleeAttackState : EnemyState
     {
         private readonly AttackBehaviour _attack;
 

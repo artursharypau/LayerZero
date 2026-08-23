@@ -7,7 +7,7 @@ using VContainer;
 
 namespace LayerZero.Gameplay.Combat
 {
-    public sealed class CombatSystem : MonoBehaviour, ICombatSystem, IInterruptibleAttack
+    internal sealed class CombatSystem : MonoBehaviour, ICombatSystem, IInterruptibleAttack
     {
         private readonly Dictionary<AttackKind, IAttackExecutor> _executors = new();
 

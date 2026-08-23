@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Player.Config
 {
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "LayerZero/Characters/Player Config")]
-    public sealed class PlayerConfig : ScriptableObject
+    internal sealed class PlayerConfig : ScriptableObject
     {
         [SerializeField] private PlayerMovementConfig _movement = new();
         [SerializeField] private PlayerInputConfig _input = new();

@@ -3,7 +3,7 @@ using LayerZero.Gameplay.Characters.Player.Input;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerWallSlideState : PlayerInAirState
+    internal sealed class PlayerWallSlideState : PlayerInAirState
     {
         public PlayerWallSlideState(PlayerController owner)
             : base(owner)

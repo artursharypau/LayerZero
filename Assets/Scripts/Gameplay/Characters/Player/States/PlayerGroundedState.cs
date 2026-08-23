@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public abstract class PlayerGroundedState : PlayerState
+    internal abstract class PlayerGroundedState : PlayerState
     {
         protected PlayerGroundedState(PlayerController owner)
             : base(owner)

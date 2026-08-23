@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Movement
 {
-    public interface IMovement2D : IPositioned
+    internal interface IMovement2D : IPositioned
     {
         bool IsGrounded { get; }
         bool IsWalled { get; }

@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerMoveState : PlayerGroundedState
+    internal sealed class PlayerMoveState : PlayerGroundedState
     {
         public PlayerMoveState(PlayerController owner)
             : base(owner)

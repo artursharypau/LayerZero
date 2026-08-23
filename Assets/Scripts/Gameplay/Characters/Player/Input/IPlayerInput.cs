@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player.Input
 {
-    public interface IPlayerInput
+    internal interface IPlayerInput
     {
         Vector2 Move { get; }
 

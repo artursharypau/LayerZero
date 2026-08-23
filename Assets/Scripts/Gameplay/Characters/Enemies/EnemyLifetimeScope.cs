@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace LayerZero.Gameplay.Characters.Enemies
 {
-    public sealed class EnemyLifetimeScope : CharacterLifetimeScope
+    internal sealed class EnemyLifetimeScope : CharacterLifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

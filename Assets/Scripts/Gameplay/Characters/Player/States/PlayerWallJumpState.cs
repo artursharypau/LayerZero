@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public sealed class PlayerWallJumpState : PlayerInAirState
+    internal sealed class PlayerWallJumpState : PlayerInAirState
     {
         private Countdown _moveLock;
 

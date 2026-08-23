@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Player.Config
 {
     [Serializable]
-    public sealed class PlayerAttackConfig
+    internal sealed class PlayerAttackConfig
     {
         [SerializeField] private AttackComboStep[] _comboSteps = Array.Empty<AttackComboStep>();
         [SerializeField] [Min(0f)] private float _velocityDuration = 0.1f;

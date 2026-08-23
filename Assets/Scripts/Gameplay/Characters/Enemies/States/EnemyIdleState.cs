@@ -2,7 +2,7 @@ using LayerZero.Core.Timing;
 
 namespace LayerZero.Gameplay.Characters.Enemies.States
 {
-    public sealed class EnemyIdleState : EnemyGroundedState
+    internal sealed class EnemyIdleState : EnemyGroundedState
     {
         private Countdown _timer;
 

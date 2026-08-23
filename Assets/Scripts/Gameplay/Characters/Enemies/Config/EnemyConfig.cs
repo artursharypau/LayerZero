@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Enemies.Config
 {
     [CreateAssetMenu(fileName = "EnemyConfig", menuName = "LayerZero/Characters/Enemy Config")]
-    public sealed class EnemyConfig : ScriptableObject
+    internal sealed class EnemyConfig : ScriptableObject
     {
         [SerializeField] private EnemyMovementConfig _movement = new();
         [SerializeField] private EnemyChaseConfig _chase = new();

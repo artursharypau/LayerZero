@@ -2,7 +2,7 @@ using System;
 
 namespace LayerZero.Presentation.Vfx
 {
-    public interface IVfxAnimatorEvents
+    internal interface IVfxAnimatorEvents
     {
         public event Action VfxFinished;
     }

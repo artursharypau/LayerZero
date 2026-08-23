@@ -4,7 +4,7 @@ using LayerZero.Core.EventBus.Handlers;
 
 namespace LayerZero.Core.EventBus.Subjects
 {
-    public sealed class EventSubject<TEvent> : IEventSubject<TEvent>
+    internal sealed class EventSubject<TEvent> : IEventSubject<TEvent>
         where TEvent : IEventBusEvent
     {
         private readonly List<IEventHandler<TEvent>> _handlers = new();

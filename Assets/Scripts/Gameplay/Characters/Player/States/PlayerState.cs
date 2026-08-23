@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Player.Input;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public abstract class PlayerState : CharacterState<PlayerController>
+    internal abstract class PlayerState : CharacterState<PlayerController>
     {
         protected PlayerState(PlayerController owner)
             : base(owner)

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Combat.Attack
 {
-    public interface IInterruptibleAttack
+    internal interface IInterruptibleAttack
     {
         bool TryInterrupt(Transform parrier);
     }

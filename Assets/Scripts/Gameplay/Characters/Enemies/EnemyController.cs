@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Enemies
 {
-    public sealed class EnemyController : Character2D
+    internal sealed class EnemyController : Character2D
     {
         [Header("Data")]
         [SerializeField] private EnemyConfig _config;

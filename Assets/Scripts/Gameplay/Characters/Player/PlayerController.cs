@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player
 {
-    public sealed class PlayerController : Character2D
+    internal sealed class PlayerController : Character2D
     {
         [SerializeField] private PlayerConfig _config;
 

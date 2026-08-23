@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Enemies.Config
 {
     [Serializable]
-    public sealed class PerceptionConfig
+    internal sealed class PerceptionConfig
     {
         [SerializeField] [Min(0f)] private float _distance = 13f;
         [SerializeField] [Min(0f)] private float _scanInterval = 0.5f;

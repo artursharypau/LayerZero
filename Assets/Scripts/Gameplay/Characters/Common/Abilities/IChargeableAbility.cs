@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Common.Abilities
 {
-    public interface IChargeableAbility : IAbility
+    internal interface IChargeableAbility : IAbility
     {
         void Refill();
         void RefillTo(int amount);

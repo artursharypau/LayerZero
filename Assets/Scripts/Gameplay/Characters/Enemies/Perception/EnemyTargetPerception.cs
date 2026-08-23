@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Enemies.Perception
 {
-    public sealed class EnemyTargetPerception
+    internal sealed class EnemyTargetPerception
     {
         private readonly PerceptionConfig _config;
         private readonly Transform _origin;

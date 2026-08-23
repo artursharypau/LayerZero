@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Common.Abilities
 {
-    public sealed class AbilityCharges
+    internal sealed class AbilityCharges
     {
         private readonly int _max;
 

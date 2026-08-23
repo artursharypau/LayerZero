@@ -1,6 +1,6 @@
 namespace LayerZero.Gameplay.Characters.Common.Animation
 {
-    public static class CommonAnimatorParameters
+    internal static class CommonAnimatorParameters
     {
         public static readonly AnimatorParameter State = new("state", AnimatorParameterKind.Int);
 

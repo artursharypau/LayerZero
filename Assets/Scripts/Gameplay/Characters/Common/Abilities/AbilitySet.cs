@@ -4,7 +4,7 @@ using LayerZero.Core.Diagnostics;
 
 namespace LayerZero.Gameplay.Characters.Common.Abilities
 {
-    public class AbilitySet
+    internal sealed class AbilitySet
     {
         private readonly Dictionary<int, IAbility> _abilities = new();
 

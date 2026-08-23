@@ -4,7 +4,7 @@ using LayerZero.Gameplay.Characters.Player.Input;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
-    public abstract class PlayerInAirState : PlayerState
+    internal abstract class PlayerInAirState : PlayerState
     {
         protected PlayerInAirState(PlayerController owner)
             : base(owner)

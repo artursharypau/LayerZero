@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Common.Collisions
 {
     [Serializable]
-    public sealed class GroundWallDetector
+    internal sealed class GroundWallDetector
     {
         [SerializeField] private RayProbe _groundProbe = new();
         [SerializeField] private RayProbe _wallProbe = new();

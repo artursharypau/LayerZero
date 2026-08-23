@@ -7,7 +7,7 @@ using UnityEngine;
 namespace LayerZero.Gameplay.Characters.Common.Movement
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public sealed class CharacterMovement2D : MonoBehaviour, IMovement2D
+    internal sealed class CharacterMovement2D : MonoBehaviour, IMovement2D
     {
         [SerializeField] private GroundWallDetector _groundWallDetector = new();
         [SerializeField] [Min(1f)] private float _knockbackDeceleration = 40f;
