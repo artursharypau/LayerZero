@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LayerZero.Gameplay.Combat.Damage.Resistance
 {
@@ -48,10 +47,8 @@ namespace LayerZero.Gameplay.Combat.Damage.Resistance
             bool ignoresStun = false;
             float knockbackMultiplier = 1f;
 
-            for (int i = 0; i < _active.Values.Count; i++)
+            foreach (DamageResistance resistance in _active.Values)
             {
-                DamageResistance resistance = _active.Values.ElementAt(i);
-
                 switch (resistance.Kind)
                 {
                     case ResistanceKind.StunImmunity:

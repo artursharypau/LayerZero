@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LayerZero.Core.Diagnostics;
 using LayerZero.Presentation.Vfx.Catalog;
 using LayerZero.Presentation.Vfx.Pooling;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace LayerZero.Presentation.Vfx
         {
             if (!_pools.TryGetValue(kind, out IVfxPool pool))
             {
-                Debug.LogWarning($"Vfx '{kind}' is not registered in the catalog.");
+                GameLog.Warning(this, $"Vfx '{kind}' is not registered in the catalog.");
                 return;
             }
 
@@ -60,19 +61,19 @@ namespace LayerZero.Presentation.Vfx
 
             if (!prefab)
             {
-                Debug.LogError("Vfx catalog contains an entry without a prefab.");
+                GameLog.Error(this, "Vfx catalog contains an entry without a prefab.");
                 return;
             }
 
             if (prefab.Kind == VfxKind.None)
             {
-                Debug.LogError($"Vfx prefab '{prefab.name}' has no kind assigned.", prefab);
+                GameLog.Error(prefab, $"Vfx prefab '{prefab.name}' has no kind assigned.");
                 return;
             }
 
             if (_pools.ContainsKey(prefab.Kind))
             {
-                Debug.LogError($"Vfx catalog contains a duplicate entry for '{prefab.Kind}'.", prefab);
+                GameLog.Error(prefab, $"Vfx catalog contains a duplicate entry for '{prefab.Kind}'.");
                 return;
             }
 

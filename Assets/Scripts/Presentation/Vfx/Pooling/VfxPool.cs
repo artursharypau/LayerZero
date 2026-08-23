@@ -9,59 +9,59 @@ namespace LayerZero.Presentation.Vfx.Pooling
         private readonly VfxInstance _prefab;
         private readonly Transform _root;
 
-        private readonly List<VfxInstance> _all;
-        private readonly Queue<IVfxInstance> _available;
+        private readonly Queue<VfxInstance> _available;
+        private readonly HashSet<VfxInstance> _inUse;
 
         public VfxPool(VfxInstance prefab, Transform root, int count)
         {
             _prefab = prefab;
             _root = root;
 
-            _all = new List<VfxInstance>(count);
-            _available = new Queue<IVfxInstance>(count);
+            _available = new Queue<VfxInstance>(count);
+            _inUse = new HashSet<VfxInstance>(count);
 
             for (int i = 0; i < count; i++)
             {
-                VfxInstance instance = Create();
-
-                _all.Add(instance);
-                _available.Enqueue(instance);
+                _available.Enqueue(Create());
             }
         }
 
         public IVfxInstance Get()
         {
-            if (_available.Count == 0)
-            {
-                VfxInstance instance = Create();
+            VfxInstance instance = _available.Count > 0 ? _available.Dequeue() : Create();
+            _inUse.Add(instance);
 
-                _all.Add(instance);
-                _available.Enqueue(instance);
-            }
-
-            return _available.Dequeue();
+            return instance;
         }
 
         public void Release(IVfxInstance instance)
         {
-            if (_all.Contains(instance as VfxInstance) && !_available.Contains(instance))
+            if (instance is VfxInstance pooled && _inUse.Remove(pooled))
             {
-                _available.Enqueue(instance);
+                _available.Enqueue(pooled);
             }
         }
 
         public void Dispose()
         {
-            for (int i = 0; i < _all.Count; i++)
+            foreach (VfxInstance instance in _available)
             {
-                if (_all[i])
+                if (instance)
                 {
-                    Object.Destroy(_all[i].gameObject);
+                    Object.Destroy(instance.gameObject);
                 }
             }
 
-            _all.Clear();
+            foreach (VfxInstance instance in _inUse)
+            {
+                if (instance)
+                {
+                    Object.Destroy(instance.gameObject);
+                }
+            }
+
             _available.Clear();
+            _inUse.Clear();
         }
 
         private VfxInstance Create()
