@@ -1,0 +1,19 @@
+{
+  "name": "LayerZero.Gameplay",
+  "rootNamespace": "LayerZero.Gameplay",
+  "references": [
+    "Unity.InputSystem",
+    "VContainer",
+    "LayerZero.Core",
+    "LayerZero.GeneratedInput"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

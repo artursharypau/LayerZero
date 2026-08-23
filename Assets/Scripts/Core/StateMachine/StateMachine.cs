@@ -11,6 +11,9 @@ namespace LayerZero.Core.StateMachine
 
         private bool _isFlushing;
 
+        public event Action<StateBase> StateEntered;
+
+        public bool Running { get; private set; }
         public StateBase Pending { get; private set; }
         public StateBase Current { get; private set; }
 
@@ -19,34 +22,30 @@ namespace LayerZero.Core.StateMachine
             _registry.Add(state);
         }
 
-        public void Start(int id)
+        public void Start(int initialId)
         {
+            Running = true;
             Pending = null;
-            Current = _registry.Get(id);
+            Current = _registry.Get(initialId);
             Current.Enter();
+
+            StateEntered?.Invoke(Current);
         }
 
-        public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
+        public void Stop()
         {
-            StateBase newState = _registry.Get(id);
-            Schedule(newState, mode);
-        }
+            FlushPending();
 
-        public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
-        {
-            StateBase state = _registry.Get(id);
-            if (state is not IStatePayload<TPayload> statePayload)
-            {
-                throw new InvalidOperationException(
-                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'");
-            }
-
-            statePayload.SetPayload(payload);
-            Schedule(state, mode);
+            Running = false;
         }
 
         public void Update()
         {
+            if (!Running)
+            {
+                return;
+            }
+
             FlushPending();
 
             if (Current == null)
@@ -65,18 +64,12 @@ namespace LayerZero.Core.StateMachine
 
         public void FixedUpdate()
         {
-            if (Current == null)
+            if (!Running)
             {
                 return;
             }
 
-            if (Current.TryGetFixedTransition(out int target))
-            {
-                ChangeState(target);
-                return;
-            }
-
-            Current.FixedUpdate();
+            Current?.FixedUpdate();
         }
 
         private void Schedule(StateBase state, StateTransitionMode mode)
@@ -94,6 +87,35 @@ namespace LayerZero.Core.StateMachine
             {
                 FlushPending();
             }
+        }
+
+        public void ChangeState(int id, StateTransitionMode mode = StateTransitionMode.Deferred)
+        {
+            if (!Running)
+            {
+                return;
+            }
+
+            StateBase newState = _registry.Get(id);
+            Schedule(newState, mode);
+        }
+
+        public void ChangeState<TPayload>(int id, TPayload payload, StateTransitionMode mode = StateTransitionMode.Deferred)
+        {
+            if (!Running)
+            {
+                return;
+            }
+
+            StateBase state = _registry.Get(id);
+            if (state is not IStatePayload<TPayload> statePayload)
+            {
+                throw new InvalidOperationException(
+                    $"State '{state.GetType().Name}' does not accept a payload of type '{typeof(TPayload).Name}'");
+            }
+
+            statePayload.SetPayload(payload);
+            Schedule(state, mode);
         }
 
         private void FlushPending()
@@ -122,6 +144,8 @@ namespace LayerZero.Core.StateMachine
                 Current?.Exit();
                 Current = next;
                 Current.Enter();
+
+                StateEntered?.Invoke(Current);
             }
 
             _isFlushing = false;
