@@ -34,7 +34,15 @@ namespace LayerZero.Core.StateMachine
 
         public void Stop()
         {
+            if (!Running)
+            {
+                return;
+            }
+
             FlushPending();
+
+            Current?.Exit();
+            Current = null;
 
             Running = false;
         }
@@ -46,20 +54,16 @@ namespace LayerZero.Core.StateMachine
                 return;
             }
 
-            FlushPending();
-
-            if (Current == null)
-            {
-                return;
-            }
-
             if (Current.TryGetTransition(out int target))
             {
                 ChangeState(target);
-                return;
+            }
+            else
+            {
+                Current.Update();
             }
 
-            Current.Update();
+            FlushPending();
         }
 
         public void FixedUpdate()

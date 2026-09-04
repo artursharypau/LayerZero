@@ -8,14 +8,14 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
         public static readonly EnemyPerceivedTarget None = default;
 
         public Transform Transform { get; }
-        public IDamageable Health { get; }
+        public IDamageReceiver DamageReceiver { get; }
 
-        public EnemyPerceivedTarget(Transform transform, IDamageable health)
+        public EnemyPerceivedTarget(Transform transform, IDamageReceiver damageReceiver)
         {
             Transform = transform;
-            Health = health;
+            DamageReceiver = damageReceiver;
         }
 
-        public bool IsValid => Transform && Health?.IsDead == false;
+        public bool IsValid => Transform && DamageReceiver?.IsDead == false;
     }
 }

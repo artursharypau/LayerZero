@@ -16,7 +16,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
 
         protected int ResolveLocomotionState()
         {
-            if (Movement.IsFalling)
+            if (!Movement.IsGrounded)
             {
                 return PlayerStateId.Fall;
             }

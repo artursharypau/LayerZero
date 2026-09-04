@@ -7,7 +7,7 @@ namespace LayerZero.Presentation.Vfx
     {
         public event Action VfxFinished;
 
-        public void TriggerVfxPlayed()
+        public void TriggerVfxFinished()
         {
             VfxFinished?.Invoke();
         }

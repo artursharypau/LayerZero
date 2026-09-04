@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LayerZero.Core.EventBus.Events;
 using LayerZero.Core.EventBus.Handlers;
@@ -9,22 +10,34 @@ namespace LayerZero.Core.EventBus.Subjects
     {
         private readonly List<IEventHandler<TEvent>> _handlers = new();
 
+        private bool _isSnapshotStale;
+        private IEventHandler<TEvent>[] _snapshot = Array.Empty<IEventHandler<TEvent>>();
+
         public void AddHandler(IEventHandler<TEvent> handler)
         {
             _handlers.Add(handler);
+            _isSnapshotStale = true;
         }
 
         public void RemoveHandler(IEventHandler<TEvent> handler)
         {
-            _handlers.Remove(handler);
+            if (_handlers.Remove(handler))
+            {
+                _isSnapshotStale = true;
+            }
         }
 
         public void Notify(TEvent e)
         {
-            IEventHandler<TEvent>[] snapshot = _handlers.ToArray();
-            for (int i = 0; i < snapshot.Length; i++)
+            if (_isSnapshotStale)
             {
-                snapshot[i].Handle(e);
+                _snapshot = _handlers.ToArray();
+                _isSnapshotStale = false;
+            }
+
+            for (int i = 0; i < _snapshot.Length; i++)
+            {
+                _snapshot[i].Handle(e);
             }
         }
     }

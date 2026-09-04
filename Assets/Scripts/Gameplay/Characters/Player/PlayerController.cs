@@ -1,15 +1,22 @@
 using LayerZero.Core.StateMachine;
 using LayerZero.Gameplay.Characters.Common;
 using LayerZero.Gameplay.Characters.Common.Abilities;
+using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Characters.Player.Abilities;
 using LayerZero.Gameplay.Characters.Player.Config;
 using LayerZero.Gameplay.Characters.Player.Input;
 using LayerZero.Gameplay.Characters.Player.States;
+using LayerZero.Gameplay.Combat;
 using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Stats;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Player
 {
+    [RequireComponent(typeof(CharacterMovement2D))]
+    [RequireComponent(typeof(DamageReceiver))]
+    [RequireComponent(typeof(CombatSystem))]
+    [RequireComponent(typeof(StatsSystem))]
     internal sealed class PlayerController : Character2D
     {
         [SerializeField] private PlayerConfig _config;
@@ -20,8 +27,10 @@ namespace LayerZero.Gameplay.Characters.Player
         public IPlayerInput Input => _input;
         public AbilitySet Abilities { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _input = new PlayerInput(_config.Input);
 
             Abilities = new AbilitySet()

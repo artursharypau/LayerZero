@@ -72,12 +72,10 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
             DamageInfo damageInfo = DamageInfo.FromDefinition(damage, transform);
             for (int i = 0; i < count; i++)
             {
-                if (!_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver) || !receiver.TakeDamage(damageInfo))
+                if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver) && receiver.TakeDamage(damageInfo))
                 {
-                    continue;
+                    RaiseAttackHit(_targets[i]);
                 }
-
-                RaiseAttackHit(_targets[i]);
             }
         }
 

@@ -1,7 +1,7 @@
 namespace LayerZero.Gameplay.Combat.Damage
 {
-    internal interface IDamageable : IHealth
+    internal interface IDamageable
     {
-        void TakeDamage(int amount);
+        void TakeDamage(float amount);
     }
 }

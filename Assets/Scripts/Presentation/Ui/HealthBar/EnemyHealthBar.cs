@@ -1,13 +1,15 @@
 using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
+using LayerZero.Gameplay.Characters.Common;
 using LayerZero.Gameplay.Characters.Common.Movement;
-using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 namespace LayerZero.Presentation.Ui.HealthBar
 {
-    internal sealed class EnemyHealthBar : MonoBehaviour
+    internal sealed class EnemyHealthBar : MonoBehaviour, ICharacterView
     {
         [SerializeField] [Min(0f)] private float _visibleDuration = 3f;
         [SerializeField] [Min(0.01f)] private float _fadeOutDuration = 0.25f;
@@ -20,18 +22,23 @@ namespace LayerZero.Presentation.Ui.HealthBar
 
         private Countdown _visibleTimer;
 
+        [Inject]
+        public void Construct(IHealth health)
+        {
+            _health = health;
+        }
+
         private void Awake()
         {
             _canvas = this.GetRequiredComponent<Canvas>();
             _canvasGroup = this.GetRequiredComponent<CanvasGroup>();
             _slider = this.GetRequiredComponentInChildren<Slider>();
             _positioned = this.GetRequiredComponentInParent<IPositioned>();
-            _health = this.GetRequiredComponentInParent<IHealth>();
         }
 
         private void Start()
         {
-            _slider.value = (float)_health.CurrentHealth / _health.MaxHealth;
+            _slider.value = _health.CurrentHealth / _health.MaxHealth;
             Hide();
         }
 
@@ -69,9 +76,9 @@ namespace LayerZero.Presentation.Ui.HealthBar
             transform.rotation = Quaternion.identity;
         }
 
-        private void OnHealthChanged(int _)
+        private void OnHealthChanged(float _)
         {
-            _slider.value = (float)_health.CurrentHealth / _health.MaxHealth;
+            _slider.value = _health.CurrentHealth / _health.MaxHealth;
             Show();
         }
 

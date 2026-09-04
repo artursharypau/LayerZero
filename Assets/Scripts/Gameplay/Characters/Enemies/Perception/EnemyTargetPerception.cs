@@ -125,13 +125,13 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
 
         private void SetTarget(Transform transform)
         {
-            IDamageable health = transform.GetRequiredComponentInParent<IDamageable>();
-            if (health == null || health.IsDead)
+            IDamageReceiver damageReceiver = transform.GetRequiredComponentInParent<IDamageReceiver>();
+            if (damageReceiver == null || damageReceiver.IsDead)
             {
                 return;
             }
 
-            Target = new EnemyPerceivedTarget(transform, health);
+            Target = new EnemyPerceivedTarget(transform, damageReceiver);
             _alertTimer.Start(_config.AlertDuration);
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LayerZero.Core.EventBus.Events;
 using LayerZero.Core.EventBus.Handlers;
@@ -7,12 +8,17 @@ namespace LayerZero.Core.EventBus
 {
     public class EventBus : IEventBus
     {
-        private readonly Dictionary<string, IEventSubject> _subjects = new();
+        private readonly Dictionary<Type, IEventSubject> _subjects = new();
 
         public void Subscribe<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : IEventBusEvent
         {
-            string key = GetKey<TEvent>();
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            Type key = typeof(TEvent);
 
             if (!_subjects.TryGetValue(key, out IEventSubject subject))
             {
@@ -26,7 +32,7 @@ namespace LayerZero.Core.EventBus
         public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : IEventBusEvent
         {
-            if (_subjects.TryGetValue(GetKey<TEvent>(), out IEventSubject subject))
+            if (_subjects.TryGetValue(typeof(TEvent), out IEventSubject subject))
             {
                 ((IEventSubject<TEvent>)subject).RemoveHandler(handler);
             }
@@ -35,16 +41,10 @@ namespace LayerZero.Core.EventBus
         public void Raise<TEvent>(TEvent e)
             where TEvent : IEventBusEvent
         {
-            if (_subjects.TryGetValue(GetKey<TEvent>(), out IEventSubject subject))
+            if (_subjects.TryGetValue(typeof(TEvent), out IEventSubject subject))
             {
                 ((IEventSubject<TEvent>)subject).Notify(e);
             }
-        }
-
-        private static string GetKey<TEvent>()
-            where TEvent : IEventBusEvent
-        {
-            return typeof(TEvent).FullName;
         }
     }
 }

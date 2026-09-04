@@ -1,13 +1,13 @@
 using LayerZero.Core.Timing;
 using LayerZero.Gameplay.Characters.Player.Abilities;
-using LayerZero.Gameplay.Combat.Damage.Resistance;
+using LayerZero.Gameplay.Combat.Damage.Protections;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
     internal sealed class PlayerDashState : PlayerState
     {
         private Countdown _timer;
-        private ResistanceHandle _resistance = ResistanceHandle.None;
+        private ProtectionHandle _protection = ProtectionHandle.None;
         private float _speed;
         private float _defaultGravityScale;
         private bool _isDashing;
@@ -17,7 +17,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
         {
             On(() => !_isDashing, ResolveLocomotionState);
             On(() => _timer.IsExpired, ResolveLocomotionState);
-            On(() => Movement.IsWalled, PlayerStateId.Idle);
+            On(() => Movement.IsWalled, ResolveLocomotionState);
         }
 
         public override int Id => PlayerStateId.Dash;
@@ -37,7 +37,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
             _timer.Start(Config.Dash.Duration);
             _speed = Config.Movement.MoveSpeed * Config.Dash.SpeedMultiplier;
 
-            _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
+            _protection = Owner.DamageProtection.Apply(Protection.Invulnerability);
 
             Movement.SetGravityScale(0f);
         }
@@ -56,8 +56,8 @@ namespace LayerZero.Gameplay.Characters.Player.States
             Movement.SetGravityScale(_defaultGravityScale);
             Movement.SetVelocityX(0f);
 
-            Owner.DamageResistances.Remove(_resistance);
-            _resistance = ResistanceHandle.None;
+            Owner.DamageProtection.Remove(_protection);
+            _protection = ProtectionHandle.None;
         }
     }
 }

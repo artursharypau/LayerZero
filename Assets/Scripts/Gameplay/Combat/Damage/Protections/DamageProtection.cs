@@ -1,37 +1,37 @@
 using System.Collections.Generic;
 
-namespace LayerZero.Gameplay.Combat.Damage.Resistance
+namespace LayerZero.Gameplay.Combat.Damage.Protections
 {
-    internal sealed class DamageResistances : IDamageResistances
+    internal sealed class DamageProtection : IDamageProtection
     {
-        private readonly Dictionary<int, DamageResistance> _active = new();
+        private readonly Dictionary<int, Protection> _active = new();
 
         private int _nextId = 1;
         private int _invulnerabilityCount;
 
         public bool IsInvulnerable => _invulnerabilityCount > 0;
 
-        public ResistanceHandle Apply(DamageResistance resistance)
+        public ProtectionHandle Apply(Protection protection)
         {
             int id = _nextId++;
-            _active.Add(id, resistance);
+            _active.Add(id, protection);
 
-            if (resistance.Kind == ResistanceKind.Invulnerability)
+            if (protection.Kind == ProtectionKind.Invulnerability)
             {
                 ++_invulnerabilityCount;
             }
 
-            return new ResistanceHandle(id, resistance.Kind);
+            return new ProtectionHandle(id, protection.Kind);
         }
 
-        public void Remove(ResistanceHandle handle)
+        public void Remove(ProtectionHandle handle)
         {
-            if (!_active.Remove(handle.Id, out DamageResistance resistance))
+            if (!_active.Remove(handle.Id, out Protection protection))
             {
                 return;
             }
 
-            if (resistance.Kind == ResistanceKind.Invulnerability)
+            if (protection.Kind == ProtectionKind.Invulnerability)
             {
                 --_invulnerabilityCount;
             }
@@ -47,15 +47,15 @@ namespace LayerZero.Gameplay.Combat.Damage.Resistance
             bool ignoresStun = false;
             float knockbackMultiplier = 1f;
 
-            foreach (DamageResistance resistance in _active.Values)
+            foreach (Protection protection in _active.Values)
             {
-                switch (resistance.Kind)
+                switch (protection.Kind)
                 {
-                    case ResistanceKind.StunImmunity:
+                    case ProtectionKind.StunImmunity:
                         ignoresStun = true;
                         break;
-                    case ResistanceKind.Knockback:
-                        knockbackMultiplier *= resistance.Value;
+                    case ProtectionKind.Knockback:
+                        knockbackMultiplier *= protection.Value;
                         break;
                 }
             }

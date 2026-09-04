@@ -3,16 +3,14 @@ using LayerZero.Gameplay.Characters.Common.Animation;
 using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Combat;
 using LayerZero.Gameplay.Combat.Damage;
-using LayerZero.Gameplay.Combat.Damage.Resistance;
+using LayerZero.Gameplay.Combat.Damage.Protections;
+using LayerZero.Gameplay.Stats;
+using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
 using VContainer;
 
 namespace LayerZero.Gameplay.Characters.Common
 {
-    [RequireComponent(typeof(CharacterMovement2D))]
-    [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(DamageReceiver))]
-    [RequireComponent(typeof(CombatSystem))]
     internal abstract class Character2D : MonoBehaviour
     {
         private AnimatorStateBinder _animatorStateBinder;
@@ -21,10 +19,11 @@ namespace LayerZero.Gameplay.Characters.Common
         public StateMachine StateMachine { get; private set; }
         public IMovement2D Movement => _movement;
         public CharacterAnimator Animator { get; private set; }
-        public IDamageable Health { get; private set; }
+        public IHealth Health { get; private set; }
         public IDamageReceiver DamageReceiver { get; private set; }
-        public IDamageResistances DamageResistances { get; private set; }
+        public IDamageProtection DamageProtection { get; private set; }
         public ICombatSystem Combat { get; private set; }
+        public IStatsSystem Stats { get; private set; }
 
         public bool IsDead => Health.IsDead;
 
@@ -34,10 +33,11 @@ namespace LayerZero.Gameplay.Characters.Common
             CharacterMovement2D movement,
             StateMachine stateMachine,
             CharacterAnimator animator,
-            IDamageable health,
+            IHealth health,
             IDamageReceiver damageReceiver,
-            IDamageResistances damageResistances,
-            ICombatSystem combat)
+            IDamageProtection damageProtection,
+            ICombatSystem combat,
+            IStatsSystem stats)
         {
             _animatorStateBinder = animatorStateBinder;
             _movement = movement;
@@ -46,8 +46,15 @@ namespace LayerZero.Gameplay.Characters.Common
             Animator = animator;
             Health = health;
             DamageReceiver = damageReceiver;
-            DamageResistances = damageResistances;
+            DamageProtection = damageProtection;
             Combat = combat;
+            Stats = stats;
+        }
+
+        protected virtual void Awake()
+        {
+            float maxHealth = Stats.Get(StatId.MaxHealth);
+            Health.Initialize(maxHealth);
         }
 
         protected virtual void OnEnable()
@@ -98,7 +105,7 @@ namespace LayerZero.Gameplay.Characters.Common
 
         private void HandleDamageImpactReceived(DamageImpactInfo impact)
         {
-            if (impact.HasImpact)
+            if (!IsDead && impact.HasImpact)
             {
                 OnDamageImpactReceived(impact);
             }

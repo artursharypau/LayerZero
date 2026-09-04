@@ -83,7 +83,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.30769232
-    functionName: TriggerVfxPlayed
+    functionName: TriggerVfxFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -56,7 +56,7 @@ namespace LayerZero.Presentation.Parallax
 
         public void Recycle(float distance, float cameraLeftEdge, float cameraRightEdge)
         {
-            if (_sprites?.Length > 0)
+            if (_sprites == null || _sprites.Length == 0)
             {
                 return;
             }

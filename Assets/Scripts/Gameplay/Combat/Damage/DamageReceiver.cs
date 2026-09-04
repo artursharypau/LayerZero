@@ -1,5 +1,8 @@
 using System;
-using LayerZero.Gameplay.Combat.Damage.Resistance;
+using LayerZero.Core.Randomness;
+using LayerZero.Gameplay.Combat.Damage.Protections;
+using LayerZero.Gameplay.Stats;
+using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
 using VContainer;
 
@@ -7,38 +10,45 @@ namespace LayerZero.Gameplay.Combat.Damage
 {
     internal sealed class DamageReceiver : MonoBehaviour, IDamageReceiver
     {
+        private IHealth _health;
         private IDamageable _damageable;
-        private IDamageResistances _resistances;
+        private IDamageProtection _protection;
+        private IStatsSystem _statsSystem;
 
         public event Action<DamageInfo> Damaged;
         public event Action<DamageImpactInfo> ImpactReceived;
 
         [Inject]
-        public void Construct(IDamageable damageable, IDamageResistances resistances)
+        public void Construct(IHealth health, IDamageable damageable, IDamageProtection protection, IStatsSystem statsSystem)
         {
+            _health = health;
             _damageable = damageable;
-            _resistances = resistances;
+            _protection = protection;
+            _statsSystem = statsSystem;
         }
+
+        public bool IsDead => _health.IsDead;
 
         public bool TakeDamage(DamageInfo damageInfo)
         {
-            if (_damageable == null || _damageable.IsDead)
+            if (_health.IsDead || _protection.IsInvulnerable)
             {
                 return false;
             }
 
-            if (_resistances?.IsInvulnerable == true)
+            float evasion = _statsSystem.Get(StatId.Evasion);
+            if (Chance.Roll(evasion))
             {
                 return false;
             }
 
-            DamageImpactInfo impact = _resistances?.Resolve(damageInfo.Impact) ?? damageInfo.Impact;
+            DamageImpactInfo impact = _protection.Resolve(damageInfo.Impact);
             DamageInfo resolved = damageInfo.WithImpact(impact);
 
             _damageable.TakeDamage(resolved.Amount);
             Damaged?.Invoke(resolved);
 
-            if (impact.HasImpact && !_damageable.IsDead)
+            if (impact.HasImpact)
             {
                 ImpactReceived?.Invoke(impact);
             }

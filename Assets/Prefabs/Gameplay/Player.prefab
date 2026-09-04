@@ -176,10 +176,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2514101050448271214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7738c9bed48a45268f528d56fd19a679, type: 3}
+  m_Script: {fileID: 11500000, guid: e9c007c8303a424aa6badfb775153a5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.Health
-  _max: 1000
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Stats.StatsSystem
+  _stats: {fileID: 11400000, guid: c4a71f6b28d94e0f9b3a5d0e6172c8ab, type: 2}
 --- !u!114 &9099559585489720659
 MonoBehaviour:
   m_ObjectHideFlags: 0

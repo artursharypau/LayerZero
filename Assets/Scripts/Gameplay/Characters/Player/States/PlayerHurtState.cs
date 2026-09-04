@@ -1,7 +1,7 @@
 using LayerZero.Core.StateMachine;
 using LayerZero.Core.Timing;
 using LayerZero.Gameplay.Combat.Damage;
-using LayerZero.Gameplay.Combat.Damage.Resistance;
+using LayerZero.Gameplay.Combat.Damage.Protections;
 
 namespace LayerZero.Gameplay.Characters.Player.States
 {
@@ -9,7 +9,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
     {
         private Countdown _stunTimer;
         private DamageImpactInfo _impact;
-        private ResistanceHandle _resistance;
+        private ProtectionHandle _protection;
 
         public PlayerHurtState(PlayerController owner)
             : base(owner)
@@ -31,7 +31,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
             DamageImpactInfo impact = _impact;
 
             _impact = DamageImpactInfo.None;
-            _resistance = Owner.DamageResistances.Apply(DamageResistance.Invulnerability);
+            _protection = Owner.DamageProtection.Apply(Protection.Invulnerability);
 
             _stunTimer.Start(impact.StunDuration);
             Movement.ApplyKnockback(impact.Knockback);
@@ -41,8 +41,8 @@ namespace LayerZero.Gameplay.Characters.Player.States
         {
             base.Exit();
 
-            Owner.DamageResistances.Remove(_resistance);
-            _resistance = ResistanceHandle.None;
+            Owner.DamageProtection.Remove(_protection);
+            _protection = ProtectionHandle.None;
         }
     }
 }

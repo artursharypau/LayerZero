@@ -7,6 +7,8 @@ namespace LayerZero.Gameplay.Combat.Damage
         event Action<DamageInfo> Damaged;
         event Action<DamageImpactInfo> ImpactReceived;
 
+        bool IsDead { get; }
+
         bool TakeDamage(DamageInfo damageInfo);
     }
 }

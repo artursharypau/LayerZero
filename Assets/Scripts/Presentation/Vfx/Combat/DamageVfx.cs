@@ -1,11 +1,13 @@
 using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
-using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Characters.Common;
+using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
+using VContainer;
 
 namespace LayerZero.Presentation.Vfx.Combat
 {
-    internal sealed class DamageVfx : MonoBehaviour
+    internal sealed class DamageVfx : MonoBehaviour, ICharacterView
     {
         [SerializeField] [Min(0f)] private float _duration = 0.15f;
         [SerializeField] private Material _material;
@@ -17,9 +19,14 @@ namespace LayerZero.Presentation.Vfx.Combat
         private Countdown _timer;
         private bool _isFlashing;
 
+        [Inject]
+        public void Construct(IHealth health)
+        {
+            _health = health;
+        }
+
         private void Awake()
         {
-            _health = this.GetRequiredComponent<IHealth>();
             _renderer = this.GetRequiredComponentInChildren<SpriteRenderer>();
             _defaultMaterial = _renderer.sharedMaterial;
         }
@@ -44,7 +51,7 @@ namespace LayerZero.Presentation.Vfx.Combat
             }
         }
 
-        private void OnHealthChanged(int _)
+        private void OnHealthChanged(float _)
         {
             if (!_material)
             {
