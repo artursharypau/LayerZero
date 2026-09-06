@@ -6,14 +6,16 @@ using VContainer.Unity;
 
 namespace LayerZero.Presentation.Vfx.Combat
 {
-    internal sealed class AttackHitVfxPresenter : IStartable, IDisposable
+    internal sealed class AttackVfxPresenter : IStartable, IDisposable
     {
+        private static readonly Quaternion MirroredRotation = Quaternion.Euler(0f, 180f, 0f);
+
         private readonly IGameEventBus _eventBus;
         private readonly IVfxService _vfxService;
 
         private IDisposable _subscription;
 
-        public AttackHitVfxPresenter(IGameEventBus eventBus, IVfxService vfxService)
+        public AttackVfxPresenter(IGameEventBus eventBus, IVfxService vfxService)
         {
             _eventBus = eventBus;
             _vfxService = vfxService;
@@ -31,7 +33,10 @@ namespace LayerZero.Presentation.Vfx.Combat
 
         private void OnAttackHit(AttackHitEvent e)
         {
-            _vfxService.Play(VfxKind.AttackHit, e.Position, Quaternion.identity);
+            VfxKind kind = e.IsCritical ? VfxKind.CriticalAttack : VfxKind.Attack;
+            Quaternion rotation = e.Direction < 0f ? MirroredRotation : Quaternion.identity;
+
+            _vfxService.Play(kind, e.Position, rotation);
         }
     }
 }

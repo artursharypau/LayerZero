@@ -8,8 +8,8 @@ namespace LayerZero.Gameplay.Stats.Config
     internal class OffenseStats
     {
         [SerializeField] private Stat _damage;
-        [SerializeField] private Stat _criticalDamage;
-        [SerializeField] private Stat _criticalChance;
+        [SerializeField] private Stat _criticalDamageBonus;
+        [SerializeField] private Stat _criticalDamageChance;
 
         [SerializeField] private Stat _fireDamage;
         [SerializeField] private Stat _iceDamage;
@@ -18,8 +18,8 @@ namespace LayerZero.Gameplay.Stats.Config
         public void CopyTo(IDictionary<StatId, float> values)
         {
             values[StatId.Damage] = _damage.Value;
-            values[StatId.CriticalDamage] = _criticalDamage.Value;
-            values[StatId.CriticalChance] = _criticalChance.Value;
+            values[StatId.CriticalDamageBonus] = _criticalDamageBonus.Value;
+            values[StatId.CriticalDamageChance] = _criticalDamageChance.Value;
 
             values[StatId.FireDamage] = _fireDamage.Value;
             values[StatId.IceDamage] = _iceDamage.Value;

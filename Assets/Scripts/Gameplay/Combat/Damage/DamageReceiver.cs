@@ -36,8 +36,8 @@ namespace LayerZero.Gameplay.Combat.Damage
                 return false;
             }
 
-            float evasion = _statsSystem.Get(StatId.Evasion);
-            if (Chance.Roll(evasion))
+            float evasionChance = _statsSystem.Get(StatId.EvasionChance);
+            if (Chance.Roll(evasionChance))
             {
                 return false;
             }

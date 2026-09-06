@@ -35,7 +35,7 @@ MonoBehaviour:
       _attack:
         _kind: 0
         _damage:
-          _amount: 20
+          _multiplier: 1
           _source: 1
           _knockback: {x: 2, y: 3}
           _stunDuration: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       _attack:
         _kind: 0
         _damage:
-          _amount: 20
+          _multiplier: 1
           _source: 1
           _knockback: {x: 2, y: 3}
           _stunDuration: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
       _attack:
         _kind: 0
         _damage:
-          _amount: 30
+          _multiplier: 1.5
           _source: 1
           _knockback: {x: 3, y: 5}
           _stunDuration: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
     _attack:
       _kind: 0
       _damage:
-        _amount: 40
+        _multiplier: 2
         _source: 1
         _knockback: {x: 5, y: 9}
         _stunDuration: 0.4
@@ -71,7 +71,7 @@ MonoBehaviour:
     _attack:
       _kind: 2
       _damage:
-        _amount: 0
+        _multiplier: 1
         _source: 1
         _knockback: {x: 2, y: 4}
         _stunDuration: 0.6

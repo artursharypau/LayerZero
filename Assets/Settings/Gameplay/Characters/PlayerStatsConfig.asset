@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: PlayerStatsConfig
   m_EditorClassIdentifier: 
   _maxHealth:
-    _value: 100
+    _value: 1000
   _majorStats:
     _strength:
-      _value: 0
+      _value: 5
     _agility:
       _value: 5
     _intelligence:
-      _value: 0
+      _value: 5
     _vitality:
       _value: 5
   _offenseStats:
     _damage:
-      _value: 0
-    _criticalDamage:
-      _value: 0
-    _criticalChance:
-      _value: 0
+      _value: 20
+    _criticalDamageBonus:
+      _value: 20
+    _criticalDamageChance:
+      _value: 20
     _fireDamage:
       _value: 0
     _iceDamage:
@@ -39,7 +39,7 @@ MonoBehaviour:
   _defenseStats:
     _armor:
       _value: 0
-    _evasion:
+    _evasionChance:
       _value: 10
     _fireResistance:
       _value: 0

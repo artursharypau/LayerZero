@@ -5,17 +5,33 @@ namespace LayerZero.Gameplay.Stats
 {
     internal static class StatFormulas
     {
-        private const float HealthPerVitality = 2f;
-        private const float EvasionPerAgility = 2f;
+        private const float HealthPerVitality = 5f;
 
-        private const float MaxEvasion = 50f;
+        private const float DamagePerStrength = 1f;
+        private const float CriticalDamageBonusPerStrength = 0.5f;
+
+        private const float CriticalDamageChancePerAgility = 0.5f;
+        private const float EvasionChancePerAgility = 0.5f;
+
+        private const float MaxCriticalDamageChance = 50f;
+        private const float MaxEvasionChance = 30f;
 
         public static void ApplyDerived(IDictionary<StatId, float> values)
         {
-            values[StatId.MaxHealth] += values[StatId.Vitality] * HealthPerVitality;
+            float strength = values[StatId.Strength];
+            float agility = values[StatId.Agility];
+            float vitality = values[StatId.Vitality];
 
-            float evasion = values[StatId.Evasion] + values[StatId.Agility] * EvasionPerAgility;
-            values[StatId.Evasion] += Mathf.Clamp(evasion, 0f, MaxEvasion);
+            values[StatId.MaxHealth] += vitality * HealthPerVitality;
+
+            values[StatId.Damage] += strength * DamagePerStrength;
+            values[StatId.CriticalDamageBonus] += strength * CriticalDamageBonusPerStrength;
+
+            float criticalDamageChance = values[StatId.CriticalDamageChance] + agility * CriticalDamageChancePerAgility;
+            values[StatId.CriticalDamageChance] = Mathf.Clamp(criticalDamageChance, 0f, MaxCriticalDamageChance);
+
+            float evasionChance = values[StatId.EvasionChance] + agility * EvasionChancePerAgility;
+            values[StatId.EvasionChance] = Mathf.Clamp(evasionChance, 0f, MaxEvasionChance);
         }
     }
 }

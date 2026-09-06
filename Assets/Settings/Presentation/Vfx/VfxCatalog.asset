@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: VfxCatalog
   m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxCatalog
   _entries:
-  - _kind: 1
-    _prefab: {fileID: 1683860669960816829, guid: 69e4a934826b549dfb47c5a37a284a4c, type: 3}
+  - _prefab: {fileID: 1683860669960816829, guid: 69e4a934826b549dfb47c5a37a284a4c, type: 3}
+    _prewarmCount: 4
+  - _prefab: {fileID: 4840170814897511225, guid: 75051ba77b9a840c392b2516517db263, type: 3}
     _prewarmCount: 4

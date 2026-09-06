@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1893969544661301485}
   - component: {fileID: 1683860669960816829}
   m_Layer: 0
-  m_Name: AttackHitVfx
+  m_Name: AttackVfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
   _kind: 1
   _fallbackLifetime: 2
-  _positionJitter: 0.4
+  _positionJitter: 0.3
   _randomizeRotation: 1
 --- !u!1 &8291350897174118000
 GameObject:
@@ -133,7 +133,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7d54c7a7814974499b88d19013ac26a4, type: 3}
-  m_Color: {r: 0.8113208, g: 0.7757744, b: 0.19517621, a: 1}
+  m_Color: {r: 1, g: 0.827451, b: 0.2901961, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

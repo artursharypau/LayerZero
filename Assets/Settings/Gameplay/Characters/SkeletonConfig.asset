@@ -32,8 +32,7 @@ MonoBehaviour:
   _attack:
     _kind: 0
     _damage:
-      _amount: 20
+      _multiplier: 2
       _source: 2
       _knockback: {x: 3, y: 5}
       _stunDuration: 0.3
-    _parriedStunDuration: 1.2

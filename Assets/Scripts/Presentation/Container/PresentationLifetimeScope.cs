@@ -18,7 +18,7 @@ namespace LayerZero.Presentation.Container
                 .As<IVfxService>()
                 .WithParameter(transform);
 
-            builder.RegisterEntryPoint<AttackHitVfxPresenter>();
+            builder.RegisterEntryPoint<AttackVfxPresenter>();
         }
     }
 }

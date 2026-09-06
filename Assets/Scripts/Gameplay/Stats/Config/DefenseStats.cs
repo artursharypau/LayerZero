@@ -8,7 +8,7 @@ namespace LayerZero.Gameplay.Stats.Config
     internal class DefenseStats
     {
         [SerializeField] private Stat _armor;
-        [SerializeField] private Stat _evasion;
+        [SerializeField] private Stat _evasionChance;
 
         [SerializeField] private Stat _fireResistance;
         [SerializeField] private Stat _iceResistance;
@@ -17,7 +17,7 @@ namespace LayerZero.Gameplay.Stats.Config
         public void CopyTo(IDictionary<StatId, float> values)
         {
             values[StatId.Armor] = _armor.Value;
-            values[StatId.Evasion] = _evasion.Value;
+            values[StatId.EvasionChance] = _evasionChance.Value;
 
             values[StatId.FireResistance] = _fireResistance.Value;
             values[StatId.IceResistance] = _iceResistance.Value;

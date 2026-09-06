@@ -128,7 +128,7 @@ namespace LayerZero.Gameplay.Combat
 
             if (_executors.TryGetValue(_attackDefinition.Kind, out IAttackExecutor executor))
             {
-                executor.Execute(_attackDefinition.Damage);
+                executor.Execute(_attackDefinition);
             }
         }
 

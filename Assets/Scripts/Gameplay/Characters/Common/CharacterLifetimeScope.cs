@@ -27,6 +27,8 @@ namespace LayerZero.Gameplay.Characters.Common
             builder.Register<CharacterAnimator>(Lifetime.Scoped);
             builder.Register<AnimatorStateBinder>(Lifetime.Scoped);
 
+            builder.Register<DamageResolver>(Lifetime.Scoped).As<IDamageResolver>();
+
             IAttackExecutor[] executors = InjectInHierarchy<IAttackExecutor>(builder);
             builder.RegisterInstance(executors).As<IReadOnlyList<IAttackExecutor>>();
 
@@ -44,7 +46,8 @@ namespace LayerZero.Gameplay.Characters.Common
 
                     components.AddInHierarchy<CharacterMovement2D>()
                         .AsSelf()
-                        .As<IMovement2D>();
+                        .As<IMovement2D>()
+                        .As<IPositioned>();
 
                     components.AddInHierarchy<DamageReceiver>().As<IDamageReceiver>();
                     components.AddInHierarchy<CombatSystem>().As<ICombatSystem>();

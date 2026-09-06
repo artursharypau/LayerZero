@@ -4,13 +4,20 @@ namespace LayerZero.Gameplay.Combat.Damage
 {
     internal readonly struct DamageInfo
     {
+        public readonly bool IsCritical;
         public readonly float Amount;
         public readonly DamageSource Source;
         public readonly Transform AttackerTransform;
         public readonly DamageImpactInfo Impact;
 
-        public DamageInfo(float amount, DamageSource source, Transform attackerTransform, DamageImpactInfo impact = default)
+        public DamageInfo(
+            bool isCritical,
+            float amount,
+            DamageSource source,
+            Transform attackerTransform,
+            DamageImpactInfo impact = default)
         {
+            IsCritical = isCritical;
             Amount = amount;
             Source = source;
             AttackerTransform = attackerTransform;
@@ -19,20 +26,7 @@ namespace LayerZero.Gameplay.Combat.Damage
 
         public DamageInfo WithImpact(DamageImpactInfo impact)
         {
-            return new DamageInfo(Amount, Source, AttackerTransform, impact);
-        }
-
-        public static DamageInfo FromDefinition(DamageDefinition definition, Transform attackerTransform)
-        {
-            DamageImpactInfo impact = DamageImpactInfo.None;
-
-            if (definition.HasImpact && attackerTransform)
-            {
-                Vector2 knockback = attackerTransform.TransformDirection(definition.Knockback);
-                impact = new DamageImpactInfo(knockback, definition.StunDuration);
-            }
-
-            return new DamageInfo(definition.Amount, definition.Source, attackerTransform, impact);
+            return new DamageInfo(IsCritical, Amount, Source, AttackerTransform, impact);
         }
     }
 }

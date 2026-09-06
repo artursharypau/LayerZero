@@ -23,8 +23,9 @@ namespace LayerZero.Presentation.Ui.HealthBar
         private Countdown _visibleTimer;
 
         [Inject]
-        public void Construct(IHealth health)
+        public void Construct(IPositioned positioned, IHealth health)
         {
+            _positioned = positioned;
             _health = health;
         }
 
@@ -33,7 +34,6 @@ namespace LayerZero.Presentation.Ui.HealthBar
             _canvas = this.GetRequiredComponent<Canvas>();
             _canvasGroup = this.GetRequiredComponent<CanvasGroup>();
             _slider = this.GetRequiredComponentInChildren<Slider>();
-            _positioned = this.GetRequiredComponentInParent<IPositioned>();
         }
 
         private void Start()

@@ -6,7 +6,7 @@ namespace LayerZero.Gameplay.Combat.Damage
     [Serializable]
     internal sealed class DamageDefinition
     {
-        [SerializeField] [Min(0)] private int _amount = 10;
+        [SerializeField] [Min(0f)] private float _multiplier = 1f;
         [SerializeField] private DamageSource _source = DamageSource.None;
 
         [Header("Impact")]
@@ -17,15 +17,15 @@ namespace LayerZero.Gameplay.Combat.Damage
         {
         }
 
-        public DamageDefinition(int amount, DamageSource source, Vector2 knockback = default, float stunDuration = 0f)
+        public DamageDefinition(float multiplier, DamageSource source, Vector2 knockback = default, float stunDuration = 0f)
         {
-            _amount = amount;
+            _multiplier = multiplier;
             _source = source;
             _knockback = knockback;
             _stunDuration = stunDuration;
         }
 
-        public int Amount => _amount;
+        public float Multiplier => _multiplier;
         public DamageSource Source => _source;
 
         public Vector2 Knockback => _knockback;

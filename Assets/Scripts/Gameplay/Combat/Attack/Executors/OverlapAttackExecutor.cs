@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using LayerZero.Core.EventBus;
 using LayerZero.Core.Extensions;
+using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Combat.Damage;
 using LayerZero.Gameplay.Combat.Events;
 using UnityEngine;
@@ -19,15 +20,20 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
 
         private readonly List<Collider2D> _targets = new(TargetsBufferCapacity);
 
-        private ContactFilter2D _filter;
+        private IPositioned _positioned;
         private IGameEventBus _eventBus;
+        private IDamageResolver _damageResolver;
+
+        private ContactFilter2D _filter;
 
         public AttackKind Kind => _kind;
 
         [Inject]
-        public void Construct(IGameEventBus eventBus)
+        public void Construct(IPositioned positioned, IGameEventBus eventBus, IDamageResolver damageResolver)
         {
+            _positioned = positioned;
             _eventBus = eventBus;
+            _damageResolver = damageResolver;
         }
 
         private void Awake()
@@ -61,7 +67,7 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
             return false;
         }
 
-        public void Execute(DamageDefinition damage)
+        public void Execute(AttackDefinition attackDefinition)
         {
             int count = FindTargets(_targets);
             if (count <= 0)
@@ -69,19 +75,19 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
                 return;
             }
 
-            DamageInfo damageInfo = DamageInfo.FromDefinition(damage, transform);
+            DamageInfo damageInfo = _damageResolver.Resolve(attackDefinition.Damage, transform);
             for (int i = 0; i < count; i++)
             {
                 if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver) && receiver.TakeDamage(damageInfo))
                 {
-                    RaiseAttackHit(_targets[i]);
+                    RaiseAttackHit(damageInfo.IsCritical, _targets[i]);
                 }
             }
         }
 
-        private void RaiseAttackHit(Collider2D target)
+        private void RaiseAttackHit(bool isCritical, Collider2D target)
         {
-            _eventBus?.Raise(new AttackHitEvent(target.bounds.center));
+            _eventBus.Raise(new AttackHitEvent(isCritical, _positioned.FacingDirection, target.transform.position));
         }
 
         private void OnDrawGizmosSelected()
