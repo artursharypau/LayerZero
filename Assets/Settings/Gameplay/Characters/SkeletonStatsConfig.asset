@@ -12,38 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2eb2853ebd34433abf66f78daf58b85, type: 3}
   m_Name: SkeletonStatsConfig
   m_EditorClassIdentifier: 
-  _maxHealth:
-    _value: 1000
+  _maxHealth: 1000
   _majorStats:
-    _strength:
-      _value: 0
-    _agility:
-      _value: 0
-    _intelligence:
-      _value: 0
-    _vitality:
-      _value: 0
+    _strength: 0
+    _agility: 0
+    _intelligence: 0
+    _vitality: 0
   _offenseStats:
-    _damage:
-      _value: 15
-    _criticalDamageBonus:
-      _value: 10
-    _criticalDamageChance:
-      _value: 10
-    _fireDamage:
-      _value: 0
-    _iceDamage:
-      _value: 0
-    _lightDamage:
-      _value: 0
+    _damage: 15
+    _criticalDamageBonus: 10
+    _criticalDamageChance: 10
+    _elementalDamage: 0
+    _elementalDamageChance: 0
+    _elementalDamageDuration: 0
   _defenseStats:
-    _armor:
-      _value: 0
-    _evasionChance:
-      _value: 0
-    _fireResistance:
-      _value: 0
-    _iceResistance:
-      _value: 0
-    _lightResistance:
-      _value: 0
+    _armor: 20
+    _evasionChance: 0
+    _elementalResistance: 10

@@ -7,9 +7,7 @@ namespace LayerZero.Presentation.Vfx
     {
         event Action<IVfxInstance> Finished;
 
-        VfxKind Kind { get; }
-
-        void Play(Vector2 position, Quaternion rotation);
+        void Play(Vector2 position, Quaternion rotation, Color? tint = null);
         void Disable();
     }
 }

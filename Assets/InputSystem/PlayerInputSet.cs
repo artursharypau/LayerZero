@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace InputSystem
+namespace LayerZero.Input
 {
     /// <summary>
     /// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/InputSystem/PlayerInputSet.inputactions".
@@ -134,6 +134,24 @@ namespace InputSystem
                     ""name"": ""Counterattack"",
                     ""type"": ""Button"",
                     ""id"": ""dcdde41a-5b78-447c-a399-7d054659a2c6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectFireElement"",
+                    ""type"": ""Button"",
+                    ""id"": ""f60d0913-2a8f-4a03-8199-8a5ac700275b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectIceElement"",
+                    ""type"": ""Button"",
+                    ""id"": ""9534bc71-caef-4047-a3b7-c8c366050ff6"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -294,6 +312,28 @@ namespace InputSystem
                     ""action"": ""Counterattack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65ed490b-af20-4c4e-9b7f-59ccc5369c50"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard & Mouse"",
+                    ""action"": ""SelectFireElement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""030c9a9b-a0f1-4b8f-b60c-4d3169ecf82d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard & Mouse"",
+                    ""action"": ""SelectIceElement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -324,6 +364,8 @@ namespace InputSystem
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
             m_Player_Counterattack = m_Player.FindAction("Counterattack", throwIfNotFound: true);
+            m_Player_SelectFireElement = m_Player.FindAction("SelectFireElement", throwIfNotFound: true);
+            m_Player_SelectIceElement = m_Player.FindAction("SelectIceElement", throwIfNotFound: true);
         }
 
         ~@PlayerInputSet()
@@ -409,6 +451,8 @@ namespace InputSystem
         private readonly InputAction m_Player_Dash;
         private readonly InputAction m_Player_Attack;
         private readonly InputAction m_Player_Counterattack;
+        private readonly InputAction m_Player_SelectFireElement;
+        private readonly InputAction m_Player_SelectIceElement;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -440,6 +484,14 @@ namespace InputSystem
             /// Provides access to the underlying input action "Player/Counterattack".
             /// </summary>
             public InputAction @Counterattack => m_Wrapper.m_Player_Counterattack;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SelectFireElement".
+            /// </summary>
+            public InputAction @SelectFireElement => m_Wrapper.m_Player_SelectFireElement;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SelectIceElement".
+            /// </summary>
+            public InputAction @SelectIceElement => m_Wrapper.m_Player_SelectIceElement;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -481,6 +533,12 @@ namespace InputSystem
                 @Counterattack.started += instance.OnCounterattack;
                 @Counterattack.performed += instance.OnCounterattack;
                 @Counterattack.canceled += instance.OnCounterattack;
+                @SelectFireElement.started += instance.OnSelectFireElement;
+                @SelectFireElement.performed += instance.OnSelectFireElement;
+                @SelectFireElement.canceled += instance.OnSelectFireElement;
+                @SelectIceElement.started += instance.OnSelectIceElement;
+                @SelectIceElement.performed += instance.OnSelectIceElement;
+                @SelectIceElement.canceled += instance.OnSelectIceElement;
             }
 
             /// <summary>
@@ -507,6 +565,12 @@ namespace InputSystem
                 @Counterattack.started -= instance.OnCounterattack;
                 @Counterattack.performed -= instance.OnCounterattack;
                 @Counterattack.canceled -= instance.OnCounterattack;
+                @SelectFireElement.started -= instance.OnSelectFireElement;
+                @SelectFireElement.performed -= instance.OnSelectFireElement;
+                @SelectFireElement.canceled -= instance.OnSelectFireElement;
+                @SelectIceElement.started -= instance.OnSelectIceElement;
+                @SelectIceElement.performed -= instance.OnSelectIceElement;
+                @SelectIceElement.canceled -= instance.OnSelectIceElement;
             }
 
             /// <summary>
@@ -595,6 +659,20 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCounterattack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectFireElement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectFireElement(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectIceElement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectIceElement(InputAction.CallbackContext context);
         }
     }
 }

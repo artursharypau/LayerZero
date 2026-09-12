@@ -12,16 +12,15 @@ namespace LayerZero.Gameplay.Stats
         Vitality = 13,
 
         Damage = 20,
-        CriticalDamageBonus = 21,
+        CriticalDamage = 21,
         CriticalDamageChance = 22,
-        FireDamage = 23,
-        IceDamage = 24,
-        LightDamage = 25,
+        ElementalDamage = 23,
+        ElementalDamageChance = 24,
+        ElementalDamageDuration = 25,
 
         Armor = 30,
-        EvasionChance = 31,
-        FireResistance = 32,
-        IceResistance = 33,
-        LightResistance = 34
+        ArmorMitigation = 31,
+        EvasionChance = 32,
+        ElementalResistance = 33
     }
 }

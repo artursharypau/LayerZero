@@ -35,7 +35,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
 
             _isNextAttackQueued = false;
 
-            TryResetComboStepIndex();
+            ResetComboIfExpired();
             Animator.SetInt(PlayerAnimatorParameters.AttackIndex, _comboStepIndex);
 
             _attack.Begin();
@@ -86,7 +86,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
             return hasNext ? PlayerStateId.Attack : ResolveLocomotionState();
         }
 
-        private void TryResetComboStepIndex()
+        private void ResetComboIfExpired()
         {
             bool comboExpired = Time.time - _lastFinishedTime > Config.Attack.ComboResetDelay;
             if (comboExpired || _comboStepIndex >= Config.Attack.ComboLength)

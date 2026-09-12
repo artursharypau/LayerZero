@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1ddb908610fc053a32e13077c0980, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
+  _stats: {fileID: 11400000, guid: c4a71f6b28d94e0f9b3a5d0e6172c8ab, type: 2}
   _movement:
     _moveSpeed: 15
     _inAirMoveMultiplier: 0.5
@@ -75,3 +76,4 @@ MonoBehaviour:
         _source: 1
         _knockback: {x: 2, y: 4}
         _stunDuration: 0.6
+        _canApplyElementalEffect: 0

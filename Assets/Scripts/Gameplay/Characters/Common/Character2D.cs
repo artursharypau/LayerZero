@@ -3,8 +3,9 @@ using LayerZero.Gameplay.Characters.Common.Animation;
 using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Combat;
 using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Combat.Damage.Processing;
 using LayerZero.Gameplay.Combat.Damage.Protections;
-using LayerZero.Gameplay.Stats;
+using LayerZero.Gameplay.Combat.Elements;
 using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
 using VContainer;
@@ -23,9 +24,11 @@ namespace LayerZero.Gameplay.Characters.Common
         public IDamageReceiver DamageReceiver { get; private set; }
         public IDamageProtection DamageProtection { get; private set; }
         public ICombatSystem Combat { get; private set; }
-        public IStatsSystem Stats { get; private set; }
+        public IElementalAffinity ElementalAffinity { get; private set; }
 
         public bool IsDead => Health.IsDead;
+
+        protected abstract int InitialStateId { get; }
 
         [Inject]
         public void Construct(
@@ -37,7 +40,7 @@ namespace LayerZero.Gameplay.Characters.Common
             IDamageReceiver damageReceiver,
             IDamageProtection damageProtection,
             ICombatSystem combat,
-            IStatsSystem stats)
+            IElementalAffinity elementalAffinity)
         {
             _animatorStateBinder = animatorStateBinder;
             _movement = movement;
@@ -48,13 +51,11 @@ namespace LayerZero.Gameplay.Characters.Common
             DamageReceiver = damageReceiver;
             DamageProtection = damageProtection;
             Combat = combat;
-            Stats = stats;
+            ElementalAffinity = elementalAffinity;
         }
 
         protected virtual void Awake()
         {
-            float maxHealth = Stats.Get(StatId.MaxHealth);
-            Health.Initialize(maxHealth);
         }
 
         protected virtual void OnEnable()
@@ -73,6 +74,11 @@ namespace LayerZero.Gameplay.Characters.Common
             Health.Died -= HandleDied;
 
             _animatorStateBinder.Unbind();
+        }
+
+        protected virtual void Start()
+        {
+            StateMachine.Start(InitialStateId);
         }
 
         protected virtual void Update()

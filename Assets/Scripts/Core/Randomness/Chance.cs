@@ -4,9 +4,9 @@ namespace LayerZero.Core.Randomness
 {
     public static class Chance
     {
-        public static bool Roll(float percent)
+        public static bool Roll(float probability)
         {
-            return percent > Random.Range(0f, 100f);
+            return probability > Random.Range(0f, 1f);
         }
     }
 }

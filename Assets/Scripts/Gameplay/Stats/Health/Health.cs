@@ -1,5 +1,5 @@
 using System;
-using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Combat.Damage.Processing;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Stats.Health
@@ -9,29 +9,24 @@ namespace LayerZero.Gameplay.Stats.Health
         public event Action<float> HealthChanged;
         public event Action Died;
 
-        public float MaxHealth { get; private set; }
+        public float MaxHealth { get; }
         public float CurrentHealth { get; private set; }
-        public bool IsDead => CurrentHealth <= 0;
+        public bool IsDead => CurrentHealth <= 0f;
 
-        public void Initialize(float health)
+        public Health(IStatsSystem stats)
         {
-            if (MaxHealth > 0f)
-            {
-                return;
-            }
-
-            MaxHealth = health;
-            CurrentHealth = health;
+            MaxHealth = stats.Get(StatId.MaxHealth);
+            CurrentHealth = MaxHealth;
         }
 
         public void TakeDamage(float amount)
         {
-            if (IsDead || amount <= 0)
+            if (IsDead || amount <= 0f)
             {
                 return;
             }
 
-            CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, MaxHealth);
+            CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0f, MaxHealth);
             HealthChanged?.Invoke(CurrentHealth);
 
             if (IsDead)

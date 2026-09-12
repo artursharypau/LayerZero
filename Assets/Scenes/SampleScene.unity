@@ -10691,7 +10691,6 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _vfxCatalog: {fileID: 11400000, guid: 16e54586ad4604e5dad6cf9058f30a04, type: 2}
 --- !u!4 &827036327 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2680097526772066644, guid: a087ea00060de4b41b63ca6a55226906, type: 3}

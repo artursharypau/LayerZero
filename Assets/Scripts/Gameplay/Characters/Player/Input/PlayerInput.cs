@@ -1,7 +1,8 @@
 using System;
-using InputSystem;
 using LayerZero.Core.Timing;
 using LayerZero.Gameplay.Characters.Player.Config;
+using LayerZero.Gameplay.Combat.Elements;
+using LayerZero.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +26,8 @@ namespace LayerZero.Gameplay.Characters.Player.Input
             _actions = _inputSet.Player;
         }
 
+        public event Action<ElementKind> ElementSelected;
+
         public Vector2 Move { get; private set; }
 
         public void Enable()
@@ -41,6 +44,8 @@ namespace LayerZero.Gameplay.Characters.Player.Input
             _actions.Movement.canceled += OnMoveCanceled;
             _actions.Jump.performed += OnJumpPerformed;
             _actions.Dash.performed += OnDashPerformed;
+            _actions.SelectFireElement.performed += OnSelectFireElementPerformed;
+            _actions.SelectIceElement.performed += OnSelectIceElementPerformed;
         }
 
         public void Disable()
@@ -56,6 +61,8 @@ namespace LayerZero.Gameplay.Characters.Player.Input
             _actions.Movement.canceled -= OnMoveCanceled;
             _actions.Jump.performed -= OnJumpPerformed;
             _actions.Dash.performed -= OnDashPerformed;
+            _actions.SelectFireElement.performed -= OnSelectFireElementPerformed;
+            _actions.SelectIceElement.performed -= OnSelectIceElementPerformed;
 
             _inputSet.Disable();
             Move = Vector2.zero;
@@ -121,6 +128,16 @@ namespace LayerZero.Gameplay.Characters.Player.Input
         private void OnDashPerformed(InputAction.CallbackContext context)
         {
             _dash.Raise();
+        }
+
+        private void OnSelectFireElementPerformed(InputAction.CallbackContext context)
+        {
+            ElementSelected?.Invoke(ElementKind.Fire);
+        }
+
+        private void OnSelectIceElementPerformed(InputAction.CallbackContext context)
+        {
+            ElementSelected?.Invoke(ElementKind.Ice);
         }
     }
 }

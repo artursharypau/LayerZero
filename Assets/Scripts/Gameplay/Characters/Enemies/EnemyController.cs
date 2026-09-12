@@ -8,15 +8,14 @@ using LayerZero.Gameplay.Characters.Enemies.States;
 using LayerZero.Gameplay.Combat;
 using LayerZero.Gameplay.Combat.Attack;
 using LayerZero.Gameplay.Combat.Damage;
-using LayerZero.Gameplay.Stats;
+using LayerZero.Gameplay.Combat.Damage.Processing;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Enemies
 {
     [RequireComponent(typeof(CharacterMovement2D))]
-    [RequireComponent(typeof(DamageReceiver))]
+    [RequireComponent(typeof(DamagePipeline))]
     [RequireComponent(typeof(CombatSystem))]
-    [RequireComponent(typeof(StatsSystem))]
     internal sealed class EnemyController : Character2D
     {
         [Header("Data")]
@@ -27,6 +26,8 @@ namespace LayerZero.Gameplay.Characters.Enemies
 
         public EnemyConfig Config => _config;
         public EnemyTargetPerception Perception { get; private set; }
+
+        protected override int InitialStateId => EnemyStateId.Idle;
 
         protected override void Awake()
         {
@@ -40,11 +41,8 @@ namespace LayerZero.Gameplay.Characters.Enemies
             StateMachine.Register(new EnemyDeadState(this));
 
             RegisterCombatStates(_config.Attack.Kind);
-        }
 
-        private void Start()
-        {
-            StateMachine.Start(EnemyStateId.Idle);
+            ElementalAffinity.Select(_config.InitialElement);
         }
 
         protected override void FixedUpdate()

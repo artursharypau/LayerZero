@@ -44,11 +44,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b22d3e42a92a49bebdb815d4ab45e84e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
-  _kind: 1
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.Combat.Attack.AttackVfxInstance
   _fallbackLifetime: 2
-  _positionJitter: 0.3
-  _randomizeRotation: 1
+  _positionJitter: 0.15
+  _randomizeRotation: 0
 --- !u!1 &8291350897174118000
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +131,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7d54c7a7814974499b88d19013ac26a4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f3f4c52e0e3c49bb98e045d2479cb52, type: 3}
   m_Color: {r: 1, g: 0.827451, b: 0.2901961, a: 1}
   m_FlipX: 0
   m_FlipY: 0

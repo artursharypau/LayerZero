@@ -44,8 +44,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b22d3e42a92a49bebdb815d4ab45e84e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.VfxInstance
-  _kind: 2
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.Combat.Attack.AttackVfxInstance
   _fallbackLifetime: 2
   _positionJitter: 0.15
   _randomizeRotation: 0

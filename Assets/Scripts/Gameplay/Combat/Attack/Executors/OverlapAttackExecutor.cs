@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using LayerZero.Core.EventBus;
 using LayerZero.Core.Extensions;
+using LayerZero.Gameplay.Characters.Common.EventBus;
 using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Combat.Damage.Processing;
+using LayerZero.Gameplay.Combat.Elements;
 using LayerZero.Gameplay.Combat.Events;
 using UnityEngine;
 using VContainer;
@@ -21,7 +23,7 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
         private readonly List<Collider2D> _targets = new(TargetsBufferCapacity);
 
         private IPositioned _positioned;
-        private IGameEventBus _eventBus;
+        private ICharacterEventBus _eventBus;
         private IDamageResolver _damageResolver;
 
         private ContactFilter2D _filter;
@@ -29,7 +31,7 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
         public AttackKind Kind => _kind;
 
         [Inject]
-        public void Construct(IPositioned positioned, IGameEventBus eventBus, IDamageResolver damageResolver)
+        public void Construct(IPositioned positioned, ICharacterEventBus eventBus, IDamageResolver damageResolver)
         {
             _positioned = positioned;
             _eventBus = eventBus;
@@ -75,19 +77,20 @@ namespace LayerZero.Gameplay.Combat.Attack.Executors
                 return;
             }
 
-            DamageInfo damageInfo = _damageResolver.Resolve(attackDefinition.Damage, transform);
+            DamagePayload payload = _damageResolver.Resolve(attackDefinition.Damage, transform);
             for (int i = 0; i < count; i++)
             {
-                if (_targets[i].TryGetRequiredComponent(out IDamageReceiver receiver) && receiver.TakeDamage(damageInfo))
+                if (_targets[i].TryGetRequiredComponent(out IDamagePipeline pipeline) && pipeline.Process(payload))
                 {
-                    RaiseAttackHit(damageInfo.IsCritical, _targets[i]);
+                    RaiseAttackHit(payload, _targets[i]);
                 }
             }
         }
 
-        private void RaiseAttackHit(bool isCritical, Collider2D target)
+        private void RaiseAttackHit(DamagePayload payload, Collider2D target)
         {
-            _eventBus.Raise(new AttackHitEvent(isCritical, _positioned.FacingDirection, target.transform.position));
+            ElementKind element = payload.HasElementalEffect ? payload.ElementalEffect.Kind : ElementKind.None;
+            _eventBus.Raise(new AttackHitEvent(element, _positioned.FacingDirection, target.transform.position));
         }
 
         private void OnDrawGizmosSelected()

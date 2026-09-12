@@ -157,7 +157,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9236d4c8699542eeb11e67a8aa86e610, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Common.Animation.AnimatorEventRelay
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Characters.Common.Animation.AnimatorEvents
 --- !u!1 &3466222321441341585
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,10 +172,10 @@ GameObject:
   - component: {fileID: 7100000000000000301}
   - component: {fileID: 4817277150691120106}
   - component: {fileID: 5630542884956237323}
-  - component: {fileID: 6929327695061375567}
   - component: {fileID: 7765971437028232559}
   - component: {fileID: 3589202579622647878}
   - component: {fileID: 7100000000000000201}
+  - component: {fileID: 4212883901256877412}
   m_Layer: 8
   m_Name: Skeleton
   m_TagString: Untagged
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32adef8daa8f4461a1b72ca9fd36b94d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Enemies.EnemyLifetimeScope
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Characters.Enemies.EnemyLifetimeScope
   parentReference:
     TypeName: 
   autoRun: 1
@@ -293,7 +293,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75051eae12e4d617887a3bd335ee6b01, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Enemies.EnemyController
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Characters.Enemies.EnemyController
   _config: {fileID: 11400000, guid: 9b91371a343fc5dfe429459f09563945, type: 2}
   _perceptionOrigin: {fileID: 1613318259418196058}
 --- !u!114 &5630542884956237323
@@ -307,7 +307,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 793ae3f11017749019c9837f34fcf6ef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Characters::LayerZero.Characters.Common.Movement.CharacterMovement2D
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Characters.Common.Movement.CharacterMovement2D
   _groundWallDetector:
     _groundProbe:
       _origins:
@@ -321,19 +321,6 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
   _knockbackDeceleration: 40
---- !u!114 &6929327695061375567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466222321441341585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9c007c8303a424aa6badfb775153a5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Stats.StatsSystem
-  _stats: {fileID: 11400000, guid: d9e05b1c73f2400ab6c48a17e5390df6, type: 2}
 --- !u!114 &7765971437028232559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,7 +332,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba795a0b53074911a60c580c1a7b86a4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attacks.CombatSystem
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Combat.CombatSystem
 --- !u!114 &3589202579622647878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,9 +342,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3466222321441341585}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82cfd0da3f1d54f6b8ca5d65206afc1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 23771c4e250504124992103d6c0a5af8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Damage.DamageReceiver
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Combat.Damage.Processing.DamagePipeline
 --- !u!114 &7100000000000000201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +356,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c55e2ad2ee3acbb9e3b30bc1a04b46, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Combat::LayerZero.Combat.Attack.Executors.OverlapAttackExecutor
+  m_EditorClassIdentifier: LayerZero.Gameplay::LayerZero.Gameplay.Combat.Attack.Executors.OverlapAttackExecutor
   _kind: 0
   _origin: {fileID: 4973008962671906359}
   _radius: 1.4
@@ -517,3 +504,18 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3549593980878020198, guid: 402959083e5754969a1e08177c844c02, type: 3}
   m_PrefabInstance: {fileID: 2746101475982907}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4212883901256877412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466222321441341585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6b1c7e00124dafa3544e490219008a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Vfx.Combat.Attack.AttackVfxPresenter
+  _prefab: {fileID: 1683860669960816829, guid: 69e4a934826b549dfb47c5a37a284a4c, type: 3}
+  _elementPalette: {fileID: 11400000, guid: 5f83c0ae9b6d4e17a2c4d81be3097f64, type: 2}
+  _prewarmCount: 4

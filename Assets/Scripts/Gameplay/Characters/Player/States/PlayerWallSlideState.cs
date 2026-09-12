@@ -10,7 +10,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
         {
             On(() => Input.WasPerformed(PlayerInputAction.Jump), PlayerStateId.WallJump);
 
-            On(() => Movement.IsGrounded, TransitToIdle);
+            On(() => Movement.IsGrounded, ResolveLandingState);
             On(() => !Movement.IsWalled && Movement.IsFalling, PlayerStateId.Fall);
         }
 
@@ -36,7 +36,7 @@ namespace LayerZero.Gameplay.Characters.Player.States
             Movement.SetVelocity(0f, velocityY);
         }
 
-        private int TransitToIdle()
+        private int ResolveLandingState()
         {
             Movement.FaceTowards(Input.Move.x);
             return PlayerStateId.Idle;

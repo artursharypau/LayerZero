@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e6d6e792d5f369099627e9493186501, type: 3}
   m_Name: SkeletonConfig
   m_EditorClassIdentifier: 
+  _stats: {fileID: 11400000, guid: d9e05b1c73f2400ab6c48a17e5390df6, type: 2}
   _movement:
     _idleDuration: 2
     _moveSpeed: 1.5

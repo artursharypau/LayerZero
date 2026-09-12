@@ -479,6 +479,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca19403c58784a0f9e9bc7c915fb8f11, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Presentation.Ui.HealthBar
+  m_EditorClassIdentifier: LayerZero.Presentation::LayerZero.Presentation.Ui.HealthBar.EnemyHealthBar
   _visibleDuration: 3
   _fadeOutDuration: 0.25

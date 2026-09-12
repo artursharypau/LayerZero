@@ -21,7 +21,7 @@ namespace LayerZero.Gameplay.Combat.Damage.Protections
                 ++_invulnerabilityCount;
             }
 
-            return new ProtectionHandle(id, protection.Kind);
+            return new ProtectionHandle(id);
         }
 
         public void Remove(ProtectionHandle handle)

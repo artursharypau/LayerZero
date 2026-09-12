@@ -12,38 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2eb2853ebd34433abf66f78daf58b85, type: 3}
   m_Name: PlayerStatsConfig
   m_EditorClassIdentifier: 
-  _maxHealth:
-    _value: 1000
+  _maxHealth: 1000
   _majorStats:
-    _strength:
-      _value: 5
-    _agility:
-      _value: 5
-    _intelligence:
-      _value: 5
-    _vitality:
-      _value: 5
+    _strength: 5
+    _agility: 5
+    _intelligence: 5
+    _vitality: 5
   _offenseStats:
-    _damage:
-      _value: 20
-    _criticalDamageBonus:
-      _value: 20
-    _criticalDamageChance:
-      _value: 20
-    _fireDamage:
-      _value: 0
-    _iceDamage:
-      _value: 0
-    _lightDamage:
-      _value: 0
+    _damage: 20
+    _criticalDamageBonus: 20
+    _criticalDamageChance: 20
+    _elementalDamage: 5
+    _elementalDamageChance: 20
+    _elementalDamageDuration: 3
   _defenseStats:
-    _armor:
-      _value: 0
-    _evasionChance:
-      _value: 10
-    _fireResistance:
-      _value: 0
-    _iceResistance:
-      _value: 0
-    _lightResistance:
-      _value: 0
+    _armor: 100
+    _evasionChance: 10
+    _elementalResistance: 20

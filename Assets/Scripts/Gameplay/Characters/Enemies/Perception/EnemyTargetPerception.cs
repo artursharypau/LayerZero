@@ -1,6 +1,7 @@
 using LayerZero.Core.Collisions;
 using LayerZero.Core.Extensions;
 using LayerZero.Core.Timing;
+using LayerZero.Gameplay.Characters.Common;
 using LayerZero.Gameplay.Characters.Common.Movement;
 using LayerZero.Gameplay.Characters.Enemies.Config;
 using LayerZero.Gameplay.Collisions;
@@ -11,7 +12,7 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
 {
     internal sealed class EnemyTargetPerception
     {
-        private readonly PerceptionConfig _config;
+        private readonly EnemyPerceptionConfig _config;
         private readonly Transform _origin;
         private readonly IPositioned _positioned;
 
@@ -21,7 +22,7 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
         private Countdown _alertTimer;
         private Countdown _scanTimer;
 
-        public EnemyTargetPerception(PerceptionConfig config, Transform origin, IPositioned positioned)
+        public EnemyTargetPerception(EnemyPerceptionConfig config, Transform origin, IPositioned positioned)
         {
             _config = config;
             _origin = origin;
@@ -125,13 +126,13 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
 
         private void SetTarget(Transform transform)
         {
-            IDamageReceiver damageReceiver = transform.GetRequiredComponentInParent<IDamageReceiver>();
-            if (damageReceiver == null || damageReceiver.IsDead)
+            Character2D character = transform.GetRequiredComponentInParent<Character2D>();
+            if (!character || character.IsDead)
             {
                 return;
             }
 
-            Target = new EnemyPerceivedTarget(transform, damageReceiver);
+            Target = new EnemyPerceivedTarget(transform, character.Health);
             _alertTimer.Start(_config.AlertDuration);
         }
     }

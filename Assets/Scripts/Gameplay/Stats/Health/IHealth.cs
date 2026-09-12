@@ -10,7 +10,5 @@ namespace LayerZero.Gameplay.Stats.Health
         float MaxHealth { get; }
         float CurrentHealth { get; }
         bool IsDead { get; }
-
-        void Initialize(float health);
     }
 }

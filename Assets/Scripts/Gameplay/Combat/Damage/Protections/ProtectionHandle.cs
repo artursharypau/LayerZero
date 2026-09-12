@@ -5,12 +5,10 @@ namespace LayerZero.Gameplay.Combat.Damage.Protections
         public static readonly ProtectionHandle None = default;
 
         internal readonly int Id;
-        internal readonly ProtectionKind Kind;
 
-        internal ProtectionHandle(int id, ProtectionKind kind)
+        internal ProtectionHandle(int id)
         {
             Id = id;
-            Kind = kind;
         }
     }
 }

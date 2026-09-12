@@ -1,27 +1,17 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Stats.Config
 {
     [Serializable]
-    internal class DefenseStats
+    internal sealed class DefenseStats
     {
-        [SerializeField] private Stat _armor;
-        [SerializeField] private Stat _evasionChance;
+        [SerializeField] private float _armor;
+        [SerializeField] private float _evasionChance;
+        [SerializeField] private float _elementalResistance;
 
-        [SerializeField] private Stat _fireResistance;
-        [SerializeField] private Stat _iceResistance;
-        [SerializeField] private Stat _lightResistance;
-
-        public void CopyTo(IDictionary<StatId, float> values)
-        {
-            values[StatId.Armor] = _armor.Value;
-            values[StatId.EvasionChance] = _evasionChance.Value;
-
-            values[StatId.FireResistance] = _fireResistance.Value;
-            values[StatId.IceResistance] = _iceResistance.Value;
-            values[StatId.LightResistance] = _lightResistance.Value;
-        }
+        public float Armor => _armor;
+        public float EvasionChance => _evasionChance;
+        public float ElementalResistance => _elementalResistance;
     }
 }

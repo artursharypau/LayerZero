@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LayerZero.Presentation.Vfx.Combat.Attack;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -6,19 +7,19 @@ namespace LayerZero.Presentation.Vfx.Pooling
 {
     internal sealed class VfxPool : IVfxPool
     {
-        private readonly VfxInstance _prefab;
+        private readonly AttackVfxInstance _prefab;
         private readonly Transform _root;
 
-        private readonly Queue<VfxInstance> _available;
-        private readonly HashSet<VfxInstance> _inUse;
+        private readonly Queue<AttackVfxInstance> _available;
+        private readonly HashSet<AttackVfxInstance> _inUse;
 
-        public VfxPool(VfxInstance prefab, Transform root, int count)
+        public VfxPool(AttackVfxInstance prefab, Transform root, int count)
         {
             _prefab = prefab;
             _root = root;
 
-            _available = new Queue<VfxInstance>(count);
-            _inUse = new HashSet<VfxInstance>(count);
+            _available = new Queue<AttackVfxInstance>(count);
+            _inUse = new HashSet<AttackVfxInstance>(count);
 
             for (int i = 0; i < count; i++)
             {
@@ -28,7 +29,7 @@ namespace LayerZero.Presentation.Vfx.Pooling
 
         public IVfxInstance Get()
         {
-            VfxInstance instance = _available.Count > 0 ? _available.Dequeue() : Create();
+            AttackVfxInstance instance = _available.Count > 0 ? _available.Dequeue() : Create();
             _inUse.Add(instance);
 
             return instance;
@@ -36,7 +37,7 @@ namespace LayerZero.Presentation.Vfx.Pooling
 
         public void Release(IVfxInstance instance)
         {
-            if (instance is VfxInstance pooled && _inUse.Remove(pooled))
+            if (instance is AttackVfxInstance pooled && _inUse.Remove(pooled))
             {
                 _available.Enqueue(pooled);
             }
@@ -44,7 +45,7 @@ namespace LayerZero.Presentation.Vfx.Pooling
 
         public void Dispose()
         {
-            foreach (VfxInstance instance in _available)
+            foreach (AttackVfxInstance instance in _available)
             {
                 if (instance)
                 {
@@ -52,7 +53,7 @@ namespace LayerZero.Presentation.Vfx.Pooling
                 }
             }
 
-            foreach (VfxInstance instance in _inUse)
+            foreach (AttackVfxInstance instance in _inUse)
             {
                 if (instance)
                 {
@@ -64,9 +65,9 @@ namespace LayerZero.Presentation.Vfx.Pooling
             _inUse.Clear();
         }
 
-        private VfxInstance Create()
+        private AttackVfxInstance Create()
         {
-            VfxInstance instance = Object.Instantiate(_prefab, _root);
+            AttackVfxInstance instance = Object.Instantiate(_prefab, _root);
             instance.Disable();
 
             return instance;

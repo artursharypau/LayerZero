@@ -23,10 +23,5 @@ namespace LayerZero.Gameplay.Combat.Damage
             AttackerTransform = attackerTransform;
             Impact = impact;
         }
-
-        public DamageInfo WithImpact(DamageImpactInfo impact)
-        {
-            return new DamageInfo(IsCritical, Amount, Source, AttackerTransform, impact);
-        }
     }
 }

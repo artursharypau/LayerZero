@@ -1,23 +1,19 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Stats.Config
 {
     [Serializable]
-    internal class MajorStats
+    internal sealed class MajorStats
     {
-        [SerializeField] private Stat _strength;
-        [SerializeField] private Stat _agility;
-        [SerializeField] private Stat _intelligence;
-        [SerializeField] private Stat _vitality;
+        [SerializeField] private float _strength;
+        [SerializeField] private float _agility;
+        [SerializeField] private float _intelligence;
+        [SerializeField] private float _vitality;
 
-        public void CopyTo(IDictionary<StatId, float> values)
-        {
-            values[StatId.Strength] = _strength.Value;
-            values[StatId.Agility] = _agility.Value;
-            values[StatId.Intelligence] = _intelligence.Value;
-            values[StatId.Vitality] = _vitality.Value;
-        }
+        public float Strength => _strength;
+        public float Agility => _agility;
+        public float Intelligence => _intelligence;
+        public float Vitality => _vitality;
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "LayerZero.GeneratedInput",
-    "rootNamespace": "InputSystem",
+    "rootNamespace": "LayerZero.Input",
     "references": [
         "Unity.InputSystem"
     ],

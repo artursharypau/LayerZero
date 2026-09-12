@@ -1,4 +1,4 @@
-using LayerZero.Gameplay.Combat.Damage;
+using LayerZero.Gameplay.Stats.Health;
 using UnityEngine;
 
 namespace LayerZero.Gameplay.Characters.Enemies.Perception
@@ -8,14 +8,14 @@ namespace LayerZero.Gameplay.Characters.Enemies.Perception
         public static readonly EnemyPerceivedTarget None = default;
 
         public Transform Transform { get; }
-        public IDamageReceiver DamageReceiver { get; }
+        public IHealth Health { get; }
 
-        public EnemyPerceivedTarget(Transform transform, IDamageReceiver damageReceiver)
+        public EnemyPerceivedTarget(Transform transform, IHealth health)
         {
             Transform = transform;
-            DamageReceiver = damageReceiver;
+            Health = health;
         }
 
-        public bool IsValid => Transform && DamageReceiver?.IsDead == false;
+        public bool IsValid => Transform && Health?.IsDead == false;
     }
 }
